@@ -5,7 +5,6 @@ from django.contrib.auth.views import login, logout
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 from django.conf import settings
-from django.conf.urls.static import static
 from webpurse.views import ping_test
 admin.autodiscover()
 
@@ -34,6 +33,6 @@ if settings.DEBUG:
             'document_root': settings.MEDIA_ROOT,
         }),
    )
-   urlpatterns += patterns('django.contrib.staticfiles.views',
+    urlpatterns += patterns('django.contrib.staticfiles.views',
         url(r'^static/(?P<path>.*)$', 'serve'),
     )
