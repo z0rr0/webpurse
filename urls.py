@@ -5,7 +5,10 @@ from django.contrib.auth.views import login, logout
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 from django.conf import settings
+
 from webpurse.views import ping_test
+from webpurse.purse import views as pv
+
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -16,8 +19,8 @@ urlpatterns = patterns('',
     (r'^ping/$', ping_test),
 
     # accounts
-    (r'^accounts/login/$', login),
-    (r'^accounts/logout/$' , logout),
+    # (r'^accounts/login/$', login),
+    # (r'^accounts/logout/$' , logout),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

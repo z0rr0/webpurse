@@ -334,8 +334,9 @@ CREATE TABLE `purse_dept` (
   `modified` datetime NOT NULL,
   `created` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `purse_dept_59f72b12` (`invoice_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  KEY `purse_dept_59f72b12` (`invoice_id`),
+  KEY `taker` (`taker`,`pdate`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -367,8 +368,9 @@ CREATE TABLE `purse_futpay` (
   `created` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `purse_futpay_59f72b12` (`invoice_id`),
-  KEY `purse_futpay_36e7f8e4` (`itype_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  KEY `purse_futpay_36e7f8e4` (`itype_id`),
+  KEY `firstdate` (`firstdate`,`lastdate`,`period`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -398,8 +400,10 @@ CREATE TABLE `purse_invoice` (
   `modified` datetime NOT NULL,
   `created` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `purse_invoice_403f60f` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+  KEY `purse_invoice_403f60f` (`user_id`),
+  KEY `other` (`other`),
+  KEY `name` (`name`,`balance`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -425,8 +429,10 @@ CREATE TABLE `purse_itype` (
   `sign` tinyint(1) NOT NULL,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `purse_itype_403f60f` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+  KEY `purse_itype_403f60f` (`user_id`),
+  KEY `sign` (`sign`),
+  KEY `name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -457,8 +463,10 @@ CREATE TABLE `purse_pay` (
   `created` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `purse_pay_59f72b12` (`invoice_id`),
-  KEY `purse_pay_36e7f8e4` (`itype_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+  KEY `purse_pay_36e7f8e4` (`itype_id`),
+  KEY `pdate` (`pdate`,`value`),
+  KEY `comment` (`comment`(255))
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -489,8 +497,9 @@ CREATE TABLE `purse_transfer` (
   `created` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `purse_transfer_1dae11a0` (`ifrom_id`),
-  KEY `purse_transfer_85ff56f` (`ito_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  KEY `purse_transfer_85ff56f` (`ito_id`),
+  KEY `pdate` (`pdate`,`value`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -511,4 +520,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2011-09-11 17:07:50
+-- Dump completed on 2011-09-11 19:22:18
