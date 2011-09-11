@@ -1,0 +1,4 @@
+*.o
+*.pyc
+*~
+local_settings.py
