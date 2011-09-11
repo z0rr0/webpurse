@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load url from future %}
+{% block title %}
+    Авторизация
+{% endblock title %}
+
+{% block content %}
+<h1 align="center">Авторизация</h1>
+Для получения нужных прав необходимо пройти ваторизацию:<br>
+{% if form.errors %}
+    <p class="error">Heвepнe имя или пароль</p>
+{% endif %}
+<form method="post" action="{% url 'django.contrib.auth.views.login' %}">
+{% csrf_token %}
+	<label for="username">Имя:</label>
+    <input type="text" name="username" value="" id="username" size="5">
+    <label for='password'>пароль:</labe>
+    <input type="password" name="password" value="" id="password" size="5">
+    <input type="submit" value="login" />
+    <input type="hidden" name="next" value="{{ next|escape }}" />
+</form>
+{% endblock %}

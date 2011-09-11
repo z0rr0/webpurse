@@ -197,3 +197,17 @@ LOGGING = {
         },
     }
 }
+
+# cache 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}
+
+# rewrite global setting vars
+try:
+    from local_settings import *
+except ImportError:
+    pass

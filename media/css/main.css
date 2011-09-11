@@ -1,0 +1,130 @@
+/* main */
+body {
+    font: normal 13px Verdana, Arial, Helvetica, sans-serif;
+    background: #fff;
+    margin: 10px; 
+    padding: 0;
+    line-height: 16px
+}
+
+/* H1,2,3 */
+h1 { 
+    font-size: 19px; 
+    margin: .15em 1em 0.5em 0 
+}
+h2 { font-size: 16px }
+h3 { font-size: 14px }
+
+/* links */
+a {
+    color: #2b3a87;
+}
+a:hover {
+    text-decoration: none;
+}
+#header-page {
+    padding: 10px;
+    background: #b6b7ba;
+}
+#left-menu {
+    width: 200px;
+    margin: 7px;
+    padding: 5px;
+    border: 2px solid black;
+    background: #fc0;
+    float: left;
+    min-height: 200px;
+}
+#left-menu li {
+    list-style-type: none;
+    padding: 3px;
+    /*
+    letter-spacing: 2px;
+    text-transform: uppercase; 
+    border: 2px ridge black;
+     */
+    font-weight:bold;
+}
+#left-menu a {
+    text-decoration: none;
+    color: #000000;
+}
+#left-menu a:hover {
+    text-decoration: none;
+}
+#content-main {
+    background: #dfe0e3;
+    padding: 20px;
+    margin-left: 230px;
+    min-height: 350px;
+}
+#footer-page {
+    clear: both;
+    padding: 10px;
+    background: #b6b7ba;
+}
+ul.errorlist {
+    display: inline;
+    margin: 0; 
+    padding: 0;
+    /*line-height: 0;*/
+    font-size: 80%;
+    color: #ff0000;
+}
+.error {
+    font-size: 80%;
+    color: #ff0000;
+}
+.table-view th {
+    text-align: left;
+    vertical-align: top;
+}
+.table-edit th {
+    text-align: left;
+    vertical-align: top;
+}
+.table-edit textarea {
+/*  width: 300px;
+    height: 50px;
+*/
+}
+ul.errorlist li {
+    list-style-type: none;
+}
+table  {
+    margin-bottom: 5px;
+    /*border: 1px solid #ff0000;*/
+}
+table th {
+    text-align: center;
+    font-weight: bold;
+    background-color: #b6b7ba;
+}
+table td {
+    text-align: left; 
+    padding: 7px;
+    border-bottom: 1px solid #999;: 1px solid #000000;
+}
+.row1 {
+    background-color: #dfe0d9;
+}
+.row2 {
+    background-color: #c6c8cc;
+}
+.sttable input {
+    width: 110px;
+}
+.sttable td {
+    text-align: center;
+}
+.sttable_small input {
+    width: 80px;
+}
+#left-div1 {
+    width: 50%;
+    float: left;
+    text-align: left;
+}
+#right-div1 {
+    text-align: right;
+}

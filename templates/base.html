@@ -1,0 +1,31 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"> 
+<html lang="ru"> 
+    <head> 
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> 
+        <meta http-equiv="Content-Language" content="ru"/> 
+        {% block addmeta %}{% endblock %}
+        <link rel="stylesheet" href="{{ MEDIA_URL }}css/main.css" type="text/css" />
+        <link rel="stylesheet" href="{{ MEDIA_URL }}css/jquery-ui-1.8.16.custom.css" type="text/css" />
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.6.3.min.js"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-ui-custom.min.js"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.ui.datepicker-ru.js"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/djcsrf.js"></script>
+        <title>{% block title %}{% endblock %}</title>
+    </head> 
+    <body>
+        {% block pagejs %}{% endblock %}
+        <div id="header-page">
+            <center>Header</center>
+        </div>
+        <div id="left-menu">
+            <center>Menu</center>
+            {% include "leftmenu.html" %}
+        </div>
+        <div id="content-main">
+            {% block content %}{% endblock %}
+        </div>
+        <div id="footer-page">
+            <center>Footer</center>
+        </div>
+    </body>
+</html>
