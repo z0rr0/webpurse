@@ -7,7 +7,20 @@ body {
     padding: 0;
     line-height: 16px
 }
-
+table  {
+    margin-bottom: 5px;
+    /*border: 1px solid #ff0000;*/
+}
+table th {
+    text-align: center;
+    font-weight: bold;
+    background-color: #b6b7ba;
+}
+table td {
+    text-align: left; 
+    padding: 7px;
+    border-bottom: 1px solid #999;: 1px solid #000000;
+}
 /* H1,2,3 */
 h1 { 
     font-size: 19px; 
@@ -28,10 +41,8 @@ a:hover {
     margin: 0;
     border: 0;
 }
-.maintable table {
+.maintable td {
     border: 0;
-}
-.maintable tr {
     vertical-align: top;
 }
 #loginpage1 {
@@ -87,8 +98,7 @@ a:hover {
 #content-main {
     /*background: #dfe0e3;*/
     padding: 20px;
-    border: 2px solid black;
-    /*min-height: 350px;*/
+    /*border: 2px solid black;*/
     /*clear: both;*/
 }
 /*#tabs {
@@ -131,20 +141,7 @@ a:hover {
 /*ul.errorlist li {
     list-style-type: none;
 }*/
-table  {
-    margin-bottom: 5px;
-    /*border: 1px solid #ff0000;*/
-}
-table th {
-    text-align: center;
-    font-weight: bold;
-    background-color: #b6b7ba;
-}
-table td {
-    text-align: left; 
-    padding: 7px;
-    border-bottom: 1px solid #999;: 1px solid #000000;
-}
+
 .row1 {
     background-color: #dfe0d9;
 }

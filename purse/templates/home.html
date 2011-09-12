@@ -5,7 +5,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $( "#tabs" ).tabs({
-            event: "mouseover"
+            // event: "mouseover"
         });
         voice_update();
 
@@ -39,14 +39,24 @@
 {% block content %}
     <div id="tabs">
         <ul>
-            <li><a href="#tabs-1">Tab1</a></li>
-            <li><a href="#tabs-2">Tab2</a></li>
+            <li><a href="#tabs-1">Расход</a></li>
+            <li><a href="#tabs-2">Приход</a></li>
+            <li><a href="#tabs-3">Перевод</a></li>
+            <li><a href="#tabs-4">Долги</a></li>
         </ul>
-        <div id="tabs-1">
-            <p>1. Proin elit arcu, rutrum commodo, vehicula tempus, commodo a, risus. Curabitur nec arcu. Donec sollicitudin mi sit amet mauris. Nam elementum quam ullamcorper ante. Etiam aliquet massa et lorem. Mauris dapibus lacus auctor risus. Aenean tempor ullamcorper leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. Nunc tristique tempus lectus.</p>
+        <div id="tabs-1" >
+            <p>1. Proin elit arcu,</p>
         </div>
         <div id="tabs-2">
-            <p>2. Proin elit arcu, rutrum commodo, vehicula tempus, commodo a, risus. Curabitur nec arcu. Donec sollicitudin mi sit amet mauris. Nam elementum quam ullamcorper ante. Etiam aliquet massa et lorem. Mauris dapibus lacus auctor risus. Aenean tempor ullamcorper leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. Nunc tristique tempus lectus.</p>
+            <p>2. Proin elit arcu,</p>
+        </div>
+        <div id="tabs-3">
+            <p>3. Proin elit arcu,</p>
+        </div>
+        <div id="tabs-4">
+            <p>4. Proin elit arcu,<br>
+            Some operations are supported by several object types; in particular, practically all objects can be compared, tested for truth value, and converted to a string (with the repr() function or the slightly different str() function). The latter function is implicitly used when an object is written by the print() function.
+            </p>
         </div>
     </div> 
 {% endblock content %}
