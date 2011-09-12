@@ -199,6 +199,9 @@ LOGGING = {
     }
 }
 
+# LOGIN_REDIRECT_URL = '/accounts/profile/'
+LOGIN_REDIRECT_URL = '/'
+
 # cache 
 CACHES = {
     'default': {

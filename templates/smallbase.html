@@ -1,0 +1,13 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"> 
+<html lang="ru"> 
+    <head> 
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> 
+        <meta http-equiv="Content-Language" content="ru"/> 
+        {% block addmeta %}{% endblock %}
+        <link rel="stylesheet" href="{{ MEDIA_URL }}css/loginout.css" type="text/css" />
+        <title>{% block title %}{% endblock %}</title>
+    </head> 
+    <body>    
+        {% block content %}{% endblock %}
+    </body>
+</html>

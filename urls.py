@@ -19,8 +19,8 @@ urlpatterns = patterns('',
     (r'^ping/$', ping_test),
 
     # accounts
-    # (r'^accounts/login/$', login),
-    # (r'^accounts/logout/$' , logout),
+    (r'^accounts/login/$', login),
+    (r'^accounts/logout/$' , logout),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
@@ -36,6 +36,6 @@ if settings.DEBUG:
             'document_root': settings.MEDIA_ROOT,
         }),
    )
-    urlpatterns += patterns('django.contrib.staticfiles.views',
-        url(r'^static/(?P<path>.*)$', 'serve'),
-    )
+    # urlpatterns += patterns('django.contrib.staticfiles.views',
+    #     url(r'^static/(?P<path>.*)$', 'serve'),
+    # )

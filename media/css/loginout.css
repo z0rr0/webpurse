@@ -1,0 +1,39 @@
+/* main */
+body {
+    font: normal 12px Verdana, Arial, Helvetica, sans-serif;
+    background: #2d3335;
+    margin: 10px; 
+    padding: 0;
+    line-height: 16px
+}
+/* links */
+a {
+    color: #c5af75;
+}
+a:hover {
+    text-decoration: none;
+}
+#loginpage1 {
+    float: left;
+    /*border: 2px solid black;*/
+    width: 50%;
+    min-height: 30px;
+    color: #8b98ab;
+}
+#loginpage1 input {
+    background-color: #d2d6ce;
+}
+#loginpage2 {
+    margin-left: 50%;
+    text-align: right;
+    /*border: 2px solid black;*/
+    min-height: 30px;
+}
+.warnpic {
+    font-size: 80%;
+    color: #ca7840;
+}
+.error {
+    font-size: 80%;
+    color: #ff0000;
+}

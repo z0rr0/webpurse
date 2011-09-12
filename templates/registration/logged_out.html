@@ -1,8 +1,12 @@
-{% extends "base.html" %}
-{% block title %}
-    Выход
-{% endblock title %}
+{% extends "smallbase.html" %}
+{% load url from future %}
+{% block title %}Выход{% endblock title %}
 
 {% block content %}
-Вы вышли
+<div id="loginpage1">
+     Вы благополучно вышли.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <span class="warnpic"><a href="/accounts/login/?next=/">снова войти</a></span>
+</div>
+<div id="loginpage2"><a href="#">О проекте</a></div>
+<hr />
 {% endblock %}

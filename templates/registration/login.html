@@ -1,22 +1,31 @@
-{% extends "base.html" %}
+{% extends "smallbase.html" %}
 {% load url from future %}
-{% block title %}
-    Авторизация
-{% endblock title %}
+{% block title %}Авторизация{% endblock title %}
 
 {% block content %}
-<h1 align="center">Авторизация</h1>
-Для получения нужных прав необходимо пройти ваторизацию:<br>
-{% if form.errors %}
-    <p class="error">Heвepнe имя или пароль</p>
-{% endif %}
-<form method="post" action="{% url 'django.contrib.auth.views.login' %}">
-{% csrf_token %}
-	<label for="username">Имя:</label>
-    <input type="text" name="username" value="" id="username" size="5">
-    <label for='password'>пароль:</labe>
-    <input type="password" name="password" value="" id="password" size="5">
-    <input type="submit" value="login" />
-    <input type="hidden" name="next" value="{{ next|escape }}" />
-</form>
+<div id="loginpage1">
+    <form method="post" action="{% url 'django.contrib.auth.views.login' %}">
+    {% csrf_token %}
+        <strong>Авторизация:</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <label for="username">имя </label>
+        <input type="text" name="username" value="" id="username" size="6">
+        {% if form.username.errors  %}
+            <span class="warnpic">*</span>
+        {% endif %}
+        &nbsp;&nbsp;
+        <label for='password'>пароль </labe>
+        <input type="password" name="password" value="" id="password" size="6">
+        {% if form.password.errors  %}
+            <span class="warnpic">*</span>
+        {% endif %}
+        &nbsp;&nbsp;
+        <input type="submit" value="вход" />
+        <input type="hidden" name="next" value="{{ next|escape }}" />
+    </form>
+    {% if form.errors %}
+        <div class="warnpic">неверное имя или пароль</div>
+    {% endif %}
+</div>
+<div id="loginpage2"><a href="#">О проекте</a></div><br>
+<hr />
 {% endblock %}
