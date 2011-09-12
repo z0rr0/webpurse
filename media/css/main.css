@@ -23,6 +23,17 @@ a {
 a:hover {
     text-decoration: none;
 }
+.maintable {
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+.maintable table {
+    border: 0;
+}
+.maintable tr {
+    vertical-align: top;
+}
 #loginpage1 {
     float: left;
     /*border: 2px solid black;*/
@@ -37,7 +48,7 @@ a:hover {
     min-height: 30px;
 }
 
-#left-menu {
+#left-invoice {
     width: 200px;
     margin: 7px;
     padding: 5px;
@@ -46,6 +57,8 @@ a:hover {
     float: left;
     min-height: 330px;
 }
+
+
 #allsum {
     text-align: center;
     font-size: 150%;
@@ -74,10 +87,13 @@ a:hover {
 #content-main {
     /*background: #dfe0e3;*/
     padding: 20px;
-    margin-left: 230px;
     border: 2px solid black;
     /*min-height: 350px;*/
+    /*clear: both;*/
 }
+/*#tabs {
+    clear: both;
+}*/
 #footer-page {
     clear: both;
     padding: 10px;
@@ -87,14 +103,14 @@ a:hover {
     font-size: 80%;
     color: #ca7840;
 }
-ul.errorlist {
+/*ul.errorlist {
     display: inline;
     margin: 0; 
     padding: 0;
-    /*line-height: 0;*/
+    line-height: 0;
     font-size: 80%;
     color: #ff0000;
-}
+}*/
 .error {
     font-size: 80%;
     color: #ff0000;
@@ -112,9 +128,9 @@ ul.errorlist {
     height: 50px;
 */
 }
-ul.errorlist li {
+/*ul.errorlist li {
     list-style-type: none;
-}
+}*/
 table  {
     margin-bottom: 5px;
     /*border: 1px solid #ff0000;*/
@@ -144,11 +160,4 @@ table td {
 .sttable_small input {
     width: 80px;
 }
-#left-div1 {
-    width: 50%;
-    float: left;
-    text-align: left;
-}
-#right-div1 {
-    text-align: right;
-}
+

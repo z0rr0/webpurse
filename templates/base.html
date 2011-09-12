@@ -6,7 +6,7 @@
         {% block addmeta %}{% endblock %}
         <link rel="stylesheet" href="{{ MEDIA_URL }}css/main.css" type="text/css" />
         <link rel="stylesheet" href="{{ MEDIA_URL }}css/jquery-ui-1.8.16.custom.css" type="text/css" />
-        <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.6.3.min.js"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.6.2.min.js"></script>
         <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-ui-custom.min.js"></script>
         <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.ui.datepicker-ru.js"></script>
         <script type="text/javascript" src="{{ MEDIA_URL }}js/djcsrf.js"></script>
@@ -22,16 +22,21 @@
         </div>
         <div id="loginpage2"><a href="#">О проекте</a></div>
         <hr />
-
-        <div id="left-menu">
-            {% block leftmenu %}{% endblock leftmenu %}
-            {% comment %}
-                {% include "leftmenu.html" %}
-            {% endcomment %}
-        </div>
-        <div id="content-main">
-            {% block content %}{% endblock %}
-        </div>
+        <table class="mainntable">
+            <tr>
+                <td width="200px">
+                    <div id="left-invoice">
+                        {% block leftinvoice %}{% endblock leftinvoice %}
+                    </div>
+                </td>
+                <td>
+                    <div id="content-main">
+                        {% block content %}{% endblock %}
+                    </div>
+                </td>                
+            </tr>
+        </table>
+      
         <!-- 
         <div id="footer-page">
             <center>Footer</center>
