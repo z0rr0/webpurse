@@ -1,0 +1,27 @@
+{% load jtags %}
+<div id="allsum">
+    {% if summ %}
+        {{ summ|rusnum }} руб.
+    {% endif %}
+</div><br>
+{% if invoices %}
+    {% for invoice in invoices %}
+        <div>
+        <span id="isum">{{ invoice.balance|rusnum }} руб.</span><br>
+        {% if invoice.url %}
+            <a href="{{ invoice.url }}"><strong>{{ invoice.name }}</strong></a>
+        {% else %}
+            <strong>{{ invoice.name }}</strong>
+        {% endif %}
+        <br>
+        <em>
+            {{ invoice.comment }}
+            {% if invoice.other %}
+                <br>(чужой счет)
+            {% endif %}
+        </em>
+        </div><br>
+    {% endfor %}
+{% else %}
+    У вас еще нет счетов
+{% endif %}

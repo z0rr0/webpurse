@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block pagejs %}
+<script type="text/javascript">
+    $(document).ready(function() {
+    voice_update();
+
+    function voice_update() {
+        $.ajax({
+            url: '/invoice/view/',
+            type: 'GET',
+            dataType: 'html',
+            context: document.body,
+            async: true,
+            success: function (data) {
+                $('#leftm').html(data);
+            },
+            statusCode: {
+                404: function() {
+                    $('#leftm').html('');
+                    alert('page not found');
+                 },
+            }
+        });
+        
+    }
+});
+</script>
+{% endblock %}
+
+{% block leftmenu %}
+    <div id="leftm">123</div>
+{% endblock leftmenu %}
+
+{% block content %}
+    123
+{% endblock %}

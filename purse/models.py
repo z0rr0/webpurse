@@ -24,7 +24,7 @@ class Invoice(models.Model):
         return self.name
 
     class Meta:
-        ordering = ['name']
+        ordering = ['other', 'name']
 
 # pay types
 class Itype(models.Model):

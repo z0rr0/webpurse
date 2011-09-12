@@ -13,14 +13,18 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # Examples:
-    # url(r'^$', 'webpurse.views.home', name='home'),
+    url(r'^$', pv.home, {
+            'vtemplate': 'home.html'}),
     # url(r'^webpurse/', include('webpurse.foo.urls')),
     # server test
-    (r'^ping/$', ping_test),
+    # (r'^ping/$', ping_test),
 
     # accounts
     (r'^accounts/login/$', login),
     (r'^accounts/logout/$' , logout),
+
+    (r'^invoice/view/$' , pv.invoce_view, {
+            'vtemplate': 'invoce_view.html'}),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
@@ -28,6 +32,7 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
 )
+
 # media content                   
 # urlpatterns += patterns('',) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 if settings.DEBUG:

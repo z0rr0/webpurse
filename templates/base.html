@@ -14,18 +14,28 @@
     </head> 
     <body>
         {% block pagejs %}{% endblock %}
-        <div id="header-page">
-            <center>Header</center>
+        <div id="loginpage1">
+        {% if user.is_authenticated %}
+            Вы вошли как {{ user.first_name  }}.
+        {% endif %}
+        <span ><a href="/accounts/logout/">выйти</a></span>
         </div>
+        <div id="loginpage2"><a href="#">О проекте</a></div>
+        <hr />
+
         <div id="left-menu">
-            <center>Menu</center>
-            {% include "leftmenu.html" %}
+            {% block leftmenu %}{% endblock leftmenu %}
+            {% comment %}
+                {% include "leftmenu.html" %}
+            {% endcomment %}
         </div>
         <div id="content-main">
             {% block content %}{% endblock %}
         </div>
+        <!-- 
         <div id="footer-page">
             <center>Footer</center>
         </div>
+        -->
     </body>
 </html>
