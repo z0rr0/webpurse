@@ -14,3 +14,12 @@ class SimpleTest(TestCase):
         Tests that 1 + 1 always equals 2.
         """
         self.assertEqual(1 + 1, 2)
+
+class LoginTest(TestCase):
+    def test_login(self):
+        response = self.client.get('/accounts/login/')
+        self.failUnlessEqual(response.status_code, 200)
+
+    def test_logout(self):
+        response = self.client.get('/accounts/logout/')
+        self.failUnlessEqual(response.status_code, 200)
