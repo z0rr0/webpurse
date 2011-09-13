@@ -58,7 +58,37 @@ a:hover {
     /*border: 2px solid black;*/
     min-height: 30px;
 }
-
+#loginpage21 {
+    float: left;
+    border: 2px solid black;
+    width: 25%;
+    min-height: 30px;
+    color: #8b98ab;
+}
+#loginpage22 {
+    float: left;
+    width: 50%;
+    /*text-align:justify;*/
+    text-align: center;
+    border: 2px solid black;
+    min-height: 30px;
+}
+#loginpage22 ul {
+    list-style: none;
+    margin: 0px;
+    padding: 0;
+}
+#loginpage22 li {
+    display: inline;
+    margin: 20px;
+    padding: 0px;
+}
+#loginpage23 {
+    margin-left: 76%;
+    text-align: right;
+    border: 2px solid black;
+    min-height: 30px;
+}
 #left-invoice {
     width: 200px;
     margin: 7px;
@@ -68,8 +98,6 @@ a:hover {
     float: left;
     min-height: 330px;
 }
-
-
 #allsum {
     text-align: center;
     font-size: 150%;

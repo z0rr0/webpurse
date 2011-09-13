@@ -37,3 +37,22 @@ $(document).ajaxSend(function(event, xhr, settings) {
         xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
     }
 });
+
+function invoices_update(vurl, vdiv) {
+    $.ajax({
+        url: vurl,
+        type: 'GET',
+        dataType: 'html',
+        context: document.body,
+        async: true,
+        success: function (data) {
+            $(vdiv).html(data);
+        },
+        statusCode: {
+            404: function() {
+                $(vdiv).html('Invoices page not found');
+                // alert('Invoices page not found');
+             },
+        }
+    });
+}

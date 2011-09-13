@@ -13,20 +13,31 @@
         <title>{% block title %}{% endblock %}</title>
     </head> 
     <body>
+        <script type="text/javascript">
+        $(document).ready(function() {
+            invoices_update('/invoice/view/', '#leftm');          
+        });
+        </script>
         {% block pagejs %}{% endblock %}
-        <div id="loginpage1">
-        {% if user.is_authenticated %}
-            Вы вошли как {{ user.first_name  }}.
-        {% endif %}
-        <span ><a href="/accounts/logout/">выйти</a></span>
+        <div id="loginpage21">
+            {% if user.is_authenticated %}
+                Вы вошли как {{ user.first_name  }}.
+            {% endif %}
+            <a href="/accounts/logout/">выйти</a>
         </div>
-        <div id="loginpage2"><a href="#">О проекте</a></div>
+        <div id="loginpage22">
+            <ul class="headmenu">
+                <li><a href="/invoices/">счета</a></li>
+                <li><a href="/history/">история</a></li>
+            </ul>
+        </div>
+        <div id="loginpage23"><a href="#">О проекте</a></div>
         <hr />
         <table class="maintable" width="100%">
             <tr>
                 <td width="220px">
                     <div id="left-invoice">
-                        {% block leftinvoice %}{% endblock leftinvoice %}
+                        <div id="leftm"></div>
                     </div>
                 </td>
                 <td>
@@ -36,11 +47,5 @@
                 </td>                
             </tr>
         </table>
-      
-        <!-- 
-        <div id="footer-page">
-            <center>Footer</center>
-        </div>
-        -->
     </body>
 </html>

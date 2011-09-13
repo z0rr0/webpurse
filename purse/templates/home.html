@@ -3,38 +3,13 @@
 
 {% block pagejs %}
 <script type="text/javascript">
-    $(document).ready(function() {
-        $( "#tabs" ).tabs({
-            // event: "mouseover"
-        });
-        voice_update();
-
-        function voice_update() {
-            $.ajax({
-                url: '/invoice/view/',
-                type: 'GET',
-                dataType: 'html',
-                context: document.body,
-                async: true,
-                success: function (data) {
-                    $('#leftm').html(data);
-                },
-                statusCode: {
-                    404: function() {
-                        $('#leftm').html('');
-                        alert('page not found');
-                     },
-                }
-            });
-            
-        }
+$(document).ready(function() {
+    $( "#tabs" ).tabs({
+        // event: "mouseover"
+    });
 });
 </script>
 {% endblock %}
-
-{% block leftinvoice %}
-    <div id="leftm"></div>
-{% endblock leftinvoice %}
 
 {% block content %}
     <div id="tabs">
