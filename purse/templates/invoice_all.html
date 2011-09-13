@@ -20,7 +20,7 @@ $(document).ready(function() {
             <tr>
                 <th>Наименование</th>
                 <th>Баланс, руб.</th>
-                <th>Свой</th>
+                <th>Чужой</th>
                 <th>Примечание</th>
                 <th>Дата изменения</th>
                 <th></th>
@@ -51,7 +51,7 @@ $(document).ready(function() {
     <br>
     <strong>Изменить счета:</strong> 
     <ul class="actionul">
-        <li><a href="#" title="редактировать счета"><img src="{{ MEDIA_URL }}img/edit.png"> редактировать</a></li>
+        <li><a href="/invoice/edit/" title="редактировать счета"><img src="{{ MEDIA_URL }}img/edit.png"> редактировать</a></li>
         <li><a href="#" title="добавить новый счет"><img src="{{ MEDIA_URL }}img/add.png"> добавить</a></li>
     </ul>
 {% else %}

@@ -9,7 +9,8 @@
         <div>
         <span id="isum">{{ invoice.balance|rusnum }} руб.</span><br>
         {% if invoice.url %}
-            <a href="{{ invoice.url }}" target="_blank" title="Переход на страницу счета"><strong>{{ invoice.name }}</strong></a>
+            <a href="{{ invoice.url }}" target="_blank" 
+            title="Переход на страницу счета"><strong>{{ invoice.name }}</strong></a>
         {% else %}
             <strong>{{ invoice.name }}</strong>
         {% endif %}
@@ -23,5 +24,6 @@
         </div><br>
     {% endfor %}
 {% else %}
-    У вас еще нет счетов
+    У вас еще нет счетов, но Вы можете их 
+    <a href="/invoice/edit/" title="добавить новые счета">добавить</a>.
 {% endif %}

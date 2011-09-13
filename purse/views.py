@@ -20,7 +20,7 @@ from django.db.models import Sum
 # logger = logging.getLogger(__name__)
 
 from webpurse.purse.models import *
-# from webpurse.purse.forms import *
+from webpurse.purse.forms import *
 import datetime
 
 
@@ -62,3 +62,18 @@ def invoice_delete(request, id, redirecturl):
     if invoice:
          invoice.delete()
     return HttpResponseRedirect(redirecturl)
+
+@permission_required('purse.change_invoice')
+@transaction.autocommit
+def invoice_edit(request, vtemplate):
+    c = {}
+    c.update(csrf(request))
+    qinvoice = Invoice.objects.filter(user=request.user.id)
+    extra_num = 0 if qinvoice.count() > 0 else 5
+    InvoiceFormSet = modelformset_factory(Invoice, extra=extra_num, form=InvoiceForm)
+    if request.method == 'POST':
+        pass
+    else:
+        formset = InvoiceFormSet(queryset=qinvoice)
+    return direct_to_template(request, vtemplate, 
+        {'formset': formset})

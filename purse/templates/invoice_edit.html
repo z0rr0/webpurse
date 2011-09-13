@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load jtags %}
+{% block title %}Счета{% endblock %}
+
+{% block pagejs %}
+<script type="text/javascript">
+$(document).ready(function() {
+    // $( "#tabs" ).tabs({
+    //     // event: "mouseover"
+    // });
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<h1>Изменение данных о счетах</h1>
+<form method="POST" id="editform" action="">
+{% csrf_token %}{{ formset.management_form }}
+    <table width="100%">
+        <tr>
+            <th>№</th>
+            <th>Наименование</th>
+            <th>Баланс, руб.</th>
+            <th>Чужой</th>
+            <th>Веб-страница</th>            
+            <th>Примечание</th>
+        </tr>   
+        {% for form in formset %}
+        <tr>
+            <td>
+                {{ forloop.counter }}
+                {{ form.id }}
+            </td>
+            <td>
+                {{ form.name }}
+                {{ form.name.errors|lower }}
+            </td>
+            <td>
+                {{ form.balance }}
+                {{ form.balance.errors|lower }}
+            </td>
+            <td>
+                {{ form.other }}
+                {{ form.other.errors|lower }}
+            </td>
+            <td>
+                {{ form.url }}
+                {{ form.url.errors|lower }}
+            </td>           
+            <td>
+                {{ form.comment }}
+                {{ form.comment.errors|lower }}
+            </td>
+        </tr> 
+        {% endfor %}
+    </table>
+    <br>
+    <input type="submit" value="Сохранить" />
+ </form>
+{% endblock content %}

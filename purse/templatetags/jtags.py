@@ -15,4 +15,4 @@ def rusnum(value):
 
 @register.filter(name='myinvoice')
 def rusnum(value):
-    return '-' if value else '+'
+    return '+' if value else '-'
