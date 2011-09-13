@@ -5,9 +5,10 @@
 {% block pagejs %}
 <script type="text/javascript">
 $(document).ready(function() {
-    // $( "#tabs" ).tabs({
-    //     // event: "mouseover"
-    // });
+    $('#addlink').click(function() {
+        $('#invoiceadd').show();
+        // invoices_update('/invoice/view/', '#leftm');
+    })
 });
 </script>
 {% endblock %}
@@ -52,8 +53,48 @@ $(document).ready(function() {
     <strong>Изменить счета:</strong> 
     <ul class="actionul">
         <li><a href="/invoice/edit/" title="редактировать счета"><img src="{{ MEDIA_URL }}img/edit.png"> редактировать</a></li>
-        <li><a href="#" title="добавить новый счет"><img src="{{ MEDIA_URL }}img/add.png"> добавить</a></li>
+        <li><a href="#" title="добавить новый счет" id="addlink"><img src="{{ MEDIA_URL }}img/add.png"> добавить</a></li>
     </ul>
+    <div id="invoiceadd" style="display: NONE"><br>
+        <table>
+            <tr>
+                <td>Наименование</td>
+                <td>
+                    {{ form.name }}
+                    {{ form.name.errors|lower }}
+                </td>
+            </tr>
+            <tr>                
+                <td>Баланс, руб.</td>
+                <td>
+                    {{ form.balance }}
+                    {{ form.balance.errors|lower }}
+                </td>
+            </tr>
+            <tr>
+                <td>Чужой</td>
+                <td>
+                    {{ form.other }}
+                    {{ form.other.errors|lower }}
+                </td>
+            </tr>
+            <tr>
+                <td>Веб-страница</td>
+                <td>
+                    {{ form.url }}
+                    <div class="italicp">{{ form.url.help_text }}</div>
+                    {{ form.url.errors|lower }}
+                </td> 
+            </tr>
+            <tr>
+                <td>Примечание</td>
+                <td>
+                    {{ form.comment }}
+                    {{ form.comment.errors|lower }}
+                </td>
+            </tr>
+        </table>
+    </div>
     <p class="italicp">
         <b>*</b> &mdash; чужие счета не учитываются при подсчете баланса.
     </p>

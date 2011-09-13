@@ -8,10 +8,11 @@ from django.views.generic.simple import direct_to_template
 from django.forms.models import modelformset_factory
 # from django.forms import Textarea
 from django.contrib import auth
-# from django.forms.extras import widgets
+from django.forms.extras import widgets
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from django.db import transaction
 from django.db.models import Sum
+from django import forms
 # new
 # from django.template.response import TemplateResponse
 # import the logging library
@@ -46,8 +47,15 @@ def invoice_view(request, vtemplate):
 @login_required
 def invoice_all(request, vtemplate):
     invoices, summ = user_invoices(request.user.id)
+    # edit spec form
+    form = InvoiceForm()
+    form.fields['name'].widget = forms.TextInput(attrs={'size':'20'})
+    form.fields['balance'].widget = forms.TextInput(attrs={'size':'20'})
+    form.fields['url'].widget = forms.TextInput(attrs={'size':'50'})
+    form.fields['comment'].widget = forms.forms.Textarea(attrs={'cols': '60', 'rows': '2'})
+    # return response request
     return direct_to_template(request, vtemplate, {
-        'invoices': invoices, 'summ': summ
+        'invoices': invoices, 'summ': summ, 'form': form
         });
 
 def invoice_perm(user):
