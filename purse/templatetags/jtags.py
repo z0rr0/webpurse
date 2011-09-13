@@ -12,3 +12,7 @@ def income(value):
 @register.filter(name='rusnum')
 def rusnum(value):
     return locale.format('%0.2f', value, True)
+
+@register.filter(name='myinvoice')
+def rusnum(value):
+    return '-' if value else '+'

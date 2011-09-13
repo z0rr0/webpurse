@@ -7,19 +7,23 @@ body {
     padding: 0;
     line-height: 16px
 }
-table  {
+.itable  {
     margin-bottom: 5px;
     /*border: 1px solid #ff0000;*/
 }
-table th {
+.itable th {
     text-align: center;
     font-weight: bold;
-    background-color: #b6b7ba;
+    background-color: #232323;
 }
-table td {
-    text-align: left; 
-    padding: 7px;
-    border-bottom: 1px solid #999;: 1px solid #000000;
+.itable tfoot {
+    font-weight: bold;
+    background-color: #3b3b3b;
+}
+.itable td {
+    /*text-align: left; */
+    border-bottom: 1px solid #818181;
+    padding: 5px;
 }
 /* H1,2,3 */
 h1 { 
@@ -42,7 +46,7 @@ a:hover {
     border: 0;
 }
 .maintable td {
-    border: 0;
+    /*border: 0;*/
     vertical-align: top;
 }
 #loginpage1 {
@@ -60,7 +64,7 @@ a:hover {
 }
 #loginpage21 {
     float: left;
-    border: 2px solid black;
+    /*border: 2px solid black;*/
     width: 25%;
     min-height: 30px;
     color: #8b98ab;
@@ -70,10 +74,11 @@ a:hover {
     width: 50%;
     /*text-align:justify;*/
     text-align: center;
-    border: 2px solid black;
+    /*border: 2px solid black;*/
     min-height: 30px;
 }
 #loginpage22 ul {
+    display: inline;
     list-style: none;
     margin: 0px;
     padding: 0;
@@ -86,7 +91,7 @@ a:hover {
 #loginpage23 {
     margin-left: 76%;
     text-align: right;
-    border: 2px solid black;
+    /*border: 2px solid black;*/
     min-height: 30px;
 }
 #left-invoice {
@@ -149,6 +154,19 @@ a:hover {
     font-size: 80%;
     color: #ff0000;
 }*/
+.actionul {
+    display: inline;
+}
+.actionul ul {
+    list-style: none;
+    margin: 0px;
+    padding: 0;
+}
+.actionul li {
+    display: inline;
+    margin: 10px;
+    padding: 0px;
+}
 .error {
     font-size: 80%;
     color: #ff0000;

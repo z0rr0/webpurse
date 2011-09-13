@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load jtags %}
+{% block title %}Счета{% endblock %}
+
+{% block pagejs %}
+<script type="text/javascript">
+$(document).ready(function() {
+    // $( "#tabs" ).tabs({
+    //     // event: "mouseover"
+    // });
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<h1>Ваши счета</h1>
+{% if invoices %}
+    <table class="itable">
+        <thead>
+            <tr>
+                <th>Наименование</th>
+                <th>Баланс, руб.</th>
+                <th>Свой</th>
+                <th>Примечание</th>
+                <th>Дата изменения</th>
+                <th></th>
+            </tr>   
+        </thead>
+        <tfoot>
+            <tr>
+                <td>Итого</td>
+                <td colspan="5">{{ summ|rusnum }}</td>
+            </tr>
+        </tfoot>    
+        <tbody>
+            {% for invoice in invoices %}
+            <tr>
+                <td><a href="{{ invoice.url }}" target="_blank" 
+                    title="перейти к внешней странице счета">{{ invoice.name }}</a></td>
+                <td>{{ invoice.balance|rusnum }}</td>
+                <td align="center">{{ invoice.other|myinvoice }}</td>
+                <td>{{ invoice.comment }}</td>            
+                <td><nobr>{{ invoice.modified|date:'d.m.Y H:i' }}</nobr></td>             
+                <td width="30px"><a href="/invoice/delete/{{ invoice.id }}/" title="удалить счет">
+                    <img src="{{ MEDIA_URL }}img/delete.png"  align="right" alt="удалить"></a>
+                </td>
+            </tr>   
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <strong>Изменить счета:</strong> 
+    <ul class="actionul">
+        <li><a href="#" title="редактировать счета"><img src="{{ MEDIA_URL }}img/edit.png"> редактировать</a></li>
+        <li><a href="#" title="добавить новый счет"><img src="{{ MEDIA_URL }}img/add.png"> добавить</a></li>
+    </ul>
+{% else %}
+    <em>Данные не найдены</em>
+{% endif %}
+ 
+{% endblock content %}

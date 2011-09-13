@@ -9,7 +9,7 @@ from django.forms.models import modelformset_factory
 # from django.forms import Textarea
 from django.contrib import auth
 # from django.forms.extras import widgets
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from django.db import transaction
 from django.db.models import Sum
 # new
@@ -30,11 +30,35 @@ def home(request, vtemplate):
     return direct_to_template(request, vtemplate, {})
 
  # INVOICE *************************
-@login_required
-def invoce_view(request, vtemplate):
-    user_id = request.user.id
+def user_invoices(user_id):
     invoices = Invoice.objects.filter(user=user_id)
-    summ = Invoice.objects.filter(user=user_id, other=False).aggregate(Sum('balance'))
+    summ = Invoice.objects.filter(user=user_id, other=False)
+    summ = summ.aggregate(Sum('balance'))
+    return invoices, summ['balance__sum']
+
+@login_required
+def invoice_view(request, vtemplate):
+    invoices, summ = user_invoices(request.user.id)
     return direct_to_template(request, vtemplate, {
-        'invoices': invoices, 'summ': summ['balance__sum']
+        'invoices': invoices, 'summ': summ
         });
+
+@login_required
+def invoice_all(request, vtemplate):
+    invoices, summ = user_invoices(request.user.id)
+    return direct_to_template(request, vtemplate, {
+        'invoices': invoices, 'summ': summ
+        });
+
+def invoice_perm(user):
+    return user.is_authenticated() and user.has_perm("invoice.can_delete")
+
+# delete invoice, additional var: login_url="/accounts/login/"
+# or @user_passes_test(invoice_perm)
+@permission_required('purse.delete_invoice')
+@transaction.autocommit
+def invoice_delete(request, id, redirecturl):
+    invoice = get_object_or_404(Invoice, pk=int(id), user=request.user.id)
+    if invoice:
+         invoice.delete()
+    return HttpResponseRedirect(redirecturl)

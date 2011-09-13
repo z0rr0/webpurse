@@ -22,9 +22,15 @@ urlpatterns = patterns('',
     # accounts
     (r'^accounts/login/$', login),
     (r'^accounts/logout/$' , logout),
-
-    (r'^invoice/view/$' , pv.invoce_view, {
-            'vtemplate': 'invoce_view.html'}),
+    # left menu
+    (r'^invoice/view/$' , pv.invoice_view, {
+            'vtemplate': 'invoice_view.html'}),
+    # view all user invoices
+    (r'^invoices/$' , pv.invoice_all, {
+            'vtemplate': 'invoice_all.html'}),
+    # del school
+    (r'^invoice/delete/(?P<id>\d+)/?$', pv.invoice_delete, {
+        'redirecturl': '/invoices/'}),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
