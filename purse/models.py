@@ -15,7 +15,7 @@ class Invoice(models.Model):
     name = models.CharField(max_length=255, verbose_name=u'название')
     balance = models.FloatField(default=0, verbose_name = u'баланс')
     other = models.BooleanField(default=False, verbose_name=u'чужой счет')
-    url = models.URLField(max_length=255, verbose_name=u'URL', blank=True, null=True)
+    url = models.URLField(max_length=255, verbose_name=u'URL', blank=True, null=True, help_text=u'url')
     comment = models.TextField(verbose_name=u'примечание', blank=True, null=True)
     modified = models.DateTimeField(auto_now=True, auto_now_add=True, editable=False)
     created = models.DateTimeField(auto_now_add=True, editable=False)

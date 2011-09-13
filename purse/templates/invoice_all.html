@@ -55,7 +55,7 @@ $(document).ready(function() {
         <li><a href="#" title="добавить новый счет"><img src="{{ MEDIA_URL }}img/add.png"> добавить</a></li>
     </ul>
 {% else %}
-    <em>Данные не найдены</em>
+    <em>Данные не найдены, необходимо <a href="/invoice/edit/" title="добавить новые счета">добавить</a> счета.</em>
 {% endif %}
  
 {% endblock content %}
