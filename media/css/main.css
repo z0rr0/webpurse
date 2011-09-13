@@ -15,6 +15,7 @@ body {
     text-align: center;
     font-weight: bold;
     background-color: #232323;
+    padding: 8px;
 }
 .itable tfoot {
     font-weight: bold;
@@ -167,26 +168,44 @@ a:hover {
     margin: 10px;
     padding: 0px;
 }
+.italicp {
+    font-style: italic;
+    font-size: 85%;
+}
 .error {
     font-size: 80%;
     color: #ff0000;
 }
-.table-view th {
-    text-align: left;
-    vertical-align: top;
+.table_edit input {
+    background-color: #d2d6ce;
+    font-size: 90%;
 }
-.table-edit th {
-    text-align: left;
-    vertical-align: top;
+.table_edit textarea {
+    background-color: #d2d6ce;
+    font-size: 90%;
 }
-.table-edit textarea {
-/*  width: 300px;
-    height: 50px;
-*/
+.table_edit th {
+    text-align: center;
+    font-weight: bold;
+    background-color: #232323;
+    padding: 2px;
 }
-/*ul.errorlist li {
+.table_edit td {
+    text-align: center; 
+    border-bottom: 1px solid #818181;
+    padding: 0;
+}
+ul.errorlist {
+    display: inline;
+    margin: 0; 
+    padding: 0;
+    /*line-height: 0;*/
+    font-size: 80%;
+    color: #ca7840;
+}
+ul.errorlist li {
     list-style-type: none;
-}*/
+}
 
 .row1 {
     background-color: #dfe0d9;

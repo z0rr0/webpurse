@@ -21,7 +21,7 @@
         {% block pagejs %}{% endblock %}
         <div id="loginpage21">
             {% if user.is_authenticated %}
-                Вы вошли как {{ user.first_name  }}.
+                Вы вошли как <u>{{ user.first_name  }}</u>.
             {% endif %}
             <a href="/accounts/logout/">выйти</a>
         </div>

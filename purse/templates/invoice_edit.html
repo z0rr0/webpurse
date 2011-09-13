@@ -16,7 +16,7 @@ $(document).ready(function() {
 <h1>Изменение данных о счетах</h1>
 <form method="POST" id="editform" action="">
 {% csrf_token %}{{ formset.management_form }}
-    <table width="100%">
+    <table width="100%" class="table_edit">
         <tr>
             <th>№</th>
             <th>Наименование</th>
@@ -45,7 +45,7 @@ $(document).ready(function() {
             </td>
             <td>
                 {{ form.url }}
-                {{ form.url.help_text }}
+                <span class="italicp">{{ form.url.help_text }}</span>
                 {{ form.url.errors|lower }}
             </td>           
             <td>

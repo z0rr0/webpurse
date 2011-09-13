@@ -69,10 +69,24 @@ def invoice_edit(request, vtemplate):
     c = {}
     c.update(csrf(request))
     qinvoice = Invoice.objects.filter(user=request.user.id)
-    extra_num = 0 if qinvoice.count() > 0 else 5
+    if qinvoice.count():
+        extra_num = 0
+    else:
+        extra_num = 5     
+        qinvoice = Invoice.objects.none()
+
     InvoiceFormSet = modelformset_factory(Invoice, extra=extra_num, form=InvoiceForm)
     if request.method == 'POST':
-        pass
+        formset = InvoiceFormSet(request.POST, queryset=qinvoice)
+        if formset.is_valid():
+            with transaction.commit_on_success():
+                for form in formset:
+                    # skip empty forms
+                    if form.cleaned_data:
+                        invoice = form.save(commit=False)
+                        invoice.user_id = request.user.id
+                        invoice.save()
+            return redirect('/invoices/')
     else:
         formset = InvoiceFormSet(queryset=qinvoice)
     return direct_to_template(request, vtemplate, 

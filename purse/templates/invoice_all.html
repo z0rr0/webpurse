@@ -20,7 +20,7 @@ $(document).ready(function() {
             <tr>
                 <th>Наименование</th>
                 <th>Баланс, руб.</th>
-                <th>Чужой</th>
+                <th>Чужой*</th>
                 <th>Примечание</th>
                 <th>Дата изменения</th>
                 <th></th>
@@ -54,6 +54,9 @@ $(document).ready(function() {
         <li><a href="/invoice/edit/" title="редактировать счета"><img src="{{ MEDIA_URL }}img/edit.png"> редактировать</a></li>
         <li><a href="#" title="добавить новый счет"><img src="{{ MEDIA_URL }}img/add.png"> добавить</a></li>
     </ul>
+    <p class="italicp">
+        <b>*</b> &mdash; чужие счета не учитываются при подсчете баланса.
+    </p>
 {% else %}
     <em>Данные не найдены, необходимо <a href="/invoice/edit/" title="добавить новые счета">добавить</a> счета.</em>
 {% endif %}

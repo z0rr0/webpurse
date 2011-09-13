@@ -16,9 +16,11 @@
         {% endif %}
         <br>
         <em>
-            {{ invoice.comment }}
+            {% if invoice.comment %}
+                {{ invoice.comment }}<br>
+            {% endif %}
             {% if invoice.other %}
-                <br>(чужой счет)
+                (чужой счет)
             {% endif %}
         </em>
         </div><br>
