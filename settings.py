@@ -210,6 +210,9 @@ CACHES = {
     }
 }
 
+BANK_FILE = os.path.join(PROJECT_PATH, 'bank.xml')
+
+
 # rewrite global setting vars
 try:
     from local_settings import *
