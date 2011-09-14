@@ -223,6 +223,9 @@ ul.errorlist li {
 .smallfield input {
     width: 100px;
 }
+.smallsym {
+    font-size: 60%;
+}
 
 .row1 {
     background-color: #dfe0d9;

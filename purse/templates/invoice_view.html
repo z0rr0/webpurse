@@ -7,7 +7,10 @@
 {% if invoices %}
     {% for invoice in invoices %}
         <div>
-        <span id="isum">{{ invoice.balance|rusnum }} руб.</span><br>
+        <span id="isum">
+            {{ invoice.balance|rusnum }} 
+            <span class="smallsym">{{ invoice.valuta.code }}</span>
+        </span><br>
         {% if invoice.url %}
             <a href="{{ invoice.url }}" target="_blank" 
             title="Переход на страницу счета"><strong>{{ invoice.name }}</strong></a>

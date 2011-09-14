@@ -31,10 +31,10 @@ def query_bank(filename):
     bankfile = import_xml_dom(BANK_FILE) 
     with transaction.commit_on_success():
         for key, value in bankfile.items():
-            a = Valuta(id=value["id"], code=value["code"],
+            valuta = Valuta(id=value["id"], code=value["code"],
                 name=value["name"], date=value["date"],
                 kurs=value["kurs"],)
-            a.save()
+            valuta.save()
     return True
 
 # INDEX PAGE *************************
