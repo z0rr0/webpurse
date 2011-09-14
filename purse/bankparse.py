@@ -1,9 +1,11 @@
 from xml.dom import minidom
 from xml.parsers.expat import ExpatError
-import datetime
+import datetime, os
+
+fn = '/home/zorro/gitrep/djcode/webpurse/purse/bank.xml'
 
 def import_xml_dom(filename):
-    if os.path.isfile(filename):
+    if not os.path.isfile(filename):
         return False
 
     def get_text(node_list):
@@ -14,7 +16,7 @@ def import_xml_dom(filename):
         return "".join(text).strip()
     try:
         dom = minidom.parse(filename)
-    except (EnviromentError, ExpatError) as err:
+    except (EnvironmentError, ExpatError) as err:
         print "Error: %s" % err
         return False
     
@@ -46,8 +48,11 @@ def import_xml_dom(filename):
             tmp = valute.getElementsByTagName("Value")[0]
             value = get_text(tmp.childNodes)
             data[ind]["kurs"] = nom2kurs(nominal, value)
+            data[ind]["date"] = fordate
         except (ValueError, LookupError) as err:
             print "Error: %s" % err
             return False
-    return fordate, data
-    
+    return data
+ 
+# k = import_xml_dom(fn)
+# print k

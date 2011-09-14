@@ -8,10 +8,24 @@ def none2str(x):
     return x if x is not None else ''
 
 # CREATE YOUR MODELS HERE.
+# valuta
+class Valuta(models.Model):
+    code = models.CharField(max_length=5)
+    name = models.CharField(max_length=200)
+    kurs = models.FloatField(default=1)
+    date = models.DateField()
+
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        ordering = ['name']
 
 # ivoices
 class Invoice(models.Model):
     user = models.ForeignKey(User, verbose_name=u'пользователь')
+    valuta = models.ForeignKey(Valuta, verbose_name=u'валюта', default=643,
+        help_text=u'валюта счета')
     name = models.CharField(max_length=255, verbose_name=u'название',
         help_text=u'наименование счета')
     balance = models.FloatField(default=0, verbose_name = u'баланс',
@@ -30,6 +44,7 @@ class Invoice(models.Model):
 
     class Meta:
         ordering = ['other', 'name']
+
 
 # pay types
 class Itype(models.Model):

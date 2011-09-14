@@ -12,7 +12,6 @@ $(document).ready(function() {
 });
 </script>
 {% endblock %}
-
 {% block content %}
 <h1>Ваши счета</h1>
 {% if invoices %}
@@ -20,7 +19,7 @@ $(document).ready(function() {
         <thead>
             <tr>
                 <th>Наименование</th>
-                <th>Баланс, руб.</th>
+                <th>Баланс</th>
                 <th>Чужой*</th>
                 <th>Примечание</th>
                 <th>Дата изменения</th>
@@ -38,7 +37,7 @@ $(document).ready(function() {
             <tr>
                 <td><a href="{{ invoice.url }}" target="_blank" 
                     title="перейти к внешней странице счета">{{ invoice.name }}</a></td>
-                <td>{{ invoice.balance|rusnum }}</td>
+                <td>{{ invoice.balance|rusnum }} {{ invoice.valuta.code }}</td>
                 <td align="center">{{ invoice.other|myinvoice }}</td>
                 <td>{{ invoice.comment }}</td>            
                 <td><nobr>{{ invoice.modified|date:'d.m.Y H:i' }}</nobr></td>             

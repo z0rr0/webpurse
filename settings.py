@@ -210,7 +210,8 @@ CACHES = {
     }
 }
 
-BANK_FILE = os.path.join(PROJECT_PATH, 'bank.xml')
+# BANK_FILE = os.path.join(PROJECT_PATH, 'bank.xml')
+BANK_FILE = '/home/zorro/gitrep/djcode/webpurse/purse/bank.xml'
 
 
 # rewrite global setting vars

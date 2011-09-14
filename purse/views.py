@@ -22,8 +22,20 @@ from django import forms
 
 from webpurse.purse.models import *
 from webpurse.purse.forms import *
+from webpurse.purse.bankparse import import_xml_dom
+from webpurse.settings import BANK_FILE
+
 import datetime
 
+def query_bank(filename):
+    bankfile = import_xml_dom(BANK_FILE) 
+    with transaction.commit_on_success():
+        for key, value in bankfile.items():
+            a = Valuta(id=value["id"], code=value["code"],
+                name=value["name"], date=value["date"],
+                kurs=value["kurs"],)
+            a.save()
+    return True
 
 # INDEX PAGE *************************
 @login_required
@@ -32,10 +44,13 @@ def home(request, vtemplate):
 
  # INVOICE *************************
 def user_invoices(user_id):
-    invoices = Invoice.objects.filter(user=user_id)
-    summ = Invoice.objects.filter(user=user_id, other=False)
-    summ = summ.aggregate(Sum('balance'))
-    return invoices, summ['balance__sum']
+    invoices = Invoice.objects.select_related().filter(user=user_id)
+    summ_inv = invoices.filter(other=False)
+    summ = 0
+    for s in summ_inv:
+        summ += s.balance * s.valuta.kurs
+    # summ = summ.aggregate(Sum('balance'))
+    return invoices, summ
 
 @login_required
 def invoice_view(request, vtemplate):
@@ -47,6 +62,7 @@ def invoice_view(request, vtemplate):
 @login_required
 def invoice_all(request, vtemplate):
     invoices, summ = user_invoices(request.user.id)
+    # b = query_bank(BANK_FILE)
     # edit spec form
     c = {}
     c.update(csrf(request))

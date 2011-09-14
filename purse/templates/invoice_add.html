@@ -26,6 +26,11 @@ $(document).ready(function() {
                 {{ form.name.errors|lower }}
             </td>
         </tr>
+            <th>{{ form.valuta.label }}</th>
+            <td>
+                {{ form.valuta }}
+                <div class="italicp">{{ form.valuta.help_text }}</div>
+            </td>
         <tr>                
             <th>{{ form.balance.label }}, руб.</th>
             <td class="smallfield">
