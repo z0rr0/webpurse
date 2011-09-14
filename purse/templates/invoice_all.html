@@ -56,44 +56,53 @@ $(document).ready(function() {
         <li><a href="#" title="добавить новый счет" id="addlink"><img src="{{ MEDIA_URL }}img/add.png"> добавить</a></li>
     </ul>
     <div id="invoiceadd" style="display: NONE"><br>
-        <table>
-            <tr>
-                <td>Наименование</td>
-                <td>
-                    {{ form.name }}
-                    {{ form.name.errors|lower }}
-                </td>
-            </tr>
-            <tr>                
-                <td>Баланс, руб.</td>
-                <td>
-                    {{ form.balance }}
-                    {{ form.balance.errors|lower }}
-                </td>
-            </tr>
-            <tr>
-                <td>Чужой</td>
-                <td>
-                    {{ form.other }}
-                    {{ form.other.errors|lower }}
-                </td>
-            </tr>
-            <tr>
-                <td>Веб-страница</td>
-                <td>
-                    {{ form.url }}
-                    <div class="italicp">{{ form.url.help_text }}</div>
-                    {{ form.url.errors|lower }}
-                </td> 
-            </tr>
-            <tr>
-                <td>Примечание</td>
-                <td>
-                    {{ form.comment }}
-                    {{ form.comment.errors|lower }}
-                </td>
-            </tr>
-        </table>
+        <h3>Введите данные нового счета</h3>
+        <form method="POST" id="addform" action="/invoice/add/" class="formstyle">
+        {% csrf_token %}{{ formset.management_form }}
+            <table class="bigfield">
+                <tr>
+                    <th>{{ form.name.label }}</th>
+                    <td>
+                        {{ form.name }}
+                        <div class="italicp">{{ form.name.help_text }}</div>
+                        {{ form.name.errors|lower }}
+                    </td>
+                </tr>
+                <tr>                
+                    <th>{{ form.balance.label }}, руб.</th>
+                    <td class="smallfield">
+                        {{ form.balance }}
+                        <div class="italicp">{{ form.balance.help_text }}</div>
+                        {{ form.balance.errors|lower }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>{{ form.other.label }}*</th>
+                    <td>
+                        {{ form.other }}
+                        <div class="italicp">{{ form.other.help_text }}</div>
+                        {{ form.other.errors|lower }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>{{ form.url.label }}</th>
+                    <td>
+                        {{ form.url }}
+                        <div class="italicp">{{ form.url.help_text }}</div>
+                        {{ form.url.errors|lower }}
+                    </td> 
+                </tr>
+                <tr>
+                    <th>{{ form.comment.label }}</th>
+                    <td>
+                        {{ form.comment }}
+                        <div class="italicp">{{ form.comment.help_text }}</div>
+                        {{ form.comment.errors|lower }}
+                    </td>
+                </tr>
+            </table>
+        <input type="submit" value="Сохранить" />
+         </form>
     </div>
     <p class="italicp">
         <b>*</b> &mdash; чужие счета не учитываются при подсчете баланса.

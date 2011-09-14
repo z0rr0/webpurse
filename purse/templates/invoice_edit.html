@@ -14,7 +14,7 @@ $(document).ready(function() {
 
 {% block content %}
 <h1>Изменение данных о счетах</h1>
-<form method="POST" id="editform" action="">
+<form method="POST" id="editform" action="" class="formstyle">
 {% csrf_token %}{{ formset.management_form }}
     <table width="100%" class="table_edit">
         <tr>
