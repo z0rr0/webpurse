@@ -19,7 +19,7 @@ $(document).ready(function() {
 {% csrf_token %}{{ formset.management_form }}
     <table class="bigfield">
         <tr>
-            <td>{{ form.name.label }}</td>
+            <th>{{ form.name.label }}</th>
             <td>
                 {{ form.name }}
                 <div class="italicp">{{ form.name.help_text }}</div>
@@ -27,7 +27,7 @@ $(document).ready(function() {
             </td>
         </tr>
         <tr>                
-            <td>{{ form.balance.label }}, руб.</td>
+            <th>{{ form.balance.label }}, руб.</th>
             <td class="smallfield">
                 {{ form.balance }}
                 <div class="italicp">{{ form.balance.help_text }}</div>
@@ -35,7 +35,7 @@ $(document).ready(function() {
             </td>
         </tr>
         <tr>
-            <td>{{ form.other.label }}*</td>
+            <th>{{ form.other.label }}*</th>
             <td>
                 {{ form.other }}
                 <div class="italicp">{{ form.other.help_text }}</div>
@@ -43,7 +43,7 @@ $(document).ready(function() {
             </td>
         </tr>
         <tr>
-            <td>{{ form.url.label }}</td>
+            <th>{{ form.url.label }}</th>
             <td>
                 {{ form.url }}
                 <div class="italicp">{{ form.url.help_text }}</div>
@@ -51,7 +51,7 @@ $(document).ready(function() {
             </td> 
         </tr>
         <tr>
-            <td>{{ form.comment.label }}</td>
+            <th>{{ form.comment.label }}</th>
             <td>
                 {{ form.comment }}
                 <div class="italicp">{{ form.comment.help_text }}</div>
