@@ -48,11 +48,13 @@ def invoice_view(request, vtemplate):
 def invoice_all(request, vtemplate):
     invoices, summ = user_invoices(request.user.id)
     # edit spec form
+    c = {}
+    c.update(csrf(request))
     form = InvoiceForm()
-    form.fields['name'].widget = forms.TextInput(attrs={'size':'20'})
-    form.fields['balance'].widget = forms.TextInput(attrs={'size':'20'})
-    form.fields['url'].widget = forms.TextInput(attrs={'size':'50'})
-    form.fields['comment'].widget = forms.forms.Textarea(attrs={'cols': '60', 'rows': '2'})
+    # form.fields['name'].widget = forms.TextInput(attrs={'size':'20'})
+    # form.fields['balance'].widget = forms.TextInput(attrs={'size':'20'})
+    # form.fields['url'].widget = forms.TextInput(attrs={'size':'50'})
+    # form.fields['comment'].widget = forms.forms.Textarea(attrs={'cols': '60', 'rows': '2'})
     # return response request
     return direct_to_template(request, vtemplate, {
         'invoices': invoices, 'summ': summ, 'form': form
@@ -72,7 +74,6 @@ def invoice_delete(request, id, redirecturl):
     return HttpResponseRedirect(redirecturl)
 
 @permission_required('purse.change_invoice')
-@transaction.autocommit
 def invoice_edit(request, vtemplate):
     c = {}
     c.update(csrf(request))
@@ -97,5 +98,20 @@ def invoice_edit(request, vtemplate):
             return redirect('/invoices/')
     else:
         formset = InvoiceFormSet(queryset=qinvoice)
-    return direct_to_template(request, vtemplate, 
-        {'formset': formset})
+    return direct_to_template(request, vtemplate, {'formset': formset})
+
+@permission_required('purse.add_invoice')
+@transaction.autocommit
+def invoice_add(request, vtemplate):
+    c = {}
+    c.update(csrf(request))
+    if request.method == 'POST':
+        form = InvoiceForm(request.POST or None) 
+        if form.is_valid():
+            invoice = form.save(commit=False)
+            invoice.user_id = request.user.id
+            invoice.save()
+            return redirect('/invoices/')
+    else:
+        form = InvoiceForm()
+    return direct_to_template(request, vtemplate, {'form': form})

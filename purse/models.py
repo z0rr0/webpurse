@@ -12,12 +12,16 @@ def none2str(x):
 # ivoices
 class Invoice(models.Model):
     user = models.ForeignKey(User, verbose_name=u'пользователь')
-    name = models.CharField(max_length=255, verbose_name=u'название')
-    balance = models.FloatField(default=0, verbose_name = u'баланс')
-    other = models.BooleanField(default=False, verbose_name=u'чужой счет')
-    url = models.URLField(max_length=255, verbose_name=u'URL', 
+    name = models.CharField(max_length=255, verbose_name=u'название',
+        help_text=u'наименование счета')
+    balance = models.FloatField(default=0, verbose_name = u'баланс',
+        help_text=u'начальный баланс')
+    other = models.BooleanField(default=False, verbose_name=u'чужой',
+        help_text=u'счет не относится к личным финансам')
+    url = models.URLField(max_length=255, verbose_name=u'Веб-страница', 
         blank=True, null=True, help_text=u'адрес веб-страницы счета')
-    comment = models.TextField(verbose_name=u'примечание', blank=True, null=True)
+    comment = models.TextField(verbose_name=u'примечание', blank=True, null=True,
+        help_text=u'комментарий к счету')
     modified = models.DateTimeField(auto_now=True, auto_now_add=True, editable=False)
     created = models.DateTimeField(auto_now_add=True, editable=False)
 

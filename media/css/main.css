@@ -176,14 +176,6 @@ a:hover {
     font-size: 80%;
     color: #ff0000;
 }
-.table_edit input {
-    background-color: #d2d6ce;
-    font-size: 90%;
-}
-.table_edit textarea {
-    background-color: #d2d6ce;
-    font-size: 90%;
-}
 .table_edit th {
     text-align: center;
     font-weight: bold;
@@ -205,6 +197,24 @@ ul.errorlist {
 }
 ul.errorlist li {
     list-style-type: none;
+}
+.formstyle input {
+    background-color: #d2d6ce;
+    font-size: 90%;
+}
+.formstyle textarea {
+    background-color: #d2d6ce;
+    font-size: 90%;
+}
+.bigfield input {
+    width: 200px;
+}
+.bigfield textarea {
+    width: 400px;
+    height: 60px;
+}
+.smallfield input {
+    width: 100px;
 }
 
 .row1 {

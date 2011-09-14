@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load jtags %}
+{% block title %}Добавление счета{% endblock %}
+
+{% block pagejs %}
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#addlink').click(function() {
+        $('#invoiceadd').show();
+        // invoices_update('/invoice/view/', '#leftm');
+    })
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<h1>Добавление счета</h1>
+<form method="POST" id="addform" action="" class="formstyle">
+{% csrf_token %}{{ formset.management_form }}
+    <table class="bigfield">
+        <tr>
+            <td>{{ form.name.label }}</td>
+            <td>
+                {{ form.name }}
+                <div class="italicp">{{ form.name.help_text }}</div>
+                {{ form.name.errors|lower }}
+            </td>
+        </tr>
+        <tr>                
+            <td>{{ form.balance.label }}, руб.</td>
+            <td class="smallfield">
+                {{ form.balance }}
+                <div class="italicp">{{ form.balance.help_text }}</div>
+                {{ form.balance.errors|lower }}
+            </td>
+        </tr>
+        <tr>
+            <td>{{ form.other.label }}*</td>
+            <td>
+                {{ form.other }}
+                <div class="italicp">{{ form.other.help_text }}</div>
+                {{ form.other.errors|lower }}
+            </td>
+        </tr>
+        <tr>
+            <td>{{ form.url.label }}</td>
+            <td>
+                {{ form.url }}
+                <div class="italicp">{{ form.url.help_text }}</div>
+                {{ form.url.errors|lower }}
+            </td> 
+        </tr>
+        <tr>
+            <td>{{ form.comment.label }}</td>
+            <td>
+                {{ form.comment }}
+                <div class="italicp">{{ form.comment.help_text }}</div>
+                {{ form.comment.errors|lower }}
+            </td>
+        </tr>
+    </table>
+    <p class="italicp">
+        <b>*</b> &mdash; чужие счета не учитываются при подсчете баланса.
+    </p>
+<input type="submit" value="Сохранить" />
+ </form>
+{% endblock content %}
