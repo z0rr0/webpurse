@@ -16,10 +16,10 @@ class Valuta(models.Model):
     date = models.DateField()
 
     def __unicode__(self):
-        return self.name
+        return self.code
 
     class Meta:
-        ordering = ['name']
+        ordering = ['code']
 
 # ivoices
 class Invoice(models.Model):

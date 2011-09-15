@@ -62,7 +62,6 @@ def invoice_view(request, vtemplate):
 @login_required
 def invoice_all(request, vtemplate):
     invoices, summ = user_invoices(request.user.id)
-    # b = query_bank(BANK_FILE)
     # edit spec form
     c = {}
     c.update(csrf(request))
@@ -121,6 +120,7 @@ def invoice_edit(request, vtemplate):
 def invoice_add(request, vtemplate):
     c = {}
     c.update(csrf(request))
+    valutas = Valuta.objects.all()
     if request.method == 'POST':
         form = InvoiceForm(request.POST or None) 
         if form.is_valid():
@@ -129,5 +129,6 @@ def invoice_add(request, vtemplate):
             invoice.save()
             return redirect('/invoices/')
     else:
-        form = InvoiceForm()
+        form = InvoiceForm()      
+    form.fields['valuta'].choices = [(s.id, ("%s: %s" % (s.code, s.name))) for s in valutas]
     return direct_to_template(request, vtemplate, {'form': form})

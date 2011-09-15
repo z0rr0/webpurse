@@ -22,6 +22,7 @@ $(document).ready(function() {
             <th>Наименование</th>
             <th>Баланс, руб.</th>
             <th>Чужой</th>
+            <th>Валюта</th>
             <th>Веб-страница</th>            
             <th>Примечание</th>
         </tr>   
@@ -44,8 +45,12 @@ $(document).ready(function() {
                 {{ form.other.errors|lower }}
             </td>
             <td>
+                {{ form.valuta }}
+                {{ form.valuta.errors|lower }}
+            </td>
+            <td>
                 {{ form.url }}
-                <span class="italicp">{{ form.url.help_text }}</span>
+                <div class="italicp">{{ form.url.help_text }}</div>
                 {{ form.url.errors|lower }}
             </td>           
             <td>
