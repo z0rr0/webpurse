@@ -10,11 +10,15 @@ def query_bank(filename):
     bankfile = import_xml_dom(BANK_FILE) 
     with transaction.commit_on_success():
         for key, value in bankfile.items():
-            valuta = Valuta(id=value["id"], code=value["code"],
-                name=value["name"],
+            # valuta = Valuta(id=value["id"], code=value["code"],
+            #     name=value["name"],
+            #     date=value["date"],
+            #     kurs=value["kurs"],)
+            # valuta.save()name=value["name"],
+            Valuta.objects.filter(id=value["id"]).update(
+                code=value["code"], 
                 date=value["date"],
-                kurs=value["kurs"],)
-            valuta.save()
+                kurs=value["kurs"])
     return True
 
 class Command(BaseCommand):
