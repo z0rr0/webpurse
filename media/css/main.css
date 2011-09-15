@@ -198,13 +198,6 @@ ul.errorlist {
 ul.errorlist li {
     list-style-type: none;
 }
-.formstyle th {
-    text-align: left;
-    font-weight: bold;
-    background-color: #232323;
-    padding: 2px;
-    vertical-align: top;
-}
 .formstyle input {
     background-color: #d2d6ce;
     font-size: 90%;
@@ -219,6 +212,13 @@ ul.errorlist li {
 .bigfield textarea {
     width: 400px;
     height: 60px;
+}
+.bigfield th {
+    text-align: left;
+    font-weight: bold;
+    background-color: #232323;
+    padding: 2px;
+    vertical-align: top;
 }
 .smallfield input {
     width: 100px;
