@@ -7,6 +7,15 @@ $(document).ready(function() {
     $( "#tabs" ).tabs({
         // event: "mouseover"
     });
+    $('div[id*="datepicker"]').datepicker();
+    $( "#datepicker_in" ).click(function(){
+        data = $( "#datepicker_in" ).val();
+        $('#datein_label').html(data);
+    });
+    $( "#datepicker_out" ).click(function(){
+        data = $( "#datepicker_out" ).val();
+        $('#dateout_label').html(data);
+    });
 });
 </script>
 {% endblock %}
@@ -17,18 +26,52 @@ $(document).ready(function() {
             <li><a href="#tabs-1">Расход</a></li>
             <li><a href="#tabs-2">Приход</a></li>
             <li><a href="#tabs-3">Перевод</a></li>
-            <li><a href="#tabs-4">Долги</a></li>
+            <li><a href="#tabs-4">Корректировка</a></li>
+            <li><a href="#tabs-5">Долги</a></li>
         </ul>
         <div id="tabs-1" >
-            <p>1. Proin elit arcu,</p>
+            <table>
+                <tr>
+                    <td><div id="datepicker_in"></div></td>
+                    <td>
+                    <div id="paystyle">
+                        Введите данные о расходе средств
+                        <div>{{ form_out.value }}</div>
+                        <div>{{ form_out.itype }}</div>
+                        <div>{{ form_out.comment }}</div>
+                        <div><em>Дата:</em><span id="datein_label">{% now "d.m.Y" %}</span></div>
+                        <div><input type="button" value="отравить"></div>
+                    </div>
+                    </td>
+                </tr>
+            </table>
         </div>
         <div id="tabs-2">
-            <p>2. Proin elit arcu,</p>
+            <table>
+                <tr>
+                    <td><div id="datepicker_out"></div></td>
+                    <td>
+                    <div id="paystyle">
+                        Введите данные о получении средств
+                        <div>{{ form_in.value }}</div>
+                        <div>{{ form_in.itype }}</div>
+                        <div>{{ form_in.comment }}</div>
+                        <div><em>Дата:</em><span id="dateout_label">{% now "d.m.Y" %}</span></div>
+                        <div><input type="button" value="отравить"></div>
+                    </div>
+                    </td>
+                </tr>
+            </table>
         </div>
         <div id="tabs-3">
             <p>3. Proin elit arcu,</p>
         </div>
         <div id="tabs-4">
+            <p>4. Proin elit arcu,<br>
+            Some operations are supported by several object types; in particular, practically all objects can be compared, tested for truth value, and converted to a string (with the repr() function or the slightly different str() function). The latter function is implicitly used when an object is written by the print() function.
+            </p>
+        </div>
+        <div id="tabs-5">
             <p>4. Proin elit arcu,<br>
             Some operations are supported by several object types; in particular, practically all objects can be compared, tested for truth value, and converted to a string (with the repr() function or the slightly different str() function). The latter function is implicitly used when an object is written by the print() function.
             </p>

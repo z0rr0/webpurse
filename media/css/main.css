@@ -206,6 +206,29 @@ ul.errorlist li {
     background-color: #d2d6ce;
     font-size: 90%;
 }
+#paystyle {
+    margin: 2px;
+    padding-left: 10px;
+}
+#paystyle div {
+    margin-top: 5px;
+}
+#paystyle input {
+    background-color: #d2d6ce;
+    font-size: 90%;
+    width: 150px;
+}
+#paystyle select {
+    background-color: #d2d6ce;
+    font-size: 90%;
+    width: 154px;
+}
+#paystyle textarea {
+    background-color: #d2d6ce;
+    width: 300px;
+    height: 60px;
+    font-size: 90%;
+}
 .bigfield input {
     width: 200px;
 }

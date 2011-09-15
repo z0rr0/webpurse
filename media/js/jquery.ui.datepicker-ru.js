@@ -24,7 +24,7 @@ jQuery(function($){
         selectOtherMonths: true,
         showAnim: 'blind',
         // changeMonth: true,
-        changeYear: true,
+        // changeYear: true,
         showOn: "button",
         buttonImage: "/media/css/images/calendar.gif",
         buttonImageOnly: true

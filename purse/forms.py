@@ -14,3 +14,11 @@ class InvoiceForm(forms.ModelForm):
             'name': forms.TextInput(attrs={'size': '13'})}
         exclude = ('user', 'modified', 'created')
         #fields = ()
+
+class PayForm(forms.ModelForm):
+    # pass
+    # fields = ("itype", 'itype', 'comment')
+
+    class Meta:
+        model = models.Pay
+        fields = ('itype', 'value', 'comment')

@@ -40,7 +40,11 @@ def query_bank(filename):
 # INDEX PAGE *************************
 @login_required
 def home(request, vtemplate):
-    return direct_to_template(request, vtemplate, {})
+    form_in = PayForm(auto_id='in_%s')
+    form_out = PayForm(auto_id='out_%s')
+    form_in.fields['itype'].choices = [(s.id, s.name) for s in Itype.objects.filter(sign=False)]
+    form_out.fields['itype'].choices = [(s.id, s.name) for s in Itype.objects.filter(sign=True)]
+    return direct_to_template(request, vtemplate, {'form_in': form_in, 'form_out': form_out})
 
  # INVOICE *************************
 def user_invoices(user_id):
