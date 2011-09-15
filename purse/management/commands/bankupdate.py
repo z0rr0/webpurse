@@ -11,7 +11,8 @@ def query_bank(filename):
     with transaction.commit_on_success():
         for key, value in bankfile.items():
             valuta = Valuta(id=value["id"], code=value["code"],
-                name=value["name"], date=value["date"],
+                name=value["name"],
+                date=value["date"],
                 kurs=value["kurs"],)
             valuta.save()
     return True

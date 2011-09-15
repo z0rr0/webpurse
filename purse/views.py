@@ -66,6 +66,8 @@ def invoice_all(request, vtemplate):
     c = {}
     c.update(csrf(request))
     form = InvoiceForm()
+    form.fields['valuta'].choices = [(s.id, 
+        ("%s: %s" % (s.code, s.name))) for s in Valuta.objects.all()]
     # form.fields['name'].widget = forms.TextInput(attrs={'size':'20'})
     # form.fields['balance'].widget = forms.TextInput(attrs={'size':'20'})
     # form.fields['url'].widget = forms.TextInput(attrs={'size':'50'})
