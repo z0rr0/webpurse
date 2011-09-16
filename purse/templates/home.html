@@ -29,18 +29,22 @@ $(document).ready(function() {
             <li><a href="#tabs-4">Корректировка</a></li>
             <li><a href="#tabs-5">Долги</a></li>
         </ul>
-        <div id="tabs-1" >
+        <div id="tabs-1" >{{ t }}
             <table>
                 <tr>
                     <td><div id="datepicker_in"></div></td>
                     <td>
                     <div id="paystyle">
-                        Введите данные о расходе средств
-                        <div>{{ form_out.value }}</div>
-                        <div>{{ form_out.itype }}</div>
-                        <div>{{ form_out.comment }}</div>
-                        <div><em>Дата:</em><span id="datein_label">{% now "d.m.Y" %}</span></div>
-                        <div><input type="button" value="отравить"></div>
+                        Введите данные о расходе средств 
+                        (<em>дата </em>
+                        <strong>
+                            <span id="datein_label">{% now "d.m.Y" %}</span>
+                        </strong>)
+                        <div>{{ form_out.value }} <span class="smallsym">сумма транзакции</span></div>
+                        <div>{{ form_out.invoice }} <span class="smallsym">счет списания</span></div>
+                        <div>{{ form_out.itype }} <span class="smallsym">вид платежа</span></div>
+                        <div><span class="smallsym">примечание (текстовая заметка о транзакции)</span><br>{{ form_out.comment }}</div>
+                        <div><input type="button" value="отправить"></div>
                     </div>
                     </td>
                 </tr>
@@ -57,7 +61,7 @@ $(document).ready(function() {
                         <div>{{ form_in.itype }}</div>
                         <div>{{ form_in.comment }}</div>
                         <div><em>Дата:</em><span id="dateout_label">{% now "d.m.Y" %}</span></div>
-                        <div><input type="button" value="отравить"></div>
+                        <div><input type="button" value="отправить"></div>
                     </div>
                     </td>
                 </tr>

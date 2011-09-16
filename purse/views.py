@@ -40,11 +40,24 @@ def query_bank(filename):
 # INDEX PAGE *************************
 @login_required
 def home(request, vtemplate):
+    form_in, form_out = get_pay_forms(request.user)
+    return direct_to_template(request, vtemplate, {
+        'form_in': form_in, 
+        'form_out': form_out})
+
+def get_pay_forms(vuser):
+    user_itype = Itype.objects.filter(user=vuser)
+    user_invoice = Invoice.objects.filter(user=vuser)
     form_in = PayForm(auto_id='in_%s')
-    form_out = PayForm(auto_id='out_%s')
-    form_in.fields['itype'].choices = [(s.id, s.name) for s in Itype.objects.filter(sign=False)]
-    form_out.fields['itype'].choices = [(s.id, s.name) for s in Itype.objects.filter(sign=True)]
-    return direct_to_template(request, vtemplate, {'form_in': form_in, 'form_out': form_out})
+    form_out = PayForm(initial={'itype': 1}, auto_id='out_%s')
+    # invoice
+    invoice_choices = [(s.id, s.name) for s in user_invoice]
+    form_in.fields['invoice'].choices = invoice_choices
+    form_out.fields['invoice'].choices = invoice_choices
+    # itype
+    form_in.fields['itype'].choices = [(s.id, s.name) for s in user_itype.filter(sign=False)]
+    form_out.fields['itype'].choices = [(s.id, s.name) for s in user_itype.filter(sign=True)]
+    return form_in, form_out
 
  # INVOICE *************************
 def user_invoices(user_id):

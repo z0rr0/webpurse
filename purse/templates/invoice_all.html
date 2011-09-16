@@ -37,7 +37,7 @@ $(document).ready(function() {
             <tr>
                 <td><a href="{{ invoice.url }}" target="_blank" 
                     title="перейти к внешней странице счета">{{ invoice.name }}</a></td>
-                <td>{{ invoice.balance|rusnum }} <span class="smallsym">{{ invoice.valuta.code }}</span></td>
+                <td><nobr>{{ invoice.balance|rusnum }} <span class="smallsym">{{ invoice.valuta.code }}</span></nobr></td>
                 <td align="center">{{ invoice.other|myinvoice }}</td>
                 <td>{{ invoice.comment }}</td>            
                 <td><nobr>{{ invoice.modified|date:'d.m.Y H:i' }}</nobr></td>             

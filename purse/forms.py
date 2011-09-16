@@ -21,4 +21,4 @@ class PayForm(forms.ModelForm):
 
     class Meta:
         model = models.Pay
-        fields = ('itype', 'value', 'comment')
+        fields = ('itype', 'invoice', 'value', 'comment')
