@@ -41,9 +41,13 @@ def query_bank(filename):
 @login_required
 def home(request, vtemplate):
     form_in, form_out = get_pay_forms(request.user)
-    return direct_to_template(request, vtemplate, {
+    response = HttpResponse()
+    rest = direct_to_template(request, vtemplate, {
         'form_in': form_in, 
         'form_out': form_out})
+    rest.delete_cookie('aa')
+    # rest.set_cookie('aa', 123)
+    return rest
 
 def get_pay_forms(vuser):
     user_itype = Itype.objects.filter(user=vuser)

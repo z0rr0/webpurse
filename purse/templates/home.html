@@ -32,18 +32,20 @@ $(document).ready(function() {
         <div id="tabs-1" >{{ t }}
             <table>
                 <tr>
-                    <td><div id="datepicker_in"></div></td>
+                    <td><div id="datepicker_out"></div></td>
                     <td>
                     <div id="paystyle">
                         Введите данные о расходе средств 
                         (<em>дата </em>
                         <strong>
-                            <span id="datein_label">{% now "d.m.Y" %}</span>
+                            <span id="dateout_label">{% now "d.m.Y" %}</span>
                         </strong>)
                         <div>{{ form_out.value }} <span class="smallsym">сумма транзакции</span></div>
                         <div>{{ form_out.invoice }} <span class="smallsym">счет списания</span></div>
                         <div>{{ form_out.itype }} <span class="smallsym">вид платежа</span></div>
-                        <div><span class="smallsym">примечание (текстовая заметка о транзакции)</span><br>{{ form_out.comment }}</div>
+                        <div><span class="smallsym">примечание (текстовая заметка о транзакции)</span>
+                            <br>{{ form_out.comment }}
+                        </div>
                         <div><input type="button" value="отправить"></div>
                     </div>
                     </td>
@@ -53,14 +55,20 @@ $(document).ready(function() {
         <div id="tabs-2">
             <table>
                 <tr>
-                    <td><div id="datepicker_out"></div></td>
+                    <td><div id="datepicker_in"></div></td>
                     <td>
                     <div id="paystyle">
-                        Введите данные о получении средств
-                        <div>{{ form_in.value }}</div>
-                        <div>{{ form_in.itype }}</div>
-                        <div>{{ form_in.comment }}</div>
-                        <div><em>Дата:</em><span id="dateout_label">{% now "d.m.Y" %}</span></div>
+                        Введите данные о получении средств 
+                        (<em>дата </em>
+                        <strong>
+                            <span id="datein_label">{% now "d.m.Y" %}</span>
+                        </strong>)
+                        <div>{{ form_in.value }} <span class="smallsym">сумма транзакции</span></div>
+                        <div>{{ form_in.invoice }} <span class="smallsym">счет списания</span></div>
+                        <div>{{ form_in.itype }} <span class="smallsym">вид платежа</span></div>
+                        <div><span class="smallsym">примечание (текстовая заметка о транзакции)</span>
+                            <br>{{ form_in.comment }}
+                        </div>
                         <div><input type="button" value="отправить"></div>
                     </div>
                     </td>
