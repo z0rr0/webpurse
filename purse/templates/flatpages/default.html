@@ -1,0 +1,32 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+    "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+    <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> 
+    <meta http-equiv="Content-Language" content="ru"/> 
+    <link rel="stylesheet" href="{{ MEDIA_URL }}css/main.css" type="text/css" />
+    <title>{{ flatpage.title }}</title>
+    </head>
+    <body>
+        <div id="loginpage21">
+            <a href="/">Главная страница</a>
+        </div>
+        <div id="loginpage22"></div>
+        <div id="loginpage23"><a href="/about/">О проекте</a></div>
+        <hr />
+        <table class="maintable" width="100%">
+            <tr>
+                <td width="220px">
+                    <div id="left-invoice">
+                        <div id="leftm"></div>
+                    </div>
+                </td>
+                <td>
+                    <div id="content-main">
+                        {{ flatpage.content }}
+                    </div>
+                </td>                
+            </tr>
+        </table>
+    </body>
+</html>

@@ -7,6 +7,11 @@ body {
     padding: 0;
     line-height: 16px
 }
+p {
+    font: normal 13px Verdana, Arial, Helvetica, sans-serif;
+    text-indent: 40px;
+    text-align: justify;
+}
 .itable  {
     margin-bottom: 5px;
     /*border: 1px solid #ff0000;*/

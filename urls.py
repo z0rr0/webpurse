@@ -51,6 +51,10 @@ if settings.DEBUG:
         url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {
             'document_root': settings.MEDIA_ROOT,
         }),
+        url(r'^robots.txt$', 'django.views.static.serve',
+            {'document_root': settings.MEDIA_ROOT, 'path': "robots.txt"}),
+        url(r'^favicon.ico$', 'django.views.static.serve',
+            {'document_root': settings.MEDIA_ROOT, 'path': "favicon.ico"}),
    )
     # urlpatterns += patterns('django.contrib.staticfiles.views',
     #     url(r'^static/(?P<path>.*)$', 'serve'),
