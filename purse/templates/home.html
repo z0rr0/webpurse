@@ -7,6 +7,7 @@ $(document).ready(function() {
     $( "#tabs" ).tabs({
         // event: "mouseover"
     });
+    $('#send_out').click(send_out);
     $('div[id*="datepicker"]').datepicker();
     $( "#datepicker_in" ).click(function(){
         data = $( "#datepicker_in" ).val();
@@ -16,6 +17,25 @@ $(document).ready(function() {
         data = $( "#datepicker_out" ).val();
         $('#dateout_label').html(data);
     });
+    function send_out() {
+        prefix = '#out_';
+        val = val_validate(prefix + 'value');
+        if (!val) alert('Пожалуйста проверьте введенные значения.');
+        else {
+            // ok send form
+
+            // clear form
+            $(prefix + 'value').val(0);
+            $(prefix + 'comment').val('');
+        }
+    }
+    function val_validate(val_id) {
+        str = $(val_id).val();
+        str = str.replace(/,/gi, ".")
+        val = parseFloat(str);
+        if (isNaN(val) || val == 0) return false;
+        else return val;
+    }
 });
 </script>
 {% endblock %}
@@ -46,7 +66,7 @@ $(document).ready(function() {
                         <div><span class="smallsym">примечание (текстовая заметка о транзакции)</span>
                             <br>{{ form_out.comment }}
                         </div>
-                        <div><input type="button" value="отправить"></div>
+                        <div><input type="button" id="send_out" value="отправить"></div>
                     </div>
                     </td>
                 </tr>

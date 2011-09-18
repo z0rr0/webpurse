@@ -50,7 +50,7 @@ function invoices_update(vurl, vdiv) {
         },
         statusCode: {
             404: function() {
-                $(vdiv).html('Invoices page not found');
+                $(vdiv).html('Page not found');
                 // alert('Invoices page not found');
              },
         }
