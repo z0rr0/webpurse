@@ -85,11 +85,14 @@ function send_out(pref) {
             context: document.body,
             async: true,
             success: function (data) {
+                $(prefix + 'status').html('Сохранено');
+                $(prefix + 'status').show();
                 invoices_update('/invoice/view/', '#leftm'); 
-                alert("ok");
+                $(prefix + 'status').hide(8000);
+                // alert("ok");
             },
             error: function () {
-                alert('error'); 
+                alert('sorry, error'); 
             },
         });
         // clear form

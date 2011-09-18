@@ -175,6 +175,7 @@ def pay_add(request, vtemplate):
                 )
                 Invoice.objects.filter(id=pay.invoice_id).update(balance=new_balance)
         except:
+            raise Http404
             qstatus = 'faile'
         qstatus = 'ok'
     else:

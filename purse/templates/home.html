@@ -48,7 +48,10 @@ $(document).ready(function() {
                             <div><span class="smallsym">примечание (текстовая заметка о транзакции)</span>
                                 <br>{{ form_out.comment }}
                             </div>
-                            <div><input type="button" onclick="send_out('out')" value="отправить"></div>
+                            <div>
+                                <input type="button" onclick="send_out('out')" value="отправить">
+                                <span id="out_status" class="paystatus"></span>
+                            </div>
                         </form>
                         </div>
                     </td>
@@ -73,7 +76,10 @@ $(document).ready(function() {
                             <div><span class="smallsym">примечание (текстовая заметка о транзакции)</span>
                                 <br>{{ form_in.comment }}
                             </div>
-                            <div><input type="button" onclick="send_out('in')" value="отправить"></div>
+                            <div>
+                                <input type="button" onclick="send_out('in')" value="отправить">
+                                <span id="in_status" class="paystatus"></span>
+                            </div>
                         </form>
                     </div>
                     </td>
