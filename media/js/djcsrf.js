@@ -85,6 +85,7 @@ function send_out(pref) {
             context: document.body,
             async: true,
             success: function (data) {
+                invoices_update('/invoice/view/', '#leftm'); 
                 alert("ok");
             },
             error: function () {

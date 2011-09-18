@@ -159,17 +159,21 @@ def invoice_add(request, vtemplate):
 @permission_required('purse.add_pay')
 def pay_add(request, vtemplate):
     if request.method == 'POST':
+        # try:
+        value = float(request.POST['value'])
+        itype = get_object_or_404(Itype, pk=int(request.POST['itype']))
+        invoice = get_object_or_404(Invoice, pk=int(request.POST['invoice']))
+        value = -abs(value) if itype.sign else abs(value)
+        new_balance = invoice.balance + value
         try:
-            value = float(request.POST['value'])
-            itype = get_object_or_404(Itype, pk=int(request.POST['itype']))
-            invoice = get_object_or_404(Invoice, pk=int(request.POST['invoice']))
-            value = -abs(value) if itype.sign else abs(value)
-            pay = Pay.objects.create(invoice=invoice,
-                itype=itype,   
-                pdate=datetime.datetime.strptime(request.POST['pdate'], "%d.%m.%Y").date(),
-                value=value,
-                comment=request.POST['comment']
-            )
+            with transaction.commit_on_success():
+                pay = Pay.objects.create(invoice=invoice,
+                    itype=itype,   
+                    pdate=datetime.datetime.strptime(request.POST['pdate'], "%d.%m.%Y").date(),
+                    value=value,
+                    comment=request.POST['comment']
+                )
+                Invoice.objects.filter(id=pay.invoice_id).update(balance=new_balance)
         except:
             qstatus = 'faile'
         qstatus = 'ok'
