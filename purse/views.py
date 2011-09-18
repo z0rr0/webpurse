@@ -155,3 +155,25 @@ def invoice_add(request, vtemplate):
         form = InvoiceForm()      
     form.fields['valuta'].choices = [(s.id, ("%s: %s" % (s.code, s.name))) for s in valutas]
     return direct_to_template(request, vtemplate, {'form': form})
+
+@permission_required('purse.add_pay')
+def pay_add(request, vtemplate):
+    if request.method == 'POST':
+        try:
+            value = float(request.POST['value'])
+            itype = get_object_or_404(Itype, pk=int(request.POST['itype']))
+            invoice = get_object_or_404(Invoice, pk=int(request.POST['invoice']))
+            value = -abs(value) if itype.sign else abs(value)
+            pay = Pay.objects.create(invoice=invoice,
+                itype=itype,   
+                pdate=datetime.datetime.strptime(request.POST['pdate'], "%d.%m.%Y").date(),
+                value=value,
+                comment=request.POST['comment']
+            )
+        except:
+            qstatus = 'faile'
+        qstatus = 'ok'
+    else:
+        qstatus = 'faile'
+    return direct_to_template(request, vtemplate, {'qstatus': qstatus})
+    

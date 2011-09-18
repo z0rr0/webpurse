@@ -37,7 +37,9 @@ urlpatterns = patterns('',
     # add 1 invoice
     (r'^invoice/add/$' , pv.invoice_add, {
         'vtemplate': 'invoice_add.html'}),
-
+    # add pay
+    (r'^pay/add/$' , pv.pay_add, {
+        'vtemplate': 'pay_add.html'}),
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     # Uncomment the next line to enable the admin:

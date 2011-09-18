@@ -37,7 +37,7 @@ $(document).ajaxSend(function(event, xhr, settings) {
         xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
     }
 });
-
+// update left menu
 function invoices_update(vurl, vdiv) {
     $.ajax({
         url: vurl,
@@ -55,4 +55,44 @@ function invoices_update(vurl, vdiv) {
              },
         }
     });
+}
+// validate pays data
+function val_validate(val_id) {
+    str = $(val_id).val();
+    str = str.replace(/,/gi, ".")
+    val = parseFloat(str);
+    if (isNaN(val) || val == 0) return false;
+    else return val;
+}
+// send pay
+function send_out(pref) {
+    prefix = '#' + pref + '_';
+    val = val_validate(prefix + 'value');
+    if (!val) alert('Пожалуйста проверьте введенные значения.');
+    else {
+        // ok send form
+        $.ajax({
+            url: '/pay/add/',
+            type: 'POST',
+            data: {
+                invoice : $(prefix + 'invoice').val(),
+                itype : $(prefix + 'itype').val(),
+                value : val,
+                pdate : $('#datepicker_' + pref).val(),
+                comment : $(prefix + 'comment').val(),
+            },
+            dataType: 'html',
+            context: document.body,
+            async: true,
+            success: function (data) {
+                alert("ok");
+            },
+            error: function () {
+                alert('error'); 
+            },
+        });
+        // clear form
+        $(prefix + 'value').val(0);
+        $(prefix + 'comment').val('');
+    }
 }
