@@ -15,16 +15,28 @@ $(document).ready(function() {
             $('#uptype1').html(data);
             //alert('Load was performed.');
         });
-        // $('#invoiceadd').show();
-        // invoices_update('/invoice/view/', '#leftm');
     })
 });
+function addtype(sign) {
+    input_id = '#add' + sign;
+    if ($(input_id).val()) {
+        // done
+        alert($(input_id).val());  
+    } 
+    else alert('Пожалуйста проверьте введенные данные.');
+}
 </script>
 {% endblock %}
 {% block content %}
 <h1>Виды платежей</h1>
 <div class="itypestyle1">
     <h3>Расходы</h3>
+    <div id="paystyle">
+        <form type="POST" action="">
+            <input value="" id="add1">
+            <a href="javascript:addtype(1)"><img src="{{ MEDIA_URL }}img/add.png" alt="добавить" align="top"></a>
+        </form>
+    </div>
     <div id="uptype1">
         {% if itype_out %}
             <ul>
@@ -43,6 +55,12 @@ $(document).ready(function() {
 </div>
 <div class="itypestyle2">
     <h3>Доходы</h3> 
+    <div id="paystyle">
+        <form type="POST" action="">
+            <input value="" id="add0">
+            <a href="javascript:addtype(0)"><img src="{{ MEDIA_URL }}img/add.png" alt="добавить" align="top"></a>
+        </form>
+    </div>
     <div id="uptype2">
         {% if itype_in %}
             <ul>
