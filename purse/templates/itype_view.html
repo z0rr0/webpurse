@@ -1,0 +1,12 @@
+ {% if itypes %}
+    <ul>
+        {% for itype in itypes %}
+            <li>
+                {{ itype.name }}
+                <img src="{{ MEDIA_URL }}img/delete.png"   alt="удалить">
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <em>видов расходов нет</em>
+{% endif %}

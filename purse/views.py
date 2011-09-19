@@ -221,3 +221,12 @@ def itypes_all(request, vtemplate):
         'itype_in': itype_in,
         'itype_out': itype_out
         })
+
+@login_required
+def itype_view(request, sign, vtemplate):
+    itypes = Itype.objects.filter(user=request.user, sign=sign)
+    headtext = 'Расходы' if sign else 'Доходы'
+    return direct_to_template(request, vtemplate, {
+        'itypes': itypes,
+        'headtext': headtext
+        })

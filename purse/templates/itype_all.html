@@ -4,10 +4,20 @@
 {% block pagejs %}
 <script type="text/javascript">
 $(document).ready(function() {
-    // $('#addlink').click(function() {
-    //     // $('#invoiceadd').show();
-    //     // invoices_update('/invoice/view/', '#leftm');
-    // })
+    $('.dellink').mouseover(function(){
+            $(this).fadeTo("slow",1);
+        }).mouseout(function(){
+           $(this).fadeTo("slow",0.5);
+        });
+
+    $('#addlink').click(function() {
+        $.get('/type/view/1/', function(data) {
+            $('#uptype1').html(data);
+            //alert('Load was performed.');
+        });
+        // $('#invoiceadd').show();
+        // invoices_update('/invoice/view/', '#leftm');
+    })
 });
 </script>
 {% endblock %}
@@ -15,37 +25,38 @@ $(document).ready(function() {
 <h1>Виды платежей</h1>
 <div class="itypestyle1">
     <h3>Расходы</h3>
-        <div id="uptype1">
-            {% if itype_out %}
-                <ul>
-                    {% for tout in itype_out %}
-                        <li>
-                            {{ tout.name }}
-                            <img src="{{ MEDIA_URL }}img/delete.png"   alt="удалить">
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <em>видов расходов нет</em>
-            {% endif %}
-        </div>
+    <div id="uptype1">
+        {% if itype_out %}
+            <ul>
+                {% for tout in itype_out %}
+                    <li>
+                        {{ tout.name }}
+                        <span class="dellink"><a href="#"><img src="{{ MEDIA_URL }}img/delete.png" alt="удалить"></a></span>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <em>видов расходов нет</em>
+        {% endif %}
+    </div>
+    <a href="#" id="addlink">update</a>
 </div>
 <div class="itypestyle2">
     <h3>Доходы</h3> 
-        <div id="uptype2">
-            {% if itype_in %}
-                <ul>
-                    {% for tin in itype_in %}
-                        <li>
-                            {{ tin.name }}
-                            <img src="{{ MEDIA_URL }}img/delete.png"   alt="удалить">
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <em>видов расходов нет</em>
-            {% endif %}
-        </div>
+    <div id="uptype2">
+        {% if itype_in %}
+            <ul>
+                {% for tin in itype_in %}
+                    <li>
+                        {{ tin.name }}
+                        <img src="{{ MEDIA_URL }}img/delete.png"   alt="удалить">
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <em>видов расходов нет</em>
+        {% endif %}
+    </div>
 </div>
  
 {% endblock content %}

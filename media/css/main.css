@@ -285,12 +285,15 @@ ul.errorlist li {
 .itypestyle1 {
     float: left;
     min-width: 250px; 
-    border: 2px solid black; 
+    /*border: 2px solid black; */
     padding: 10px;
 }
 .itypestyle2 {
     margin-left: 300px;
     min-width: 250px; 
-    border: 2px solid black; 
+    /*border: 2px solid black; */
     padding: 10px;
+}
+.dellink {
+    opacity: 0.5;
 }

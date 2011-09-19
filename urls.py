@@ -43,6 +43,9 @@ urlpatterns = patterns('',
     # view all user itypes
     (r'^types/$' , pv.itypes_all, {
             'vtemplate': 'itype_all.html'}),
+    # itype view, group by sing
+    (r'^type/view/(?P<sign>\d+)/?$' , pv.itype_view, {
+        'vtemplate': 'itype_view.html'}),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
