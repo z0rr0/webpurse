@@ -40,20 +40,29 @@ def query_bank(filename):
 # INDEX PAGE *************************
 @login_required
 def home(request, vtemplate):
-    form_in, form_out = get_pay_forms(request.user)
+    # data from cookie
+    form_def = {}
+    for prefix in ('in_', 'out_'):
+        form_def[prefix] = {}
+        invoice_pref = prefix + 'invoice'
+        itype_pref = prefix + 'itype'
+        if invoice_pref in request.COOKIES:
+            form_def[prefix]['invoice'] = request.COOKIES[invoice_pref]
+        if itype_pref in request.COOKIES:
+            form_def[prefix]['itype'] = request.COOKIES[itype_pref]
+    # create forms
+    form_in, form_out = get_pay_forms(request.user, form_def)
     response = HttpResponse()
     rest = direct_to_template(request, vtemplate, {
         'form_in': form_in, 
         'form_out': form_out})
-    rest.delete_cookie('aa')
-    # rest.set_cookie('aa', 123)
     return rest
 
-def get_pay_forms(vuser):
+def get_pay_forms(vuser, form_def):
     user_itype = Itype.objects.filter(user=vuser)
     user_invoice = Invoice.objects.filter(user=vuser)
-    form_in = PayForm(auto_id='in_%s')
-    form_out = PayForm(initial={'itype': 1}, auto_id='out_%s')
+    form_in = PayForm(initial=form_def['in_'], auto_id='in_%s')
+    form_out = PayForm(initial=form_def['out_'], auto_id='out_%s')
     # invoice
     invoice_choices = [(s.id, s.name) for s in user_invoice]
     form_in.fields['invoice'].choices = invoice_choices
@@ -111,6 +120,17 @@ def invoice_delete(request, id, redirecturl):
          invoice.delete()
     return HttpResponseRedirect(redirecturl)
 
+@permission_required('purse.delete_itype')
+@transaction.autocommit
+def invoice_delete(request, id, redirecturl):
+    qstatus = 'faile'
+    itype = get_object_or_404(Itype, pk=int(id), user=request.user.id)
+    if itype:
+         itype.delete()
+         qstatus = 'ok'
+    # return HttpResponseRedirect(redirecturl)
+    return direct_to_template(request, vtemplate, {'qstatus': qstatus})
+
 @permission_required('purse.change_invoice')
 def invoice_edit(request, vtemplate):
     c = {}
@@ -158,6 +178,7 @@ def invoice_add(request, vtemplate):
 
 @permission_required('purse.add_pay')
 def pay_add(request, vtemplate):
+    save_cookie = False
     if request.method == 'POST':
         # try:
         value = float(request.POST['value'])
@@ -174,11 +195,29 @@ def pay_add(request, vtemplate):
                     comment=request.POST['comment']
                 )
                 Invoice.objects.filter(id=pay.invoice_id).update(balance=new_balance)
+            # save cookie vars
         except:
             raise Http404
             qstatus = 'faile'
         qstatus = 'ok'
+        save_cookie = True
     else:
         qstatus = 'faile'
-    return direct_to_template(request, vtemplate, {'qstatus': qstatus})
-    
+    rest = direct_to_template(request, vtemplate, {'qstatus': qstatus})
+    if save_cookie:
+        prefix = 'in_' if value > 0 else 'out_'
+        # rest.delete_cookie(prefix + 'invoice')
+        # rest.delete_cookie(prefix + 'itype')
+        rest.set_cookie(prefix + 'invoice', pay.invoice_id)
+        rest.set_cookie(prefix + 'itype', pay.itype_id)
+    return rest
+
+@login_required
+def itypes_all(request, vtemplate):
+    user_itype = Itype.objects.filter(user=request.user)
+    itype_in = user_itype.filter(sign=False)
+    itype_out = user_itype.filter(sign=True)
+    return direct_to_template(request, vtemplate, {
+        'itype_in': itype_in,
+        'itype_out': itype_out
+        })

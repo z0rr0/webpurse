@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Виды платежей{% endblock %}
+
+{% block pagejs %}
+<script type="text/javascript">
+$(document).ready(function() {
+    // $('#addlink').click(function() {
+    //     // $('#invoiceadd').show();
+    //     // invoices_update('/invoice/view/', '#leftm');
+    // })
+});
+</script>
+{% endblock %}
+{% block content %}
+<h1>Виды платежей</h1>
+<div class="itypestyle1">
+    <h3>Расходы</h3>
+        <div id="uptype1">
+            {% if itype_out %}
+                <ul>
+                    {% for tout in itype_out %}
+                        <li>
+                            {{ tout.name }}
+                            <img src="{{ MEDIA_URL }}img/delete.png"   alt="удалить">
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <em>видов расходов нет</em>
+            {% endif %}
+        </div>
+</div>
+<div class="itypestyle2">
+    <h3>Доходы</h3> 
+        <div id="uptype2">
+            {% if itype_in %}
+                <ul>
+                    {% for tin in itype_in %}
+                        <li>
+                            {{ tin.name }}
+                            <img src="{{ MEDIA_URL }}img/delete.png"   alt="удалить">
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <em>видов расходов нет</em>
+            {% endif %}
+        </div>
+</div>
+ 
+{% endblock content %}

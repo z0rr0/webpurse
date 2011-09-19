@@ -40,6 +40,10 @@ urlpatterns = patterns('',
     # add pay
     (r'^pay/add/$' , pv.pay_add, {
         'vtemplate': 'pay_add.html'}),
+    # view all user itypes
+    (r'^types/$' , pv.itypes_all, {
+            'vtemplate': 'itype_all.html'}),
+
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     # Uncomment the next line to enable the admin:
