@@ -4,13 +4,8 @@
 {% block pagejs %}
 <script type="text/javascript">
 $(document).ready(function() {
-    $('.dellink').mouseover(function(){
-            $(this).fadeTo("slow",1);
-        }).mouseout(function(){
-           $(this).fadeTo("slow",0.5);
-        });
-
-});
+    // alert('ok');
+})
 </script>
 {% endblock %}
 {% block content %}
@@ -18,7 +13,7 @@ $(document).ready(function() {
 <div class="itypestyle1">
     <h3>Расходы</h3>
     <div id="paystyle">
-        <form type="POST" action="">
+        <form type="POST" action="#" OnSubmit="addtype(1)" >
             <input value="" id="add1">
             <a href="javascript:addtype(1)"><img src="{{ MEDIA_URL }}img/add.png" alt="добавить" align="top"></a>
         </form>
@@ -28,9 +23,13 @@ $(document).ready(function() {
             <ul>
                 {% for ty in itype_out %}
                     <li>
-                        {{ ty.name }}
-                        <span class="dellink">
-                            <a href="javascript:deltype(1, {{ ty.id }})"><img src="{{ MEDIA_URL }}img/delete.png" alt="удалить"></a>
+                        <span id="type{{ ty.id }}" >{{ ty.name }}
+                            <span class="dellink" onMouseOver="up_view(this)" onMouseOut="down_view(this)">
+                                <a href="javascript:edittype(1,{{ ty.id }})"><img src="{{ MEDIA_URL }}img/edit.png" alt="правка"></a>
+                            </span>
+                            <span class="dellink" onMouseOver="up_view(this)" onMouseOut="down_view(this)">
+                                <a href="javascript:deltype(1,{{ ty.id }})"><img src="{{ MEDIA_URL }}img/delete.png" alt="удалить"></a>
+                            </span>
                         </span>
                     </li>
                 {% endfor %}
@@ -43,19 +42,23 @@ $(document).ready(function() {
 <div class="itypestyle2">
     <h3>Доходы</h3> 
     <div id="paystyle">
-        <form type="POST" action="">
+        <form type="POST" action="#" OnSubmit="addtype(0)" >
             <input value="" id="add0">
             <a href="javascript:addtype(0)"><img src="{{ MEDIA_URL }}img/add.png" alt="добавить" align="top"></a>
         </form>
     </div>
     <div id="uptype0">
         {% if itype_in %}
-            <ul>
+           <ul>
                 {% for ty in itype_in %}
                     <li>
-                        {{ ty.name }}
-                        <span class="dellink">
-                            <a href="javascript:deltype(0, {{ ty.id }})"><img src="{{ MEDIA_URL }}img/delete.png" alt="удалить"></a>
+                        <span id="type{{ ty.id }}" >{{ ty.name }}
+                            <span class="dellink" onMouseOver="up_view(this)" onMouseOut="down_view(this)">
+                                <a href="javascript:edittype(0,{{ ty.id }})"><img src="{{ MEDIA_URL }}img/edit.png" alt="правка"></a>
+                            </span>
+                            <span class="dellink" onMouseOver="up_view(this)" onMouseOut="down_view(this)">
+                                <a href="javascript:deltype(0,{{ ty.id }})"><img src="{{ MEDIA_URL }}img/delete.png" alt="удалить"></a>
+                            </span>
                         </span>
                     </li>
                 {% endfor %}

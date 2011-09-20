@@ -246,6 +246,11 @@ ul.errorlist li {
     height: 50px;
     font-size: 90%;
 }
+.itypestyle input {
+    background-color: #d2d6ce;
+    font-size: 90%;
+    width: 120px;
+}
 .bigfield input {
     width: 200px;
 }

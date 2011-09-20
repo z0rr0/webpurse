@@ -225,10 +225,10 @@ def itypes_all(request, vtemplate):
 @login_required
 def itype_view(request, sign, vtemplate):
     itypes = Itype.aobjects.filter(user=request.user, sign=sign)
-    headtext = 'Расходы' if sign else 'Доходы'
+    sign = int(sign)
     return direct_to_template(request, vtemplate, {
         'itypes': itypes,
-        'headtext': headtext
+        'sign': sign
         })
 
 @permission_required('purse.add_itype')
@@ -236,11 +236,20 @@ def itype_view(request, sign, vtemplate):
 def itype_add(request, vtemplate):
     if request.method == 'POST':
         try:
-            sign = int(request.POST['sign'])
-            itype = Itype.objects.create(name=request.POST['name'],
-                sign=bool(sign),   
-                user=request.user,
-            )
+            if 'id' in request.POST:
+                # update        
+                id = int(request.POST['id'])
+                itype = Itype.objects.filter(id=id, user=request.user)
+                itype.update(name=request.POST['name'])
+            else:
+                # create
+                sign = int(request.POST['sign'])
+                sign = bool(sign)        
+                itype = Itype(name=request.POST['name'],
+                    user=request.user,
+                    sign=sign,
+                )
+                itype.save()
         except:
             raise Http404
             qstatus = 'faile'
@@ -252,10 +261,20 @@ def itype_add(request, vtemplate):
 @permission_required('purse.chage_itype')
 @transaction.autocommit
 def itype_del(request, id, vtemplate):
-    itype = Itype.objects.filter(pk=int(id))
+    itype = Itype.objects.filter(id=int(id), user=request.user)
     if itype:
         itype.update(status=False)
         qstatus = 'ok'
     else:
         qstatus ='faile'
     return direct_to_template(request, vtemplate, {'qstatus': qstatus})
+
+@permission_required('purse.chage_itype')
+@transaction.autocommit
+def itype_edit(request, id, vtemplate):
+    try:
+        itype = Itype.objects.get(id=int(id), user=request.user)
+        sign = int(itype.sign)
+    except Itype.DoesNotExist, ValueError:
+        raise Http404
+    return direct_to_template(request, vtemplate, {'itype': itype, 'sign': sign})

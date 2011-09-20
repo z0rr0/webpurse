@@ -37,6 +37,12 @@ $(document).ajaxSend(function(event, xhr, settings) {
         xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
     }
 });
+function up_view(el) {
+    el.style.opacity="1";
+}
+function down_view(el) {
+    el.style.opacity="0.5";
+}
 // update left menu
 function invoices_update(vurl, vdiv) {
     $.ajax({
@@ -136,12 +142,44 @@ function addtype(sign) {
     } 
     else alert('Пожалуйста проверьте введенные данные.');
 }
+// save edit itype
+function savetype(sign, id) {
+    input_id = '#edit' + id;
+    if ($(input_id).val()) {
+        $.ajax({
+            url: '/type/add/',
+            type: 'POST',
+            data: {
+                id: id,
+                sign : sign,
+                name : $(input_id).val(),
+            },
+            dataType: 'html',
+            context: document.body,
+            async: true,
+            success: function (data) {
+                // done, update
+                itype_update(sign);
+                // alert("ok");
+            },
+            error: function () {
+                alert('sorry, error'); 
+            },
+        });
+    } 
+    else alert('Пожалуйста проверьте введенные данные.');
+}
 // delete itype
 function deltype(sign, id) {
     $.get('/type/del/' + id, function(data) {
             itype_update(sign);
-            // $(up_div).html(data);
         })
-        .success(function() { alert("second success"); })
+        .error(function() { alert("sorry, error"); });
+}
+// edit itype
+function edittype(sign, id) {
+    $.get('/type/edit/' + id, function(data) {
+            $('#type' + id).html(data);
+        })
         .error(function() { alert("sorry, error"); });
 }

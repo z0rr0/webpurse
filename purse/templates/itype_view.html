@@ -1,12 +1,18 @@
- {% if itypes %}
-    <ul>
-        {% for itype in itypes %}
-            <li>
-                {{ itype.name }}
-                <img src="{{ MEDIA_URL }}img/delete.png"   alt="удалить">
-            </li>
-        {% endfor %}
-    </ul>
+{% if itypes %}
+<ul>
+    {% for ty in itypes %}
+        <li>
+            <span id="type{{ ty.id }}" >{{ ty.name }}
+                <span class="dellink" onMouseOver="up_view(this)" onMouseOut="down_view(this)">
+                    <a href="javascript:edittype({{ sign }},{{ ty.id }})"><img src="{{ MEDIA_URL }}img/edit.png" alt="правка"></a>
+                </span>
+                <span class="dellink" onMouseOver="up_view(this)" onMouseOut="down_view(this)">
+                    <a href="javascript:deltype({{ sign }},{{ ty.id }})"><img src="{{ MEDIA_URL }}img/delete.png" alt="удалить"></a>
+                </span>
+            </span>
+        </li>
+    {% endfor %}
+</ul>
 {% else %}
-    <em>видов расходов нет</em>
+<em>видов расходов нет</em>
 {% endif %}
