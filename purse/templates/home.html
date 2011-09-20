@@ -7,7 +7,7 @@ $(document).ready(function() {
     $( "#tabs" ).tabs({
         // event: "mouseover"
     });
-    $('#send_out').click(send_out);
+    // $('#send_out').click(send_out);
     $('div[id*="datepicker"]').datepicker();
     $( "#datepicker_in" ).click(function(){
         data = $( "#datepicker_in" ).val();
@@ -27,9 +27,9 @@ $(document).ready(function() {
 {% block content %}
     <div id="tabs">
         <ul>
-            <li><a href="#tabs-1">Расход</a></li>
-            <li><a href="#tabs-2">Приход</a></li>
-            <li><a href="#tabs-3">Перевод</a></li>
+            <li><a href="#tabs-1" onclick="get_pay_last('#pay_last')">Расход</a></li>
+            <li><a href="#tabs-2" onclick="get_pay_last('#pay_last')">Приход</a></li>
+            <li><a href="#tabs-3" onclick="alert('updet transfer')">Перевод</a></li>
             <li><a href="#tabs-4">Корректировка</a></li>
             <li><a href="#tabs-5">Долги</a></li>
         </ul>
