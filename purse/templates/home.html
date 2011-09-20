@@ -16,7 +16,10 @@ $(document).ready(function() {
     $( "#datepicker_out" ).click(function(){
         data = $( "#datepicker_out" ).val();
         $('#dateout_label').html(data);
-    });   
+    }); 
+    
+    get_pay_last('#pay_last');
+
 });
 </script>
 {% endblock %}
@@ -36,7 +39,7 @@ $(document).ready(function() {
                     <td><div id="datepicker_out"></div></td>
                     <td>
                     <div id="paystyle">
-                        <form type="POST" action="">
+                        <form type="POST" action="#">
                             Введите данные о расходе средств 
                             (<em>дата </em>
                             <strong>
@@ -64,7 +67,7 @@ $(document).ready(function() {
                     <td><div id="datepicker_in"></div></td>
                     <td>
                     <div id="paystyle">
-                        <form type="POST" action="">
+                        <form type="POST" action="#">
                             Введите данные о получении средств 
                             (<em>дата </em>
                             <strong>
@@ -100,4 +103,5 @@ $(document).ready(function() {
             </p>
         </div>
     </div> 
+    <div id="pay_last"></div>
 {% endblock content %}

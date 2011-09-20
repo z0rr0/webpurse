@@ -16,3 +16,7 @@ def rusnum(value):
 @register.filter(name='myinvoice')
 def rusnum(value):
     return '+' if value else '-'
+
+@register.filter(name='arrow')
+def arrow(value):
+    return '&larr;' if value > 0 else '&rarr;'

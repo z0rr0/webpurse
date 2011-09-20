@@ -1,0 +1,32 @@
+{% load jtags %}
+{% if pays %}
+    <table border="0" align="center" class="pay_last">
+       <!--  <tr>
+            <th>Счет</th>
+            <th>Сумма</th>
+            <th colspan="2">вид</th>
+            <th>Примечание</th>
+        </tr> -->
+        {% for pay in pays %}
+            {% ifchanged %}
+                <tr>
+                    <th colspan="5" class="pay_last_date">
+                        <span ><em>{{ pay.pdate|date:"d.m.Y" }}</em></span>
+                    </th>
+                </tr>
+            {% endifchanged %}
+        <tr>
+            <td>{{ pay.invoice.name }}</td>
+            <td class="pay_last_add">
+                {{ pay.value|rusnum }}
+                <span class="smallsym">{{ pay.invoice.valuta.code }}</span>
+            </td>
+            <td>{{ pay.value|arrow|safe }}</td>
+            <td class="pay_last_add">{{ pay.itype.name }}</td>
+            <td><em>{{ pay.comment }}</em></td>
+        </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <em>платежей нет</em>
+{% endif %}

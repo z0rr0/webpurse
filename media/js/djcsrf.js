@@ -95,6 +95,7 @@ function send_out(pref) {
                 $(prefix + 'status').show();
                 invoices_update('/invoice/view/', '#leftm'); 
                 $(prefix + 'status').hide(8000);
+                get_pay_last('#pay_last');
                 // alert("ok");
             },
             error: function () {
@@ -182,4 +183,11 @@ function edittype(sign, id) {
             $('#type' + id).html(data);
         })
         .error(function() { alert("sorry, error"); });
+}
+// update last pays
+function get_pay_last(divid)  {
+    $.get('/pay/last/', function(data) {
+        $(divid).html(data);
+    })
+    .error(function() { alert("sorry, error"); });
 }

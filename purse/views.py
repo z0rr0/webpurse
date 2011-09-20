@@ -27,6 +27,8 @@ from webpurse.settings import BANK_FILE
 
 import datetime
 
+LAST_PAYS = 5
+
 def query_bank(filename):
     bankfile = import_xml_dom(BANK_FILE) 
     with transaction.commit_on_success():
@@ -180,13 +182,12 @@ def invoice_add(request, vtemplate):
 def pay_add(request, vtemplate):
     save_cookie = False
     if request.method == 'POST':
-        # try:
-        value = float(request.POST['value'])
-        itype = get_object_or_404(Itype, pk=int(request.POST['itype']))
-        invoice = get_object_or_404(Invoice, pk=int(request.POST['invoice']))
-        value = -abs(value) if itype.sign else abs(value)
-        new_balance = invoice.balance + value
         try:
+            value = float(request.POST['value'])
+            itype = get_object_or_404(Itype, pk=int(request.POST['itype']))
+            invoice = get_object_or_404(Invoice, pk=int(request.POST['invoice']))
+            value = -abs(value) if itype.sign else abs(value)
+            new_balance = invoice.balance + value
             with transaction.commit_on_success():
                 pay = Pay.objects.create(invoice=invoice,
                     itype=itype,   
@@ -211,6 +212,16 @@ def pay_add(request, vtemplate):
         rest.set_cookie(prefix + 'invoice', pay.invoice_id)
         rest.set_cookie(prefix + 'itype', pay.itype_id)
     return rest
+
+@login_required
+def pay_last(request, vtemplate):
+    last_days = LAST_PAYS
+    day_border = datetime.datetime.now().date() - datetime.timedelta(days=last_days)
+    pays = Pay.objects.filter(pdate__gte=day_border).order_by('-pdate')
+    return direct_to_template(request, vtemplate, {
+        'pays': pays,
+        'last_days': last_days,
+        })
 
 @login_required
 def itypes_all(request, vtemplate):
@@ -245,11 +256,10 @@ def itype_add(request, vtemplate):
                 # create
                 sign = int(request.POST['sign'])
                 sign = bool(sign)        
-                itype = Itype(name=request.POST['name'],
+                itype = Itype.objects.create(name=request.POST['name'],
                     user=request.user,
                     sign=sign,
                 )
-                itype.save()
         except:
             raise Http404
             qstatus = 'faile'

@@ -40,6 +40,9 @@ urlpatterns = patterns('',
     # add pay
     (r'^pay/add/$' , pv.pay_add, {
         'vtemplate': 'pay_add.html'}),
+    # last pay's
+    (r'^pay/last/$' , pv.pay_last, {
+        'vtemplate': 'pay_last.html'}),
     # view all user itypes
     (r'^types/$' , pv.itypes_all, {
             'vtemplate': 'itype_all.html'}),

@@ -302,3 +302,23 @@ ul.errorlist li {
 .dellink {
     opacity: 0.5;
 }
+.pay_last th {
+    text-align: center;
+    font-weight: bold;
+    font-size: 85%; 
+    /*background-color: #232323;*/
+    /*padding: 5px;*/
+}
+.pay_last td {
+    border-bottom: 1px solid #818181;
+    padding: 3px;
+    /*margin: 10px;*/
+}
+.pay_last_add {
+    text-align: center; 
+    min-width: 100px;  
+}
+.pay_last_date {
+    text-align: center;
+    padding-top: 20px;
+}
