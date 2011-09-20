@@ -100,3 +100,48 @@ function send_out(pref) {
         $(prefix + 'comment').val('');
     }
 }
+// update itype div, 1 from 2
+function itype_update(sign) {
+    to_page = '/type/view/' + sign +'/';
+    up_div = '#uptype' + sign;
+    $.get(to_page, function(data) {
+            $(up_div).html(data);
+        });
+}
+// add itype
+function addtype(sign) {
+    input_id = '#add' + sign;
+    if ($(input_id).val()) {
+        $.ajax({
+            url: '/type/add/',
+            type: 'POST',
+            data: {
+                sign : sign,
+                name : $(input_id).val(),
+            },
+            dataType: 'html',
+            context: document.body,
+            async: true,
+            success: function (data) {
+                // clear form
+                $(input_id).val('');
+                // done, update
+                itype_update(sign);
+                // alert("ok");
+            },
+            error: function () {
+                alert('sorry, error'); 
+            },
+        });
+    } 
+    else alert('Пожалуйста проверьте введенные данные.');
+}
+// delete itype
+function deltype(sign, id) {
+    $.get('/type/del/' + id, function(data) {
+            itype_update(sign);
+            // $(up_div).html(data);
+        })
+        .success(function() { alert("second success"); })
+        .error(function() { alert("sorry, error"); });
+}

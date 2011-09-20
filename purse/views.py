@@ -59,7 +59,7 @@ def home(request, vtemplate):
     return rest
 
 def get_pay_forms(vuser, form_def):
-    user_itype = Itype.objects.filter(user=vuser)
+    user_itype = Itype.aobjects.filter(user=vuser)
     user_invoice = Invoice.objects.filter(user=vuser)
     form_in = PayForm(initial=form_def['in_'], auto_id='in_%s')
     form_out = PayForm(initial=form_def['out_'], auto_id='out_%s')
@@ -214,7 +214,7 @@ def pay_add(request, vtemplate):
 
 @login_required
 def itypes_all(request, vtemplate):
-    user_itype = Itype.objects.filter(user=request.user)
+    user_itype = Itype.aobjects.filter(user=request.user)
     itype_in = user_itype.filter(sign=False)
     itype_out = user_itype.filter(sign=True)
     return direct_to_template(request, vtemplate, {
@@ -224,9 +224,38 @@ def itypes_all(request, vtemplate):
 
 @login_required
 def itype_view(request, sign, vtemplate):
-    itypes = Itype.objects.filter(user=request.user, sign=sign)
+    itypes = Itype.aobjects.filter(user=request.user, sign=sign)
     headtext = 'Расходы' if sign else 'Доходы'
     return direct_to_template(request, vtemplate, {
         'itypes': itypes,
         'headtext': headtext
         })
+
+@permission_required('purse.add_itype')
+@transaction.autocommit
+def itype_add(request, vtemplate):
+    if request.method == 'POST':
+        try:
+            sign = int(request.POST['sign'])
+            itype = Itype.objects.create(name=request.POST['name'],
+                sign=bool(sign),   
+                user=request.user,
+            )
+        except:
+            raise Http404
+            qstatus = 'faile'
+        qstatus = 'ok'
+    else:
+        qstatus = 'faile'
+    return direct_to_template(request, vtemplate, {'qstatus': qstatus})
+
+@permission_required('purse.chage_itype')
+@transaction.autocommit
+def itype_del(request, id, vtemplate):
+    itype = Itype.objects.filter(pk=int(id))
+    if itype:
+        itype.update(status=False)
+        qstatus = 'ok'
+    else:
+        qstatus ='faile'
+    return direct_to_template(request, vtemplate, {'qstatus': qstatus})

@@ -46,6 +46,12 @@ urlpatterns = patterns('',
     # itype view, group by sing
     (r'^type/view/(?P<sign>\d+)/?$' , pv.itype_view, {
         'vtemplate': 'itype_view.html'}),
+    # add pay
+    (r'^type/add/$' , pv.itype_add, {
+        'vtemplate': 'pay_add.html'}),
+    # delete pay
+    (r'^type/del/(?P<id>\d+)/?$' , pv.itype_del, {
+        'vtemplate': 'pay_add.html'}),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

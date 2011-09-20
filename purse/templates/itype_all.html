@@ -10,21 +10,7 @@ $(document).ready(function() {
            $(this).fadeTo("slow",0.5);
         });
 
-    $('#addlink').click(function() {
-        $.get('/type/view/1/', function(data) {
-            $('#uptype1').html(data);
-            //alert('Load was performed.');
-        });
-    })
 });
-function addtype(sign) {
-    input_id = '#add' + sign;
-    if ($(input_id).val()) {
-        // done
-        alert($(input_id).val());  
-    } 
-    else alert('Пожалуйста проверьте введенные данные.');
-}
 </script>
 {% endblock %}
 {% block content %}
@@ -40,10 +26,12 @@ function addtype(sign) {
     <div id="uptype1">
         {% if itype_out %}
             <ul>
-                {% for tout in itype_out %}
+                {% for ty in itype_out %}
                     <li>
-                        {{ tout.name }}
-                        <span class="dellink"><a href="#"><img src="{{ MEDIA_URL }}img/delete.png" alt="удалить"></a></span>
+                        {{ ty.name }}
+                        <span class="dellink">
+                            <a href="javascript:deltype(1, {{ ty.id }})"><img src="{{ MEDIA_URL }}img/delete.png" alt="удалить"></a>
+                        </span>
                     </li>
                 {% endfor %}
             </ul>
@@ -51,7 +39,6 @@ function addtype(sign) {
             <em>видов расходов нет</em>
         {% endif %}
     </div>
-    <a href="#" id="addlink">update</a>
 </div>
 <div class="itypestyle2">
     <h3>Доходы</h3> 
@@ -61,13 +48,15 @@ function addtype(sign) {
             <a href="javascript:addtype(0)"><img src="{{ MEDIA_URL }}img/add.png" alt="добавить" align="top"></a>
         </form>
     </div>
-    <div id="uptype2">
+    <div id="uptype0">
         {% if itype_in %}
             <ul>
-                {% for tin in itype_in %}
+                {% for ty in itype_in %}
                     <li>
-                        {{ tin.name }}
-                        <img src="{{ MEDIA_URL }}img/delete.png"   alt="удалить">
+                        {{ ty.name }}
+                        <span class="dellink">
+                            <a href="javascript:deltype(0, {{ ty.id }})"><img src="{{ MEDIA_URL }}img/delete.png" alt="удалить"></a>
+                        </span>
                     </li>
                 {% endfor %}
             </ul>

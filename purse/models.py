@@ -3,6 +3,11 @@ from django.db import models
 from django.contrib.auth.models import User
 import datetime
 
+# new manager
+class ActiveManager(models.Manager):
+    def get_query_set(self):
+        return super(ActiveManager, self).get_query_set().filter(status=True)
+
 # adding methods
 def none2str(x):
     return x if x is not None else ''
@@ -50,7 +55,11 @@ class Invoice(models.Model):
 class Itype(models.Model):
     user = models.ForeignKey(User, verbose_name = u'пользователь')
     sign = models.BooleanField(default=True, verbose_name = u'расход (доход)')
+    status = models.BooleanField(default=True, verbose_name = u'статус)')
     name = models.CharField(max_length=255, verbose_name=u'название')
+    # managers
+    objects = models.Manager()
+    aobjects = ActiveManager()
 
     def __unicode__(self):
         itypestr = u'расход' if self.sign else u'доход'
