@@ -216,7 +216,7 @@ def pay_edit(request, id, vtemplate):
     user_itypes = Itype.aobjects.filter(user=request.user)
     user_invoices = Invoice.objects.filter(user=request.user)
     # get pay by id
-    pay = get_object_or_404(Pay, id=int(id), invoice__in=[ val.id for val in user_invoices ])
+    pay = get_object_or_404(Pay, id=int(id), invoice__user=request.user)
     if request.method == 'POST':
         form = PayEditForm(request.POST or None) 
         if form.is_valid():
@@ -240,10 +240,9 @@ def pay_edit(request, id, vtemplate):
 def pay_last(request, vtemplate):
     # day_border = datetime.datetime.now().date() - datetime.timedelta(days=LAST_PAYS)
     invoices = Invoice.objects.filter(user=request.user).only('id')
-    pays = Pay.objects.filter(invoice__in=[ val.id for val in invoices ]).order_by('-pdate')[:LAST_PAYS]
-    return direct_to_template(request, vtemplate, {
-        'pays': pays,
-        })
+    # pays = Pay.objects.filter(invoice__in=[ val.id for val in invoices ]).order_by('-pdate')[:LAST_PAYS]
+    pays = Pay.objects.filter(invoice__user=request.user).order_by('-pdate')[:LAST_PAYS]
+    return direct_to_template(request, vtemplate, {'pays': pays, })
 
 # ALL USER ITYPE'S
 @login_required

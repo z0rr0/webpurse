@@ -4,14 +4,10 @@
 {% block pagejs %}
 <script type="text/javascript">
 $(document).ready(function() {
-    $('#form1').submit(function () {
-        addtype(1);
-        return false;
-    });
-    $('#form0').submit(function () {
-        addtype(0);
-        return false;
-    });
+    // $('#form1').submit(function () {
+    //     addtype(1);
+    //     return false;
+    // });
 })
 </script>
 {% endblock %}
@@ -20,7 +16,7 @@ $(document).ready(function() {
 <div class="itypestyle1">
     <h3>Расходы</h3>
     <div id="paystyle">
-        <form type="POST" action="#" id="form1">
+        <form type="POST" action="javascript:addtype(1)" id="form1">
             <input value="" id="add1">
             <a href="javascript:addtype(1)"><img src="{{ MEDIA_URL }}img/add.png" alt="добавить" align="top"></a>
         </form>
@@ -49,7 +45,7 @@ $(document).ready(function() {
 <div class="itypestyle2">
     <h3>Доходы</h3> 
     <div id="paystyle">
-        <form type="POST" action="#"  id="form0">
+        <form type="POST" action="javascript:addtype(0)"  id="form0">
             <input value="" id="add0">
             <a href="javascript:addtype(0)"><img src="{{ MEDIA_URL }}img/add.png" alt="добавить" align="top"></a>
         </form>
