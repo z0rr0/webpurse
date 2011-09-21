@@ -1,4 +1,5 @@
 {% load jtags %}
+
 {% if pays %}
     <table border="0" align="center" class="pay_last">
        <!--  <tr>
@@ -6,11 +7,12 @@
             <th>Сумма</th>
             <th colspan="2">вид</th>
             <th>Примечание</th>
+            <th>edit</th>
         </tr> -->
         {% for pay in pays %}
             {% ifchanged %}
                 <tr>
-                    <th colspan="5" class="pay_last_date">
+                    <th colspan="6" class="pay_last_date">
                         <span ><em>{{ pay.pdate|date:"d.m.Y" }}</em></span>
                     </th>
                 </tr>
@@ -24,6 +26,7 @@
             <td>{{ pay.value|arrow|safe }}</td>
             <td class="pay_last_add">{{ pay.itype.name }}</td>
             <td><em>{{ pay.comment }}</em></td>
+            <td>edit</td>
         </tr>
         {% endfor %}
     </table>

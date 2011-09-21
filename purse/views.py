@@ -22,22 +22,11 @@ from django import forms
 
 from webpurse.purse.models import *
 from webpurse.purse.forms import *
-from webpurse.purse.bankparse import import_xml_dom
 from webpurse.settings import BANK_FILE
 
 import datetime
 
-LAST_PAYS = 5
-
-def query_bank(filename):
-    bankfile = import_xml_dom(BANK_FILE) 
-    with transaction.commit_on_success():
-        for key, value in bankfile.items():
-            valuta = Valuta(id=value["id"], code=value["code"],
-                name=value["name"], date=value["date"],
-                kurs=value["kurs"],)
-            valuta.save()
-    return True
+LAST_PAYS = 10
 
 # INDEX PAGE *************************
 @login_required
@@ -84,6 +73,7 @@ def user_invoices(user_id):
     # summ = summ.aggregate(Sum('balance'))
     return invoices, summ
 
+# VIEW INVOICES LIST AND ALL SUM BALANCE
 @login_required
 def invoice_view(request, vtemplate):
     invoices, summ = user_invoices(request.user.id)
@@ -91,6 +81,7 @@ def invoice_view(request, vtemplate):
         'invoices': invoices, 'summ': summ
         });
 
+# TABLE USERS INVOICES
 @login_required
 def invoice_all(request, vtemplate):
     invoices, summ = user_invoices(request.user.id)
@@ -109,9 +100,11 @@ def invoice_all(request, vtemplate):
         'invoices': invoices, 'summ': summ, 'form': form
         });
 
+# AUTH USER
 def invoice_perm(user):
     return user.is_authenticated() and user.has_perm("invoice.can_delete")
 
+# DELETE SELEST INVOICE 
 # delete invoice, additional var: login_url="/accounts/login/"
 # or @user_passes_test(invoice_perm)
 @permission_required('purse.delete_invoice')
@@ -122,6 +115,7 @@ def invoice_delete(request, id, redirecturl):
          invoice.delete()
     return HttpResponseRedirect(redirecturl)
 
+# DELETE SELECT INVOICE
 @permission_required('purse.delete_itype')
 @transaction.autocommit
 def invoice_delete(request, id, redirecturl):
@@ -130,9 +124,9 @@ def invoice_delete(request, id, redirecturl):
     if itype:
          itype.delete()
          qstatus = 'ok'
-    # return HttpResponseRedirect(redirecturl)
     return direct_to_template(request, vtemplate, {'qstatus': qstatus})
 
+# EDIT SELECT INVOICE'S OR ADD <= 5 ROWS
 @permission_required('purse.change_invoice')
 def invoice_edit(request, vtemplate):
     c = {}
@@ -143,7 +137,7 @@ def invoice_edit(request, vtemplate):
     else:
         extra_num = 5     
         qinvoice = Invoice.objects.none()
-
+    # formset
     InvoiceFormSet = modelformset_factory(Invoice, extra=extra_num, form=InvoiceForm)
     if request.method == 'POST':
         formset = InvoiceFormSet(request.POST, queryset=qinvoice)
@@ -160,6 +154,7 @@ def invoice_edit(request, vtemplate):
         formset = InvoiceFormSet(queryset=qinvoice)
     return direct_to_template(request, vtemplate, {'formset': formset})
 
+# ADD NEW USER INVOICE
 @permission_required('purse.add_invoice')
 @transaction.autocommit
 def invoice_add(request, vtemplate):
@@ -178,6 +173,7 @@ def invoice_add(request, vtemplate):
     form.fields['valuta'].choices = [(s.id, ("%s: %s" % (s.code, s.name))) for s in valutas]
     return direct_to_template(request, vtemplate, {'form': form})
 
+# ADD NEW PAY (+ OR -)
 @permission_required('purse.add_pay')
 def pay_add(request, vtemplate):
     save_cookie = False
@@ -207,22 +203,22 @@ def pay_add(request, vtemplate):
     rest = direct_to_template(request, vtemplate, {'qstatus': qstatus})
     if save_cookie:
         prefix = 'in_' if value > 0 else 'out_'
-        # rest.delete_cookie(prefix + 'invoice')
-        # rest.delete_cookie(prefix + 'itype')
+        # OR rest.delete_cookie(prefix + 'invoice')
         rest.set_cookie(prefix + 'invoice', pay.invoice_id)
         rest.set_cookie(prefix + 'itype', pay.itype_id)
     return rest
 
+# VIEW LAST PAY'S
 @login_required
 def pay_last(request, vtemplate):
-    last_days = LAST_PAYS
-    day_border = datetime.datetime.now().date() - datetime.timedelta(days=last_days)
-    pays = Pay.objects.filter(pdate__gte=day_border).order_by('-pdate')
+    # day_border = datetime.datetime.now().date() - datetime.timedelta(days=LAST_PAYS)
+    invoices = Invoice.objects.filter(user=request.user).only('id')
+    pays = Pay.objects.filter(invoice__in=[ val.id for val in invoices ]).order_by('-pdate')[:LAST_PAYS]
     return direct_to_template(request, vtemplate, {
         'pays': pays,
-        'last_days': last_days,
         })
 
+# ALL USER ITYPE'S
 @login_required
 def itypes_all(request, vtemplate):
     user_itype = Itype.aobjects.filter(user=request.user)
@@ -233,6 +229,7 @@ def itypes_all(request, vtemplate):
         'itype_out': itype_out
         })
 
+# USER ITYPE FILTERS BY SIGN
 @login_required
 def itype_view(request, sign, vtemplate):
     itypes = Itype.aobjects.filter(user=request.user, sign=sign)
@@ -242,6 +239,7 @@ def itype_view(request, sign, vtemplate):
         'sign': sign
         })
 
+# ADD ITYPE WITH SELECTED SIGN - OR - EDIT ITYPE NAME
 @permission_required('purse.add_itype')
 @transaction.autocommit
 def itype_add(request, vtemplate):
@@ -268,6 +266,7 @@ def itype_add(request, vtemplate):
         qstatus = 'faile'
     return direct_to_template(request, vtemplate, {'qstatus': qstatus})
 
+# DELETE ITYPE (STATUS=FALSE)
 @permission_required('purse.chage_itype')
 @transaction.autocommit
 def itype_del(request, id, vtemplate):
@@ -279,6 +278,7 @@ def itype_del(request, id, vtemplate):
         qstatus ='faile'
     return direct_to_template(request, vtemplate, {'qstatus': qstatus})
 
+# VIEW ITYPE FOR EDIT FORM
 @permission_required('purse.chage_itype')
 @transaction.autocommit
 def itype_edit(request, id, vtemplate):
