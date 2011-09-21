@@ -40,6 +40,9 @@ urlpatterns = patterns('',
     # add pay
     (r'^pay/add/$' , pv.pay_add, {
         'vtemplate': 'pay_add.html'}),
+    # edit pay
+    (r'^pay/edit/(?P<id>\d+)/?$' , pv.pay_edit, {
+        'vtemplate': 'pay_edit.html'}),
     # last pay's
     (r'^pay/last/$' , pv.pay_last, {
         'vtemplate': 'pay_last.html'}),

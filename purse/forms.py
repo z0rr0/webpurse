@@ -22,3 +22,11 @@ class PayForm(forms.ModelForm):
     class Meta:
         model = models.Pay
         fields = ('itype', 'invoice', 'value', 'comment')
+
+class PayEditForm(forms.ModelForm):
+    # pass
+    # fields = ("itype", 'itype', 'comment')
+
+    class Meta:
+        model = models.Pay
+        fields = ('itype', 'invoice', 'value', 'comment', 'pdate')

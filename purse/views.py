@@ -208,6 +208,33 @@ def pay_add(request, vtemplate):
         rest.set_cookie(prefix + 'itype', pay.itype_id)
     return rest
 
+# EDIT PAY
+@permission_required('purse.change_pay')
+def pay_edit(request, id, vtemplate):
+    c = {}
+    c.update(csrf(request))
+    user_itypes = Itype.aobjects.filter(user=request.user)
+    user_invoices = Invoice.objects.filter(user=request.user)
+    # get pay by id
+    pay = get_object_or_404(Pay, id=int(id), invoice__in=[ val.id for val in user_invoices ])
+    if request.method == 'POST':
+        form = PayEditForm(request.POST or None) 
+        if form.is_valid():
+            pay = form.save(commit=False)
+            # invoice.save()
+            # return redirect('/invoices/')
+    else:
+        pay.value = abs(pay.value)
+        form = PayEditForm(instance=pay)
+    form.fields['invoice'].choices = [(s.id, s.name) for s in user_invoices]
+    # itype items
+    items=[(u"Доход", [(s.id, s.name) for s in user_itypes.filter(sign=False)]),
+        (u"Расход", [(s.id, s.name) for s in user_itypes.filter(sign=True)])]
+    form.fields['itype'].choices = items
+    return direct_to_template(request, vtemplate, {
+        'form': form,
+        })
+
 # VIEW LAST PAY'S
 @login_required
 def pay_last(request, vtemplate):
