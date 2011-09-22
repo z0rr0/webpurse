@@ -191,3 +191,12 @@ function get_pay_last(divid)  {
     })
     .error(function() { alert("sorry, error"); });
 }
+// delete pay
+function delpay(id) {
+    $.get('/pay/del/' + id, function(data) {
+        invoices_update('/invoice/view/', '#leftm'); 
+        get_pay_last('#pay_last');
+        // alert("ok");
+        })
+        .error(function() { alert("sorry, error"); });
+}

@@ -222,7 +222,7 @@ def pay_edit(request, id, vtemplate):
                 invoice.save()
                 # save new pay
                 new_pay.save()
-                # return redirect('/')
+                return redirect('/')
     else:
         pay.value = abs(pay.value)
         form = PayEditForm(instance=pay)
@@ -234,6 +234,19 @@ def pay_edit(request, id, vtemplate):
     return direct_to_template(request, vtemplate, {
         'form': form,
         })
+
+# DELETE PAY
+@permission_required('purse.delete_pay')
+def pay_del(request, id, vtemplate):
+    pay = get_object_or_404(Pay, id=int(id), invoice__user=request.user)
+    with transaction.commit_on_success():
+        invoice = get_object_or_404(Invoice, pk=pay.invoice_id)
+        invoice.balance -= pay.value
+        invoice.save()
+        # delete
+        pay.delete()
+    qstatus = 'ok'
+    return direct_to_template(request, vtemplate, {'qstatus': qstatus})
 
 # VIEW LAST PAY'S
 @login_required
