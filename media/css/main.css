@@ -215,12 +215,27 @@ ul.errorlist {
 ul.errorlist li {
     list-style-type: none;
 }
+.formstyle th {
+    text-align: left;
+    font-weight: bold;
+    background-color: #232323;
+    padding: 2px;
+    vertical-align: top;
+}
 .formstyle input {
     background-color: #d2d6ce;
+    width: 150px;
+    font-size: 90%;
+}
+.formstyle select {
+    background-color: #d2d6ce;
+    width: 154px;
     font-size: 90%;
 }
 .formstyle textarea {
     background-color: #d2d6ce;
+    width: 400px;
+    height: 60px;
     font-size: 90%;
 }
 #paystyle {
@@ -253,6 +268,10 @@ ul.errorlist li {
 }
 .bigfield input {
     width: 200px;
+}
+.bigfield select {
+    width: 200px;
+    background-color: #d2d6ce;
 }
 .bigfield textarea {
     width: 400px;

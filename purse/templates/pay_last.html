@@ -12,7 +12,7 @@
         {% for pay in pays %}
             {% ifchanged %}
                 <tr>
-                    <th colspan="6" class="pay_last_date">
+                    <th colspan="7" class="pay_last_date">
                         <span ><em>{{ pay.pdate|date:"d.m.Y" }}</em></span>
                     </th>
                 </tr>
@@ -26,7 +26,16 @@
             <td>{{ pay.value|arrow|safe }}</td>
             <td class="pay_last_add">{{ pay.itype.name }}</td>
             <td><em>{{ pay.comment }}</em></td>
-            <td>edit</td>
+            <td>
+                <span class="dellink" onMouseOver="up_view(this)" onMouseOut="down_view(this)">
+                    <a href="/pay/edit/{{ pay.id }}"><img src="{{ MEDIA_URL }}img/edit.png" alt="правка"></a>
+                </span>
+            </td>
+            <td>
+                <span class="dellink" onMouseOver="up_view(this)" onMouseOut="down_view(this)">
+                    <a href="javascript:delpay(1,{{ pay.id }})"><img src="{{ MEDIA_URL }}img/delete.png" alt="удалить"></a>
+                </span>
+            </td>
         </tr>
         {% endfor %}
     </table>

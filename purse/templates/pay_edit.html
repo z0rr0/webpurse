@@ -3,6 +3,69 @@
     Правка платежа
 {% endblock title %}
 
+{% block pagejs %}
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#id_pdate').datepicker();
+    // $('#editform').submit(function () {
+    //     prefix = '#id_value';
+    //     val = val_validate(prefix);
+    //     if (!val) alert('Пожалуйста проверьте введенные значения.');
+    //     else {
+    //         $(prefix).val(val);
+    //         alert('ok');
+    //     }
+    //     return false;
+    // });
+});
+</script>
+{% endblock %}
+
 {% block content %}
-    {{ form.as_ul }}
+<h1>Редактирование платежа</h1><br>
+<form method="POST" id="editform" action="" class="formstyle">
+{% csrf_token %}{{ form.management_form }}
+    <table>
+        <tr>
+            <th>{{ form.pdate.label }}</th>
+            <td>
+                {{ form.pdate }}
+                <div class="italicp">{{ form.pdate.help_text }}</div>
+                {{ form.pdate.errors|lower }}
+            </td>
+        </tr>
+        <tr>
+            <th>{{ form.value.label }}</th>
+            <td>
+                {{ form.value }}
+                <div class="italicp">{{ form.value.help_text }}</div>
+                {{ form.value.errors|lower }}
+            </td>
+        </tr>
+        <tr>
+            <th>{{ form.invoice.label }}</th>
+            <td>
+                {{ form.invoice }}
+                <div class="italicp">{{ form.invoice.help_text }}</div>
+                {{ form.invoice.errors|lower }}
+            </td>
+        </tr>
+        <tr>
+            <th>{{ form.itype.label }}</th>
+            <td>
+                {{ form.itype }}
+                <div class="italicp">{{ form.itype.help_text }}</div>
+                {{ form.itype.errors|lower }}
+            </td>
+        </tr>
+        <tr>
+            <th>{{ form.comment.label }}</th>
+            <td>
+                {{ form.comment }}
+                <div class="italicp">{{ form.comment.help_text }}</div>
+                {{ form.comment.errors|lower }}
+            </td>
+        </tr>
+    </table><br>
+<input type="submit" value="Сохранить" />
 {% endblock content %}

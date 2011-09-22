@@ -70,10 +70,10 @@ class Itype(models.Model):
 
 # user pays
 class Pay(models.Model):
-    invoice = models.ForeignKey(Invoice, verbose_name = u'счет')
-    itype = models.ForeignKey(Itype, verbose_name = u'тип')
-    value = models.FloatField(default=0, verbose_name = u'сумма')
-    pdate = models.DateField(verbose_name = u'дата')    
+    invoice = models.ForeignKey(Invoice, verbose_name = u'счет', help_text=u'счет для операции')
+    itype = models.ForeignKey(Itype, verbose_name = u'вид', help_text=u'вид платежа')
+    value = models.FloatField(default=0, verbose_name = u'сумма', help_text=u'сумма платежа')
+    pdate = models.DateField(verbose_name = u'дата', help_text=u'дата платежа')    
     comment = models.TextField(verbose_name=u'примечание', blank=True, null=True)
     modified = models.DateTimeField(auto_now=True, auto_now_add=True, editable=False)
     created = models.DateTimeField(auto_now_add=True, editable=False)

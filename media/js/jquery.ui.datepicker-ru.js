@@ -26,7 +26,7 @@ jQuery(function($){
         // changeMonth: true,
         // changeYear: true,
         showOn: "button",
-        buttonImage: "/media/css/images/calendar.gif",
+        buttonImage: "/media/img/cal.png",
         buttonImageOnly: true
         };
     $.datepicker.setDefaults($.datepicker.regional['ru']);

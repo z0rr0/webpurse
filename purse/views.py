@@ -115,17 +115,6 @@ def invoice_delete(request, id, redirecturl):
          invoice.delete()
     return HttpResponseRedirect(redirecturl)
 
-# DELETE SELECT INVOICE
-@permission_required('purse.delete_itype')
-@transaction.autocommit
-def invoice_delete(request, id, redirecturl):
-    qstatus = 'faile'
-    itype = get_object_or_404(Itype, pk=int(id), user=request.user.id)
-    if itype:
-         itype.delete()
-         qstatus = 'ok'
-    return direct_to_template(request, vtemplate, {'qstatus': qstatus})
-
 # EDIT SELECT INVOICE'S OR ADD <= 5 ROWS
 @permission_required('purse.change_invoice')
 def invoice_edit(request, vtemplate):
@@ -218,11 +207,22 @@ def pay_edit(request, id, vtemplate):
     # get pay by id
     pay = get_object_or_404(Pay, id=int(id), invoice__user=request.user)
     if request.method == 'POST':
-        form = PayEditForm(request.POST or None) 
+        invoice = get_object_or_404(Invoice, pk=pay.invoice_id)
+        invoice.balance -= pay.value
+        form = PayEditForm(request.POST or None, instance=pay) 
         if form.is_valid():
-            pay = form.save(commit=False)
-            # invoice.save()
-            # return redirect('/invoices/')
+            with transaction.commit_on_success():
+                new_pay = form.save(commit=False)
+                new_pay.value = -abs(pay.value) if pay.itype.sign else abs(pay.value)
+                # edit balance old invoice, return summ
+                invoice.save()
+                # edit balance new invoice
+                invoice = get_object_or_404(Invoice, pk=new_pay.invoice_id)
+                invoice.balance += new_pay.value
+                invoice.save()
+                # save new pay
+                new_pay.save()
+                # return redirect('/')
     else:
         pay.value = abs(pay.value)
         form = PayEditForm(instance=pay)
@@ -239,8 +239,8 @@ def pay_edit(request, id, vtemplate):
 @login_required
 def pay_last(request, vtemplate):
     # day_border = datetime.datetime.now().date() - datetime.timedelta(days=LAST_PAYS)
-    invoices = Invoice.objects.filter(user=request.user).only('id')
     # pays = Pay.objects.filter(invoice__in=[ val.id for val in invoices ]).order_by('-pdate')[:LAST_PAYS]
+    invoices = Invoice.objects.filter(user=request.user).only('id')
     pays = Pay.objects.filter(invoice__user=request.user).order_by('-pdate')[:LAST_PAYS]
     return direct_to_template(request, vtemplate, {'pays': pays, })
 
