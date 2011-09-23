@@ -63,17 +63,20 @@ function invoices_update(vurl, vdiv) {
     });
 }
 // validate pays data
-function val_validate(val_id) {
+function val_validate(val_id, force) {
     str = $(val_id).val();
-    str = str.replace(/,/gi, ".")
-    val = parseFloat(str);
+    str = jQuery.trim(str.replace(/,/gi, "."));
+    $(val_id).val(str);
+    if (force) val = parseFloat(str);
+    else val = str;
+    // if
     if (isNaN(val) || val == 0) return false;
     else return val;
 }
 // send pay
 function send_out(pref) {
     prefix = '#' + pref + '_';
-    val = val_validate(prefix + 'value');
+    val = val_validate(prefix + 'value', true);
     if (!val) alert('Пожалуйста проверьте введенные значения.');
     else {
         // ok send form

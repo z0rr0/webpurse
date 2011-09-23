@@ -7,6 +7,19 @@
 <script type="text/javascript">
 $(document).ready(function() {
     $('#id_pdate').datepicker();
+    $('#editform').submit(function () {
+        prefix = '#id_value';
+        val = val_validate(prefix);
+        if (!val) {
+            alert('Пожалуйста проверьте введенные значения.');
+            return false;
+        }
+        else {
+            $(prefix).val(val, false);
+            // alert('ok');
+        }
+        return true;
+    });
 });
 </script>
 {% endblock %}
