@@ -30,3 +30,11 @@ class PayEditForm(forms.ModelForm):
     class Meta:
         model = models.Pay
         fields = ('itype', 'invoice', 'value', 'comment', 'pdate')
+
+class PayCorrectForm(forms.ModelForm):
+    # pass
+    tosum = forms.BooleanField(label=u'корректировка')
+
+    class Meta:
+        model = models.Pay
+        fields = ('invoice', 'value', 'comment', 'pdate')

@@ -6,7 +6,7 @@ import datetime
 # new manager
 class ActiveManager(models.Manager):
     def get_query_set(self):
-        return super(ActiveManager, self).get_query_set().filter(status=True)
+        return super(ActiveManager, self).get_query_set().filter(status=True, correction=False)
 
 # adding methods
 def none2str(x):
@@ -29,17 +29,23 @@ class Valuta(models.Model):
 # ivoices
 class Invoice(models.Model):
     user = models.ForeignKey(User, verbose_name=u'пользователь')
-    valuta = models.ForeignKey(Valuta, verbose_name=u'валюта', default=643,
+    valuta = models.ForeignKey(Valuta, default=643,
+        verbose_name=u'валюта', 
         help_text=u'валюта счета')
-    name = models.CharField(max_length=255, verbose_name=u'название',
+    name = models.CharField(max_length=255, 
+        verbose_name=u'название',
         help_text=u'наименование счета')
-    balance = models.FloatField(default=0, verbose_name = u'баланс',
+    balance = models.FloatField(default=0, 
+        verbose_name = u'баланс',
         help_text=u'начальный баланс')
-    other = models.BooleanField(default=False, verbose_name=u'чужой',
+    other = models.BooleanField(default=False, 
+        verbose_name=u'чужой',
         help_text=u'счет не относится к личным финансам')
-    url = models.URLField(max_length=255, verbose_name=u'Веб-страница', 
+    url = models.URLField(max_length=255, 
+        verbose_name=u'Веб-страница', 
         blank=True, null=True, help_text=u'адрес веб-страницы счета')
-    comment = models.TextField(verbose_name=u'примечание', blank=True, null=True,
+    comment = models.TextField(verbose_name=u'примечание', 
+        blank=True, null=True,
         help_text=u'комментарий к счету')
     modified = models.DateTimeField(auto_now=True, auto_now_add=True, editable=False)
     created = models.DateTimeField(auto_now_add=True, editable=False)
@@ -56,6 +62,7 @@ class Itype(models.Model):
     user = models.ForeignKey(User, verbose_name = u'пользователь')
     sign = models.BooleanField(default=True, verbose_name = u'расход (доход)')
     status = models.BooleanField(default=True, verbose_name = u'статус)')
+    correction = models.BooleanField(default=False, verbose_name = u'корректировка)')
     name = models.CharField(max_length=255, verbose_name=u'название')
     # managers
     objects = models.Manager()

@@ -17,6 +17,10 @@ $(document).ready(function() {
         data = $( "#datepicker_out" ).val();
         $('#dateout_label').html(data);
     }); 
+    $( "#datepicker_cor" ).click(function(){
+        data = $( "#datepicker_cor" ).val();
+        $('#datecor_label').html(data);
+    });
     // $('#form_out').submit(function () {
     //     send_out('out');
     //     return false;
@@ -37,8 +41,8 @@ $(document).ready(function() {
         <ul>
             <li><a href="#tabs-1" onclick="get_pay_last('#pay_last')">Расход</a></li>
             <li><a href="#tabs-2" onclick="get_pay_last('#pay_last')">Приход</a></li>
-            <li><a href="#tabs-3" onclick="alert('updet transfer')">Перевод</a></li>
-            <li><a href="#tabs-4">Корректировка</a></li>
+            <li><a href="#tabs-3" onclick="get_pay_last('#pay_last')">Корректировка</a></li>
+            <li><a href="#tabs-4" onclick="alert('updet transfer')">Перевод</a></li>
             <li><a href="#tabs-5">Долги</a></li>
         </ul>
         <div id="tabs-1" >{{ t }}
@@ -98,7 +102,32 @@ $(document).ready(function() {
             </table>
         </div>
         <div id="tabs-3">
-            <p>3. Proin elit arcu,</p>
+            <table>
+                <tr>
+                    <td><div id="datepicker_cor"></div></td>
+                    <td>
+                    <div id="paystyle">
+                        <form type="POST" action="javascript:send_cor('in')"  id="form_cor">
+                            Введите данные о получении средств 
+                            (<em>дата </em>
+                            <strong>
+                                <span id="datecor_label">{% now "d.m.Y" %}</span>
+                            </strong>)
+                            <div>{{ form_cor.value }} <span class="smallsym">сумма транзакции</span></div>
+                            <div>{{ form_cor.invoice }} <span class="smallsym">счет списания</span></div>
+                            <div>{{ form_cor.tosum }} корректировка счета</div>
+                            <div><span class="smallsym">примечание (текстовая заметка о транзакции)</span>
+                                <br>{{ form_cor.comment }}
+                            </div>
+                            <div>
+                                <input type="submit" value="отправить">
+                                <span id="cor_status" class="paystatus"></span>
+                            </div>
+                        </form>
+                    </div>
+                    </td>
+                </tr>
+            </table>
         </div>
         <div id="tabs-4">
             <p>4. Proin elit arcu,<br>
