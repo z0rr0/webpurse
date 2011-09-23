@@ -202,10 +202,12 @@ def pay_add(request, vtemplate):
 def pay_correct(request, vtemplate):
     save_cookie = False
     if request.method == 'POST':
-        invoice = get_object_or_404(Invoice, pk=int(request.POST['invoice']), user=request.user)
         with transaction.commit_on_success():
+            invoice = get_object_or_404(Invoice, 
+                pk=int(request.POST['invoice']), 
+                user=request.user)
             try:
-                tosum = int(equest.POST['tosum'])
+                tosum = int(request.POST['tosum'])
                 if tosum:
                     value = float(request.POST['value']) - invoice.balance
                     invoice.balance = float(request.POST['value'])
