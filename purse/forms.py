@@ -38,3 +38,13 @@ class PayCorrectForm(forms.ModelForm):
     class Meta:
         model = models.Pay
         fields = ('invoice', 'value', 'comment', 'pdate')
+
+class TransferForm(forms.ModelForm):
+    # pass
+
+    class Meta:
+        model = models.Transfer
+        fields = ('ifrom', 'value', 'comment', 'pdate')
+
+class TransSmallForm(forms.Form):
+    fselect = forms.ChoiceField()

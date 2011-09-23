@@ -133,8 +133,8 @@ class Dept(models.Model):
 
 # transfer pays
 class Transfer(models.Model):
-    ifrom = models.ForeignKey(Invoice, related_name='Ifrom')
-    ito = models.ForeignKey(Invoice, related_name='Ito')
+    ifrom = models.ForeignKey(Invoice, related_name='invfrom')
+    ito = models.ForeignKey(Invoice, related_name='invto')
     value = models.FloatField(default=0, verbose_name = u'сумма')
     pdate = models.DateField(verbose_name = u'дата')    
     comment = models.TextField(verbose_name=u'примечание', blank=True, null=True)

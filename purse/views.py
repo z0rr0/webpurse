@@ -208,29 +208,27 @@ def pay_correct(request, vtemplate):
         with transaction.commit_on_success():
             invoice = get_object_or_404(Invoice, 
                 pk=int(request.POST['invoice']), user=request.user)
-            # try:
-            tosum = int(request.POST['tosum'])
-            if tosum:
-                value = float(request.POST['value']) - invoice.balance
-            else:
-                value = float(request.POST['value'])
-            # create or search cor itype
-            itype, created = Itype.objects.get_or_create(correction=True, 
-                user=request.user, name=CORRECT_PAY_NAME)     
-            pay = Pay.objects.create(invoice=invoice,
-                itype=itype,   
-                pdate=datetime.datetime.strptime(request.POST['pdate'], "%d.%m.%Y").date(),
-                value=value,
-                comment=request.POST['comment'])
-            # save new pay
-            # pay.save()
-            # update invoice
-            invoice.balance = F('balance') + value
-            invoice.save()
-            # invoice.update(balance=F('balance') + value, modified=datetime.datetime.now())
-            # except:
-            #     raise Http404
-            #     qstatus = 'faile'
+            try:
+                tosum = int(request.POST['tosum'])
+                if tosum:
+                    value = float(request.POST['value']) - invoice.balance
+                else:
+                    value = float(request.POST['value'])
+                # create or search cor itype
+                itype, created = Itype.objects.get_or_create(correction=True, 
+                    user=request.user, name=CORRECT_PAY_NAME)     
+                # save new pay
+                pay = Pay.objects.create(invoice=invoice,
+                    itype=itype,   
+                    pdate=datetime.datetime.strptime(request.POST['pdate'], "%d.%m.%Y").date(),
+                    value=value,
+                    comment=request.POST['comment'])
+                # update invoice
+                invoice.balance = F('balance') + value
+                invoice.save()
+            except:
+                raise Http404
+                qstatus = 'faile'
             qstatus = 'ok'
     else:
         qstatus = 'faile'
@@ -294,7 +292,7 @@ def pay_last(request, vtemplate):
     # day_border = datetime.datetime.now().date() - datetime.timedelta(days=LAST_PAYS)
     # pays = Pay.objects.filter(invoice__in=[ val.id for val in invoices ]).order_by('-pdate')[:LAST_PAYS]
     invoices = Invoice.objects.filter(user=request.user).only('id')
-    pays = Pay.objects.filter(invoice__user=request.user).order_by('-pdate')[:LAST_PAYS]
+    pays = Pay.objects.filter(invoice__user=request.user).order_by('-pdate', '-modified')[:LAST_PAYS]
     return direct_to_template(request, vtemplate, {'pays': pays, })
 
 # ALL USER ITYPE'S

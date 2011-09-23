@@ -21,17 +21,11 @@ $(document).ready(function() {
         data = $( "#datepicker_cor" ).val();
         $('#datecor_label').html(data);
     });
-    // $('#form_out').submit(function () {
-    //     send_out('out');
-    //     return false;
-    // })
-    // $('#form_in').submit(function () {
-    //     send_out('in');
-    //     return false;
-    // })
-    
+    $( "#datepicker_trans" ).click(function(){
+        data = $( "#datepicker_trans" ).val();
+        $('#datetrans_label').html(data);
+    });      
     get_pay_last('#pay_last');
-
 });
 </script>
 {% endblock %}
@@ -42,7 +36,7 @@ $(document).ready(function() {
             <li><a href="#tabs-1" onclick="get_pay_last('#pay_last')">Расход</a></li>
             <li><a href="#tabs-2" onclick="get_pay_last('#pay_last')">Приход</a></li>
             <li><a href="#tabs-3" onclick="get_pay_last('#pay_last')">Корректировка</a></li>
-            <li><a href="#tabs-4" onclick="alert('updet transfer')">Перевод</a></li>
+            <li><a href="#tabs-4">Перевод</a></li>
             <li><a href="#tabs-5">Долги</a></li>
         </ul>
         <div id="tabs-1" >{{ t }}
@@ -108,7 +102,7 @@ $(document).ready(function() {
                     <td>
                     <div id="paystyle">
                         <form type="POST" action="javascript:send_cor('cor')"  id="form_cor">
-                            Введите данные платежа-корректировки
+                            Введите данные корректировки
                             (<em>дата </em>
                             <strong>
                                 <span id="datecor_label">{% now "d.m.Y" %}</span>
@@ -130,9 +124,32 @@ $(document).ready(function() {
             </table>
         </div>
         <div id="tabs-4">
-            <p>4. Proin elit arcu,<br>
-            Some operations are supported by several object types; in particular, practically all objects can be compared, tested for truth value, and converted to a string (with the repr() function or the slightly different str() function). The latter function is implicitly used when an object is written by the print() function.
-            </p>
+            <table>
+                <tr>
+                    <td><div id="datepicker_trans"></div></td>
+                    <td>
+                    <div id="paystyle">
+                        <form type="POST" action="javascript:send_trans('trans')"  id="form_trans">
+                            Введите данные перевода
+                            (<em>дата </em>
+                            <strong>
+                                <span id="datetrans_label">{% now "d.m.Y" %}</span>
+                            </strong>)
+                            <div>s1<span class="smallsym">сумма транзакции</span></div>
+                            <div>s2<span class="smallsym">счет списания</span></div>
+                            <div>s3<span class="smallsym">счет зачисления</span></div>
+                            <div><span class="smallsym">примечание (текстовая заметка о транзакции)</span>
+                                <br>ы4
+                            </div>
+                            <div>
+                                <input type="submit" value="отправить">
+                                <span id="trans_status" class="paystatus"></span>
+                            </div>
+                        </form>
+                    </div>
+                    </td>
+                </tr>
+            </table>
         </div>
         <div id="tabs-5">
             <p>4. Proin elit arcu,<br>
