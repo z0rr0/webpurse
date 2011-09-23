@@ -169,8 +169,8 @@ def pay_add(request, vtemplate):
     if request.method == 'POST':
         try:
             value = float(request.POST['value'])
-            itype = get_object_or_404(Itype, pk=int(request.POST['itype']))
-            invoice = get_object_or_404(Invoice, pk=int(request.POST['invoice']))
+            itype = get_object_or_404(Itype, pk=int(request.POST['itype']), user=request.user)
+            invoice = get_object_or_404(Invoice, pk=int(request.POST['invoice']), user=request.user)
             value = -abs(value) if itype.sign else abs(value)
             new_balance = invoice.balance + value
             with transaction.commit_on_success():
@@ -196,6 +196,40 @@ def pay_add(request, vtemplate):
         rest.set_cookie(prefix + 'invoice', pay.invoice_id)
         rest.set_cookie(prefix + 'itype', pay.itype_id)
     return rest
+
+# ADD NEW CORRECT PAY
+@permission_required('purse.add_pay')
+def pay_correct(request, vtemplate):
+    save_cookie = False
+    if request.method == 'POST':
+        invoice = get_object_or_404(Invoice, pk=int(request.POST['invoice']), user=request.user)
+        with transaction.commit_on_success():
+            try:
+                tosum = int(equest.POST['tosum'])
+                if tosum:
+                    value = float(request.POST['value']) - invoice.balance
+                    invoice.balance = float(request.POST['value'])
+                else:
+                    value = float(request.POST['value'])
+                    invoice.balance -= value           
+                itype = Itype.objects.get_or_create(correction=True, 
+                    user=request.user, name=u'Корректировка')        
+                pay = Pay.objects.create(invoice=invoice,
+                    itype=itype,   
+                    pdate=datetime.datetime.strptime(request.POST['pdate'], "%d.%m.%Y").date(),
+                    value=value,
+                    comment=request.POST['comment'])
+                invoice.save()
+                # save new pay
+                pay.save()
+            except ValueError:
+                raise Http404
+                qstatus = 'faile'
+            qstatus = 'ok'
+    else:
+        qstatus = 'faile'
+    qstatus = bool(int(request.POST['tosum']))
+    return direct_to_template(request, vtemplate, {'qstatus': qstatus})
 
 # EDIT PAY
 @permission_required('purse.change_pay')

@@ -110,6 +110,45 @@ function send_out(pref) {
         $(prefix + 'comment').val('');
     }
 }
+// send corrent pay
+function send_cor(pref) {
+    prefix = '#' + pref + '_';
+    val = val_validate(prefix + 'value', true);
+    if (!val) alert('Пожалуйста проверьте введенные значения.');
+    else {
+        if ($(prefix + 'tosum').is(':checked')) tosum = 1;
+        else tosum = 0;
+        // ok send form
+        $.ajax({
+            url: '/pay/correct/',
+            type: 'POST',
+            data: {
+                invoice : $(prefix + 'invoice').val(),
+                tosum : tosum,
+                value : val,
+                pdate : $('#datepicker_' + pref).val(),
+                comment : $(prefix + 'comment').val(),
+            },
+            dataType: 'html',
+            context: document.body,
+            async: true,
+            success: function (data) {
+                $(prefix + 'status').html('Сохранено');
+                $(prefix + 'status').show();
+                invoices_update('/invoice/view/', '#leftm'); 
+                $(prefix + 'status').hide(8000);
+                get_pay_last('#pay_last');
+                // alert("ok");
+            },
+            error: function () {
+                alert('sorry, error'); 
+            },
+        });
+        // clear form
+        $(prefix + 'value').val(0);
+        $(prefix + 'comment').val('');
+    }
+}
 // update itype div, 1 from 2
 function itype_update(sign) {
     to_page = '/type/view/' + sign +'/';
