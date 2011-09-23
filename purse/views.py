@@ -11,7 +11,7 @@ from django.contrib import auth
 from django.forms.extras import widgets
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from django.db import transaction
-from django.db.models import Sum
+from django.db.models import F, Sum
 from django import forms
 # new
 # from django.template.response import TemplateResponse
@@ -27,6 +27,7 @@ from webpurse.settings import BANK_FILE
 import datetime
 
 LAST_PAYS = 10
+CORRECT_PAY_NAME = u'Корректировка'
 
 # INDEX PAGE *************************
 @login_required
@@ -180,8 +181,9 @@ def pay_add(request, vtemplate):
                     value=value,
                     comment=request.POST['comment']
                 )
-                Invoice.objects.filter(id=pay.invoice_id).update(balance=new_balance)
-            # save cookie vars
+                # update invoice
+                invoice = Invoice.objects.filter(id=pay.invoice_id)
+                invoice.update(balance=F('balance') + value, modified=datetime.datetime.now())
         except:
             raise Http404
             qstatus = 'faile'
@@ -193,6 +195,7 @@ def pay_add(request, vtemplate):
     if save_cookie:
         prefix = 'in_' if value > 0 else 'out_'
         # OR rest.delete_cookie(prefix + 'invoice')
+        # save cookie vars
         rest.set_cookie(prefix + 'invoice', pay.invoice_id)
         rest.set_cookie(prefix + 'itype', pay.itype_id)
     return rest
@@ -204,29 +207,30 @@ def pay_correct(request, vtemplate):
     if request.method == 'POST':
         with transaction.commit_on_success():
             invoice = get_object_or_404(Invoice, 
-                pk=int(request.POST['invoice']), 
-                user=request.user)
-            try:
-                tosum = int(request.POST['tosum'])
-                if tosum:
-                    value = float(request.POST['value']) - invoice.balance
-                    invoice.balance = float(request.POST['value'])
-                else:
-                    value = float(request.POST['value'])
-                    invoice.balance -= value           
-                itype = Itype.objects.get_or_create(correction=True, 
-                    user=request.user, name=u'Корректировка')        
-                pay = Pay.objects.create(invoice=invoice,
-                    itype=itype,   
-                    pdate=datetime.datetime.strptime(request.POST['pdate'], "%d.%m.%Y").date(),
-                    value=value,
-                    comment=request.POST['comment'])
-                invoice.save()
-                # save new pay
-                pay.save()
-            except ValueError:
-                raise Http404
-                qstatus = 'faile'
+                pk=int(request.POST['invoice']), user=request.user)
+            # try:
+            tosum = int(request.POST['tosum'])
+            if tosum:
+                value = float(request.POST['value']) - invoice.balance
+            else:
+                value = float(request.POST['value'])
+            # create or search cor itype
+            itype, created = Itype.objects.get_or_create(correction=True, 
+                user=request.user, name=CORRECT_PAY_NAME)     
+            pay = Pay.objects.create(invoice=invoice,
+                itype=itype,   
+                pdate=datetime.datetime.strptime(request.POST['pdate'], "%d.%m.%Y").date(),
+                value=value,
+                comment=request.POST['comment'])
+            # save new pay
+            # pay.save()
+            # update invoice
+            invoice.balance = F('balance') + value
+            invoice.save()
+            # invoice.update(balance=F('balance') + value, modified=datetime.datetime.now())
+            # except:
+            #     raise Http404
+            #     qstatus = 'faile'
             qstatus = 'ok'
     else:
         qstatus = 'faile'
@@ -243,21 +247,22 @@ def pay_edit(request, id, vtemplate):
     # get pay by id
     pay = get_object_or_404(Pay, id=int(id), invoice__user=request.user)
     if request.method == 'POST':
-        invoice = get_object_or_404(Invoice, pk=pay.invoice_id)
-        invoice.balance -= pay.value
+        old_invoice, old_value = pay.invoice_id, pay.value
         form = PayEditForm(request.POST or None, instance=pay) 
         if form.is_valid():
             with transaction.commit_on_success():
+                # del pay value in old invoice
+                invoice = Invoice.objects.filter(id=old_invoice)
+                invoice.update(balance=F('balance') - old_value, 
+                    modified=datetime.datetime.now())
+                # new pay
                 new_pay = form.save(commit=False)
                 new_pay.value = -abs(pay.value) if pay.itype.sign else abs(pay.value)
-                # edit balance old invoice, return summ
-                invoice.save()
-                # edit balance new invoice
-                invoice = get_object_or_404(Invoice, pk=new_pay.invoice_id)
-                invoice.balance += new_pay.value
-                invoice.save()
-                # save new pay
                 new_pay.save()
+                # edit balance new invoice
+                invoice = Invoice.objects.filter(id=new_pay.invoice_id)
+                invoice.update(balance=F('balance') + new_pay.value,
+                    modified=datetime.datetime.now())
                 return redirect('/')
     else:
         pay.value = abs(pay.value)
@@ -276,9 +281,8 @@ def pay_edit(request, id, vtemplate):
 def pay_del(request, id, vtemplate):
     pay = get_object_or_404(Pay, id=int(id), invoice__user=request.user)
     with transaction.commit_on_success():
-        invoice = get_object_or_404(Invoice, pk=pay.invoice_id)
-        invoice.balance -= pay.value
-        invoice.save()
+        # update blance
+        Invoice.objects.filter(id=pay.invoice_id).update(balance=F('balance') - pay.value)
         # delete
         pay.delete()
     qstatus = 'ok'
