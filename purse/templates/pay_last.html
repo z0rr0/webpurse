@@ -25,7 +25,7 @@
             </td>
             <td>{{ pay.value|arrow|safe }}</td>
             <td class="pay_last_add">{{ pay.itype.name }}</td>
-            <td><em>{{ pay.comment }}</em></td>
+            <td valign="top"><em><pre>{{ pay.comment }}</pre></em></td>
             <td>
                 <span class="dellink" onMouseOver="up_view(this)" onMouseOut="down_view(this)">
                     <a href="/pay/edit/{{ pay.id }}"><img src="{{ MEDIA_URL }}img/edit.png" alt="правка"></a>

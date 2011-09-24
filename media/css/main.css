@@ -7,6 +7,10 @@ body {
     padding: 0;
     line-height: 16px
 }
+pre {
+    padding: 0px;
+    margin: 0px;
+}
 p {
     font: normal 13px Verdana, Arial, Helvetica, sans-serif;
     text-indent: 40px;
