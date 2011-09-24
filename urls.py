@@ -67,6 +67,9 @@ urlpatterns = patterns('',
     # edit itype
     (r'^type/edit/(?P<id>\d+)/?$' , pv.itype_edit, {
         'vtemplate': 'itype_edit.html'}),
+    # delete itype
+    (r'^transfer/update/$' , pv.transfer_update, {
+        'vtemplate': 'transfer_update.html'}),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

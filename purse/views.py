@@ -63,6 +63,12 @@ def get_pay_forms(vuser, form_def):
     form_in.fields['invoice'].choices = invoice_choices
     form_out.fields['invoice'].choices = invoice_choices
     form_cor.fields['invoice'].choices = invoice_choices
+    # trans
+    jsevent = "update_trans('ito','ifrom')"
+    form_trans.fields['ifrom'].widget = forms.Select(attrs={
+        'id': 'trans_ifrom',
+        'onchange': jsevent,
+        })
     form_trans.fields['ifrom'].choices = invoice_choices
     # itype
     form_in.fields['itype'].choices = [(s.id, s.name) for s in user_itype.filter(sign=False)]
@@ -370,3 +376,19 @@ def itype_edit(request, id, vtemplate):
     except Itype.DoesNotExist, ValueError:
         raise Http404
     return direct_to_template(request, vtemplate, {'itype': itype, 'sign': sign})
+
+# WORK WITH TRANSFER PAY'S
+@login_required
+def transfer_update(request, vtemplate):
+    form = TransSmallForm()
+    if request.method == 'POST':
+        jsevent = "update_trans('" + request.POST['eventid'] + "','" + request.POST['form_id'] + "')"
+        form.fields['fselect'].widget = forms.Select(attrs={
+            'id': 'trans_' + request.POST['form_id'],
+            'onchange': jsevent
+            })
+        # invoice
+        user_invoice = Invoice.objects.filter(user=request.user).exclude(id=int(request.POST['val']))
+        invoice_choices = [(s.id, s.name) for s in user_invoice]
+        form.fields['fselect'].choices = invoice_choices
+    return direct_to_template(request, vtemplate, {'form': form})

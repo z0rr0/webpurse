@@ -7,9 +7,6 @@ $(document).ready(function() {
     $( "#tabs" ).tabs({
         // event: "mouseover"
     });
-    $('#trans_ifrom').change(function () {
-        alert($('#trans_ifrom').val());
-    });
     // $('#send_out').click(send_out);
     $('div[id*="datepicker"]').datepicker();
     $( "#datepicker_in" ).click(function(){
@@ -29,7 +26,7 @@ $(document).ready(function() {
         $('#datetrans_label').html(data);
     });      
     get_pay_last('#pay_last');
-    update_trans('ito', $('#trans_ifrom'));
+    update_trans('ito', 'ifrom');
 });
 </script>
 {% endblock %}
@@ -145,7 +142,7 @@ $(document).ready(function() {
                                 <span class="smallsym">счет списания</span>
                             </div>
                             <div>
-                                <span id="tr_ito">тут</span>
+                                <span id="tr_ito"></span>
                                 <span class="smallsym">счет зачисления</span>
                             </div>
                             <div><span class="smallsym">примечание (текстовая заметка о транзакции)</span>
