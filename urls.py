@@ -70,6 +70,15 @@ urlpatterns = patterns('',
     # delete itype
     (r'^transfer/update/$' , pv.transfer_update, {
         'vtemplate': 'transfer_update.html'}),
+     # add transfer
+    (r'^transfer/add/$' , pv.transfer_add, {
+        'vtemplate': 'pay_add.html'}),
+    # last transfer pay's
+    (r'^transfer/last/$' , pv.transfer_last, {
+        'vtemplate': 'transfer_last.html'}),
+    # delete transfer
+    (r'^transfer/del/(?P<id>\d+)/?$' , pv.transfer_del, {
+        'vtemplate': 'pay_add.html'}),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

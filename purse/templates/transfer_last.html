@@ -1,0 +1,45 @@
+{% load jtags %}    
+
+{% if transfers %}
+    <table border="0" align="center" class="pay_last">
+       <!--  <tr>
+            <th>Счет cписания</th>
+            <th>Сумма</th>
+            <th>Счет зачисления</th>
+            <th>Направление</th>
+            <th>Примечание</th>
+            <th>edit</th>
+        </tr> -->
+        {% for transfer in transfers %}
+            {% ifchanged %}
+                <tr>
+                    <th colspan="6" class="pay_last_date">
+                        <span ><em>{{ transfer.pdate|date:"d.m.Y" }}</em></span>
+                    </th>
+                </tr>
+            {% endifchanged %}
+        <tr>
+            <td>{{ transfer.ifrom.name }}</td>
+            <td class="pay_last_add">
+                {{ transfer.value|rusnum }}
+                <span class="smallsym">{{ transfer.ifrom.valuta.code }}</span>
+            </td>
+            <td>{{ transfer.value|unarrow|safe }}</td>
+            <td>{{ transfer.ito.name }}</td>
+            <td valign="top"><em><pre>{{ transfer.comment }}</pre></em></td>
+            <!-- <td>
+                <span class="dellink" onMouseOver="up_view(this)" onMouseOut="down_view(this)">
+                    <a href="/pay/edit/{{ pay.id }}"><img src="{{ MEDIA_URL }}img/edit.png" alt="правка"></a>
+                </span>
+            </td> -->
+            <td>
+                <span class="dellink" onMouseOver="up_view(this)" onMouseOut="down_view(this)">
+                    <a href="javascript:deltrans({{ transfer.id }})"><img src="{{ MEDIA_URL }}img/delete.png" alt="удалить"></a>
+                </span>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <em>платежей нет</em>
+{% endif %}

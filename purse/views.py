@@ -11,7 +11,7 @@ from django.contrib import auth
 from django.forms.extras import widgets
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from django.db import transaction
-from django.db.models import F, Sum
+from django.db.models import Q, F, Sum
 from django import forms
 # new
 # from django.template.response import TemplateResponse
@@ -25,9 +25,11 @@ from webpurse.purse.forms import *
 from webpurse.settings import BANK_FILE
 
 import datetime
+import logging
 
 LAST_PAYS = 10
 CORRECT_PAY_NAME = u'Корректировка'
+logger = logging.getLogger(__name__)
 
 # INDEX PAGE *************************
 @login_required
@@ -301,7 +303,7 @@ def pay_del(request, id, vtemplate):
 def pay_last(request, vtemplate):
     # day_border = datetime.datetime.now().date() - datetime.timedelta(days=LAST_PAYS)
     # pays = Pay.objects.filter(invoice__in=[ val.id for val in invoices ]).order_by('-pdate')[:LAST_PAYS]
-    invoices = Invoice.objects.filter(user=request.user).only('id')
+    # invoices = Invoice.objects.filter(user=request.user).only('id')
     pays = Pay.objects.filter(invoice__user=request.user).order_by('-pdate', '-modified')[:LAST_PAYS]
     return direct_to_template(request, vtemplate, {'pays': pays, })
 
@@ -376,18 +378,89 @@ def itype_edit(request, id, vtemplate):
         raise Http404
     return direct_to_template(request, vtemplate, {'itype': itype, 'sign': sign})
 
-# WORK WITH TRANSFER PAY'S
+# WORK WITH TRANSFER PAY'S, CREATE SELECT
 @login_required
 def transfer_update(request, vtemplate):
     form = TransSmallForm()
     if request.method == 'POST':
-        jsevent = "update_trans('" + request.POST['eventid'] + "','" + request.POST['form_id'] + "')"
-        form.fields['fselect'].widget = forms.Select(attrs={
-            'id': 'trans_' + request.POST['form_id'],
-            'onchange': jsevent
-            })
-        # invoice
-        user_invoice = Invoice.objects.filter(user=request.user).exclude(id=int(request.POST['val']))
-        invoice_choices = [(s.id, s.name) for s in user_invoice]
-        form.fields['fselect'].choices = invoice_choices
+        try:
+            jsevent = "update_trans('" + request.POST['eventid'] + "','" + request.POST['form_id'] + "')"
+            form.fields['fselect'].widget = forms.Select(attrs={
+                'id': 'trans_' + request.POST['form_id'],
+                'onchange': jsevent
+                })
+            # invoice
+            user_invoice = Invoice.objects.filter(user=request.user).exclude(id=int(request.POST['val']))
+            invoice_choices = [(s.id, s.name) for s in user_invoice]
+            form.fields['fselect'].choices = invoice_choices
+        except:
+            raise Http404
     return direct_to_template(request, vtemplate, {'form': form})
+
+# ADD PAY TRANSFER
+@permission_required('purse.add_transfer')
+def transfer_add(request, vtemplate):
+    if request.method == 'POST':
+        try:
+            with transaction.commit_on_success():
+                value = abs(float(request.POST['value']))
+                # invoices
+                ifrom = Invoice.objects.get(pk=int(request.POST['ifrom']))
+                ito = Invoice.objects.get(pk=int(request.POST['ito']))
+                # change
+                ifrom.balance = F('balance') - value
+                value_by_kurs = round(ifrom.valuta.kurs * value / ito.valuta.kurs, 2)
+                ito.balance = F('balance') + value_by_kurs
+                # date
+                ifrom.modified = datetime.datetime.now()
+                ito.modified = datetime.datetime.now()
+                # save
+                ifrom.save()
+                ito.save()
+                # transfer
+                transfer = Transfer.objects.create(ifrom=ifrom, ito=ito, 
+                    pdate=datetime.datetime.strptime(request.POST['pdate'], "%d.%m.%Y").date(), 
+                    comment=request.POST['comment'],
+                    value=value)
+        except:
+            raise Http404
+            qstatus = 'faile'
+        qstatus = 'ok'
+    else:
+        qstatus = 'faile'
+    return direct_to_template(request, vtemplate, {'qstatus': qstatus})
+
+# LAST TRANSFER'S
+@login_required
+def transfer_last(request, vtemplate):
+    invoices = Invoice.objects.filter(user=request.user).only('id')
+    transfers = Transfer.objects.filter(Q(ifrom__user=request.user) | Q(ito__user=request.user))
+    transfers = transfers.order_by('-pdate', '-modified')[:LAST_PAYS]
+    return direct_to_template(request, vtemplate, {'transfers': transfers})
+
+# DELETE TRANSFER
+@permission_required('purse.delete_transfer')
+def transfer_del(request, id, vtemplate):
+    transfer = get_object_or_404(Transfer, id=int(id), ito__user=request.user)
+    try:
+        with transaction.commit_on_success():
+            # invoices
+            ifrom = Invoice.objects.get(pk=transfer.ifrom_id)
+            ito = Invoice.objects.get(pk=transfer.ito_id)
+            # change
+            ifrom.balance = F('balance') + transfer.value
+            value_by_kurs = round(ifrom.valuta.kurs * transfer.value / ito.valuta.kurs, 2)
+            ito.balance = F('balance') - value_by_kurs
+            # date
+            ifrom.modified = datetime.datetime.now()
+            ito.modified = datetime.datetime.now()
+            # save
+            ifrom.save()
+            ito.save()
+            # delete
+            transfer.delete()
+    except:
+        raise Http404
+        qstatus = 'faile'
+    qstatus = 'ok'
+    return direct_to_template(request, vtemplate, {'qstatus': qstatus})

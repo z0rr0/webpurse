@@ -20,3 +20,7 @@ def rusnum(value):
 @register.filter(name='arrow')
 def arrow(value):
     return '&larr;' if value > 0 else '&rarr;'
+
+@register.filter(name='unarrow')
+def unarrow(value):
+    return '&larr;' if value < 0 else '&rarr;'

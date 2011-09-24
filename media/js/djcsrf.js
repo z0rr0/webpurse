@@ -174,7 +174,7 @@ function send_trans(pref) {
                 $(prefix + 'status').show();
                 invoices_update('/invoice/view/', '#leftm'); 
                 $(prefix + 'status').hide(8000);
-                // get_pay_last('#pay_last');
+                get_trans_last('#pay_last');
                 // alert("ok");
             },
             error: function () {
@@ -270,11 +270,27 @@ function get_pay_last(divid)  {
     })
     .error(function() { alert("sorry, error"); });
 }
+// update last transfer
+function get_trans_last(divid)  {
+    $.get('/transfer/last/', function(data) {
+        $(divid).html(data);
+    })
+    .error(function() { alert("sorry, error"); });
+}
 // delete pay
 function delpay(id) {
     $.get('/pay/del/' + id, function(data) {
         invoices_update('/invoice/view/', '#leftm'); 
         get_pay_last('#pay_last');
+        // alert("ok");
+        })
+        .error(function() { alert("sorry, error"); });
+}
+// delete transfer
+function deltrans(id) {
+    $.get('/transfer/del/' + id, function(data) {
+        invoices_update('/invoice/view/', '#leftm'); 
+        get_trans_last('#pay_last');
         // alert("ok");
         })
         .error(function() { alert("sorry, error"); });
