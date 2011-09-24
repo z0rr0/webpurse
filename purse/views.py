@@ -67,8 +67,7 @@ def get_pay_forms(vuser, form_def):
     jsevent = "update_trans('ito','ifrom')"
     form_trans.fields['ifrom'].widget = forms.Select(attrs={
         'id': 'trans_ifrom',
-        'onchange': jsevent,
-        })
+        'onchange': jsevent})
     form_trans.fields['ifrom'].choices = invoice_choices
     # itype
     form_in.fields['itype'].choices = [(s.id, s.name) for s in user_itype.filter(sign=False)]
