@@ -149,6 +149,43 @@ function send_cor(pref) {
         $(prefix + 'comment').val('');
     }
 }
+// send transfer pay
+function send_trans(pref) {
+    prefix = '#' + pref + '_';
+    val = val_validate(prefix + 'value', true);
+    if (!val) alert('Пожалуйста проверьте введенные значения.');
+    else {
+        // ok send form
+        $.ajax({
+            url: '/transfer/add/',
+            type: 'POST',
+            data: {
+                ifrom : $(prefix + 'ifrom').val(),
+                ito : $(prefix + 'ito').val(),
+                value : val,
+                pdate : $('#datepicker_' + pref).val(),
+                comment : $(prefix + 'comment').val(),
+            },
+            dataType: 'html',
+            context: document.body,
+            async: true,
+            success: function (data) {
+                $(prefix + 'status').html('Сохранено');
+                $(prefix + 'status').show();
+                invoices_update('/invoice/view/', '#leftm'); 
+                $(prefix + 'status').hide(8000);
+                // get_pay_last('#pay_last');
+                // alert("ok");
+            },
+            error: function () {
+                alert('sorry, error'); 
+            },
+        });
+        // clear form
+        $(prefix + 'value').val(0);
+        $(prefix + 'comment').val('');
+    }
+}
 // update itype div, 1 from 2
 function itype_update(sign) {
     to_page = '/type/view/' + sign +'/';
