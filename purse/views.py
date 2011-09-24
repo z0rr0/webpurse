@@ -384,10 +384,10 @@ def transfer_update(request, vtemplate):
     form = TransSmallForm()
     if request.method == 'POST':
         try:
-            jsevent = "update_trans('" + request.POST['eventid'] + "','" + request.POST['form_id'] + "')"
+            # jsevent = "update_trans('" + request.POST['eventid'] + "','" + request.POST['form_id'] + "')"
             form.fields['fselect'].widget = forms.Select(attrs={
                 'id': 'trans_' + request.POST['form_id'],
-                'onchange': jsevent
+                # 'onchange': jsevent
                 })
             # invoice
             user_invoice = Invoice.objects.filter(user=request.user).exclude(id=int(request.POST['val']))
