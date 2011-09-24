@@ -43,10 +43,13 @@ def home(request, vtemplate):
         if itype_pref in request.COOKIES:
             form_def[prefix]['itype'] = request.COOKIES[itype_pref]
     # create forms
-    form_in, form_out, form_cor = get_pay_forms(request.user, form_def)
-    return direct_to_template(request, vtemplate, {'form_cor': form_cor,
+    form_in, form_out, form_cor, form_trans = get_pay_forms(request.user, form_def)
+    return direct_to_template(request, vtemplate, {
             'form_in': form_in, 
-            'form_out': form_out})
+            'form_out': form_out,
+            'form_cor': form_cor,
+            'form_trans': form_trans,
+            })
 
 def get_pay_forms(vuser, form_def):
     user_itype = Itype.aobjects.filter(user=vuser)
@@ -54,15 +57,17 @@ def get_pay_forms(vuser, form_def):
     form_in = PayForm(initial=form_def['in_'], auto_id='in_%s')
     form_out = PayForm(initial=form_def['out_'], auto_id='out_%s')
     form_cor = PayCorrectForm(auto_id='cor_%s')
+    form_trans = TransferForm(auto_id='trans_%s')
     # invoice
     invoice_choices = [(s.id, s.name) for s in user_invoice]
     form_in.fields['invoice'].choices = invoice_choices
     form_out.fields['invoice'].choices = invoice_choices
     form_cor.fields['invoice'].choices = invoice_choices
+    form_trans.fields['ifrom'].choices = invoice_choices
     # itype
     form_in.fields['itype'].choices = [(s.id, s.name) for s in user_itype.filter(sign=False)]
     form_out.fields['itype'].choices = [(s.id, s.name) for s in user_itype.filter(sign=True)]
-    return form_in, form_out, form_cor
+    return form_in, form_out, form_cor, form_trans
 
  # INVOICE *************************
 def user_invoices(user_id):

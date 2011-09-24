@@ -7,6 +7,9 @@ $(document).ready(function() {
     $( "#tabs" ).tabs({
         // event: "mouseover"
     });
+    $('#trans_ifrom').change(function () {
+        alert($('#trans_ifrom').val());
+    });
     // $('#send_out').click(send_out);
     $('div[id*="datepicker"]').datepicker();
     $( "#datepicker_in" ).click(function(){
@@ -26,6 +29,7 @@ $(document).ready(function() {
         $('#datetrans_label').html(data);
     });      
     get_pay_last('#pay_last');
+    update_trans('ito', $('#trans_ifrom'));
 });
 </script>
 {% endblock %}
@@ -135,11 +139,17 @@ $(document).ready(function() {
                             <strong>
                                 <span id="datetrans_label">{% now "d.m.Y" %}</span>
                             </strong>)
-                            <div>s1<span class="smallsym">сумма транзакции</span></div>
-                            <div>s2<span class="smallsym">счет списания</span></div>
-                            <div>s3<span class="smallsym">счет зачисления</span></div>
+                            <div>{{ form_trans.value }}<span class="smallsym">сумма транзакции</span></div>
+                            <div>
+                                <span id="tr_ifrom">{{ form_trans.ifrom }}</span>
+                                <span class="smallsym">счет списания</span>
+                            </div>
+                            <div>
+                                <span id="tr_ito">тут</span>
+                                <span class="smallsym">счет зачисления</span>
+                            </div>
                             <div><span class="smallsym">примечание (текстовая заметка о транзакции)</span>
-                                <br>ы4
+                                <br>{{ form_trans.comment }}
                             </div>
                             <div>
                                 <input type="submit" value="отправить">

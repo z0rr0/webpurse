@@ -242,3 +242,24 @@ function delpay(id) {
         })
         .error(function() { alert("sorry, error"); });
 }
+// update trans select
+function update_trans(num, exval) {
+    $.ajax({
+            url: '/transfer/update/',
+            type: 'POST',
+            data: {
+                val : exval.val(),
+                form_id : num,
+            },
+            dataType: 'html',
+            context: document.body,
+            async: true,
+            success: function (data) {
+                $('#tr_' + num).html(data);
+                invoices_update('/invoice/view/', '#leftm'); 
+            },
+            error: function () {
+                alert('sorry, error'); 
+            },
+        });
+}
