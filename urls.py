@@ -82,6 +82,8 @@ urlpatterns = patterns('',
     # edit transfer
     (r'^transfer/edit/(?P<id>\d+)/?$' , pv.transfer_edit, {
         'vtemplate': 'transfer_edit.html'}),
+    # depts autocomplete 
+    (r'^dept/complete/?$' , pv.dept_complete),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

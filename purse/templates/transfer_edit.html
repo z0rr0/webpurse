@@ -8,20 +8,19 @@
 $(document).ready(function() {
     $('#trans_pdate').datepicker();
     update_trans('ito', 'ifrom', {{ initito }});
-
-    // $('#editform').submit(function () {
-    //     prefix = '#id_value';
-    //     val = val_validate(prefix);
-    //     if (!val) {
-    //         alert('Пожалуйста проверьте введенные значения.');
-    //         return false;
-    //     }
-    //     else {
-    //         $(prefix).val(val, false);
-    //         // alert('ok');
-    //     }
-    //     return true;
-    // });
+    $('#editform').submit(function () {
+        prefix = '#trans_value';
+        val = val_validate(prefix);
+        if (!val) {
+            alert('Пожалуйста проверьте введенные значения.');
+            return false;
+        }
+        else {
+            $(prefix).val(val, false);
+            // alert('ok');
+        }
+        return true;
+    });
 });
 </script>
 {% endblock %}

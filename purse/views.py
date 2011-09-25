@@ -8,6 +8,7 @@ from django.views.generic.simple import direct_to_template
 from django.forms.models import modelformset_factory
 # from django.forms import Textarea
 from django.contrib import auth
+from django.utils import simplejson
 from django.forms.extras import widgets
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from django.db import transaction
@@ -45,12 +46,13 @@ def home(request, vtemplate):
         if itype_pref in request.COOKIES:
             form_def[prefix]['itype'] = request.COOKIES[itype_pref]
     # create forms
-    form_in, form_out, form_cor, form_trans = get_pay_forms(request.user, form_def)
+    form_in, form_out, form_cor, form_trans, form_dept = get_pay_forms(request.user, form_def)
     return direct_to_template(request, vtemplate, {
             'form_in': form_in, 
             'form_out': form_out,
             'form_cor': form_cor,
             'form_trans': form_trans,
+            'form_dept': form_dept
             })
 
 def get_pay_forms(vuser, form_def):
@@ -60,11 +62,13 @@ def get_pay_forms(vuser, form_def):
     form_out = PayForm(initial=form_def['out_'], auto_id='out_%s')
     form_cor = PayCorrectForm(auto_id='cor_%s')
     form_trans = TransferForm(auto_id='trans_%s')
+    form_dept = DeptForm(auto_id='dept_%s')
     # invoice
     invoice_choices = [(s.id, s.name) for s in user_invoice]
     form_in.fields['invoice'].choices = invoice_choices
     form_out.fields['invoice'].choices = invoice_choices
     form_cor.fields['invoice'].choices = invoice_choices
+    form_dept.fields['invoice'].choices = invoice_choices
     # trans
     jsevent = "update_trans('ito','ifrom', 0)"
     form_trans.fields['ifrom'].widget = forms.Select(attrs={
@@ -74,7 +78,7 @@ def get_pay_forms(vuser, form_def):
     # itype
     form_in.fields['itype'].choices = [(s.id, s.name) for s in user_itype.filter(sign=False)]
     form_out.fields['itype'].choices = [(s.id, s.name) for s in user_itype.filter(sign=True)]
-    return form_in, form_out, form_cor, form_trans
+    return form_in, form_out, form_cor, form_trans, form_dept
 
  # INVOICE *************************
 def user_invoices(user_id):
@@ -515,3 +519,16 @@ def transfer_edit(request, id, vtemplate):
     return direct_to_template(request, vtemplate, {
         'form': form, 'initito': initito
         })
+
+# DEPTS AUTOCOMLETE
+@login_required
+def dept_complete(request):
+    result = []
+    if request.method == 'POST':
+        try:
+            depts = Dept.objects.filter(invoice__user=request.user, 
+                taker__istartswith=request.POST['val']).only('taker')
+            result = [ x.taker for x in depts ]
+        except IndexError:
+            pass
+    return HttpResponse(simplejson.dumps(result), mimetype='application/json')

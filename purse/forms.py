@@ -55,3 +55,11 @@ class TransferEditForm(forms.ModelForm):
     class Meta:
         model = models.Transfer
         fields = ('ifrom', 'ito', 'value', 'comment', 'pdate')
+
+class DeptForm(forms.ModelForm):
+    # pass
+    credit = forms.BooleanField(label=u'мой долг')
+
+    class Meta:
+        model = models.Dept
+        fields = ('invoice', 'taker', 'value', 'comment', 'pdate')

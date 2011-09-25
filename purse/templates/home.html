@@ -7,7 +7,18 @@ $(document).ready(function() {
     $( "#tabs" ).tabs({
         // event: "mouseover"
     });
-    // $('#send_out').click(send_out);
+    $("#dept_taker").autocomplete({
+        minLength: 1,
+        source: function (request, response) {
+            $.ajax({
+                url: "/dept/complete/",
+                dataType: "json",
+                data: { val: request.term },
+                type: 'POST',
+                success: response
+            })
+        },
+    });
     $('div[id*="datepicker"]').datepicker();
     $( "#datepicker_in" ).click(function(){
         data = $( "#datepicker_in" ).val();
@@ -24,7 +35,11 @@ $(document).ready(function() {
     $( "#datepicker_trans" ).click(function(){
         data = $( "#datepicker_trans" ).val();
         $('#datetrans_label').html(data);
-    });      
+    });
+    $( "#datepicker_dept" ).click(function(){
+        data = $( "#datepicker_dept" ).val();
+        $('#datedept_label').html(data);
+    });     
     get_pay_last('#pay_last');
     update_trans('ito', 'ifrom', 0);
 });
@@ -136,7 +151,7 @@ $(document).ready(function() {
                             <strong>
                                 <span id="datetrans_label">{% now "d.m.Y" %}</span>
                             </strong>)
-                            <div>{{ form_trans.value }}<span class="smallsym">сумма транзакции</span></div>
+                            <div>{{ form_trans.value }} <span class="smallsym">сумма транзакции</span></div>
                             <div>
                                 <span id="tr_ifrom">{{ form_trans.ifrom }}</span>
                                 <span class="smallsym">счет списания</span>
@@ -159,9 +174,33 @@ $(document).ready(function() {
             </table>
         </div>
         <div id="tabs-5">
-            <p>4. Proin elit arcu,<br>
-            Some operations are supported by several object types; in particular, practically all objects can be compared, tested for truth value, and converted to a string (with the repr() function or the slightly different str() function). The latter function is implicitly used when an object is written by the print() function.
-            </p>
+           <table>
+                <tr>
+                    <td><div id="datepicker_dept"></div></td>
+                    <td>
+                    <div id="paystyle">
+                        <form type="POST" action="javascript:send_dept('trans')"  id="form_dept">
+                            Введите данные займа
+                            (<em>дата </em>
+                            <strong>
+                                <span id="datedept_label">{% now "d.m.Y" %}</span>
+                            </strong>)
+                            <div>{{ form_dept.value }} <span class="smallsym">сумма долга</span></div>
+                            <div>{{ form_dept.invoice }} <span class="smallsym">счет долга</span></div>
+                            <div>{{ form_dept.taker }} <span class="smallsym">заёмщик (кредитор)</span>
+                            <div>{{ form_dept.credit }} {{ form_dept.credit.label }}
+                            <div><span class="smallsym">примечание (текстовая заметка о транзакции)</span>
+                                <br>{{ form_dept.comment }}
+                            </div>
+                            <div>
+                                <input type="submit" value="отправить">
+                                <span id="dept_status" class="paystatus"></span>
+                            </div>
+                        </form>
+                    </div>
+                    </td>
+                </tr>
+            </table>
         </div>
     </div> 
     <div id="pay_last"></div>
