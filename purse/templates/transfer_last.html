@@ -13,7 +13,7 @@
         {% for transfer in transfers %}
             {% ifchanged %}
                 <tr>
-                    <th colspan="6" class="pay_last_date">
+                    <th colspan="7" class="pay_last_date">
                         <span ><em>{{ transfer.pdate|date:"d.m.Y" }}</em></span>
                     </th>
                 </tr>
@@ -27,11 +27,11 @@
             <td>{{ transfer.value|unarrow|safe }}</td>
             <td>{{ transfer.ito.name }}</td>
             <td valign="top"><em><pre>{{ transfer.comment }}</pre></em></td>
-            <!-- <td>
+            <td>
                 <span class="dellink" onMouseOver="up_view(this)" onMouseOut="down_view(this)">
-                    <a href="/pay/edit/{{ pay.id }}"><img src="{{ MEDIA_URL }}img/edit.png" alt="правка"></a>
+                    <a href="/transfer/edit/{{ transfer.id }}"><img src="{{ MEDIA_URL }}img/edit.png" alt="правка"></a>
                 </span>
-            </td> -->
+            </td>
             <td>
                 <span class="dellink" onMouseOver="up_view(this)" onMouseOut="down_view(this)">
                     <a href="javascript:deltrans({{ transfer.id }})"><img src="{{ MEDIA_URL }}img/delete.png" alt="удалить"></a>

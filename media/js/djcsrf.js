@@ -296,7 +296,7 @@ function deltrans(id) {
         .error(function() { alert("sorry, error"); });
 }
 // update trans select
-function update_trans(num, exval) {
+function update_trans(num, exval, defid) {
     $.ajax({
         url: '/transfer/update/',
         type: 'POST',
@@ -304,6 +304,7 @@ function update_trans(num, exval) {
             val : $('#trans_' + exval) .val(),
             form_id : num,
             eventid: exval,
+            defaulid: defid
         },
         dataType: 'html',
         context: document.body,

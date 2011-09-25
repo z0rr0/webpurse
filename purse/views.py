@@ -66,7 +66,7 @@ def get_pay_forms(vuser, form_def):
     form_out.fields['invoice'].choices = invoice_choices
     form_cor.fields['invoice'].choices = invoice_choices
     # trans
-    jsevent = "update_trans('ito','ifrom')"
+    jsevent = "update_trans('ito','ifrom', 0)"
     form_trans.fields['ifrom'].widget = forms.Select(attrs={
         'id': 'trans_ifrom',
         'onchange': jsevent})
@@ -384,15 +384,16 @@ def transfer_update(request, vtemplate):
     form = TransSmallForm()
     if request.method == 'POST':
         try:
+            form = TransSmallForm(initial={'ito': int(request.POST['defaulid'])})
             # jsevent = "update_trans('" + request.POST['eventid'] + "','" + request.POST['form_id'] + "')"
-            form.fields['fselect'].widget = forms.Select(attrs={
+            form.fields['ito'].widget = forms.Select(attrs={
                 'id': 'trans_' + request.POST['form_id'],
                 # 'onchange': jsevent
                 })
             # invoice
             user_invoice = Invoice.objects.filter(user=request.user).exclude(id=int(request.POST['val']))
             invoice_choices = [(s.id, s.name) for s in user_invoice]
-            form.fields['fselect'].choices = invoice_choices
+            form.fields['ito'].choices = invoice_choices
         except:
             raise Http404
     return direct_to_template(request, vtemplate, {'form': form})
@@ -411,9 +412,6 @@ def transfer_add(request, vtemplate):
                 ifrom.balance = F('balance') - value
                 value_by_kurs = round(ifrom.valuta.kurs * value / ito.valuta.kurs, 2)
                 ito.balance = F('balance') + value_by_kurs
-                # date
-                ifrom.modified = datetime.datetime.now()
-                ito.modified = datetime.datetime.now()
                 # save
                 ifrom.save()
                 ito.save()
@@ -441,7 +439,7 @@ def transfer_last(request, vtemplate):
 # DELETE TRANSFER
 @permission_required('purse.delete_transfer')
 def transfer_del(request, id, vtemplate):
-    transfer = get_object_or_404(Transfer, id=int(id), ito__user=request.user)
+    transfer = get_object_or_404(Transfer, id=int(id), ifrom__user=request.user)
     try:
         with transaction.commit_on_success():
             # invoices
@@ -451,9 +449,6 @@ def transfer_del(request, id, vtemplate):
             ifrom.balance = F('balance') + transfer.value
             value_by_kurs = round(ifrom.valuta.kurs * transfer.value / ito.valuta.kurs, 2)
             ito.balance = F('balance') - value_by_kurs
-            # date
-            ifrom.modified = datetime.datetime.now()
-            ito.modified = datetime.datetime.now()
             # save
             ifrom.save()
             ito.save()
@@ -464,3 +459,59 @@ def transfer_del(request, id, vtemplate):
         qstatus = 'faile'
     qstatus = 'ok'
     return direct_to_template(request, vtemplate, {'qstatus': qstatus})
+
+# EDIT TRANSFER
+@permission_required('purse.change_pay')
+def transfer_edit(request, id, vtemplate):
+    c = {}
+    c.update(csrf(request))
+    ititito = 0
+    transfer = get_object_or_404(Transfer, id=int(id), ifrom__user=request.user)
+    old_value = transfer.value
+    # invoices
+    ifrom = Invoice.objects.get(pk=transfer.ifrom_id)
+    ito = Invoice.objects.get(pk=transfer.ito_id)
+    # init form
+    form = TransferEditForm(auto_id='trans_%s', instance=transfer)
+    if request.method == 'POST':
+        form = TransferEditForm(request.POST or None, auto_id='trans_%s', instance=transfer)
+        if form.is_valid():
+            with transaction.commit_on_success():
+                try:
+                    new_trans = form.save(commit=False)
+                    new_trans.value = abs(float(new_trans.value))
+                    new_trans.save()
+                    # del old trans invoice
+                    ifrom.balance = F('balance') + old_value
+                    value_by_kurs = round(ifrom.valuta.kurs * old_value / ito.valuta.kurs, 2)
+                    ito.balance = F('balance') - value_by_kurs
+                    # save
+                    ifrom.save()
+                    ito.save()
+                    # ************************
+                    # create new trans invoice
+                    ifrom = Invoice.objects.get(pk=new_trans.ifrom_id)
+                    ito = Invoice.objects.get(pk=new_trans.ito_id)
+                    ifrom.balance = F('balance') - new_trans.value
+                    value_by_kurs = round(ifrom.valuta.kurs * new_trans.value / ito.valuta.kurs, 2)
+                    ito.balance = F('balance') + value_by_kurs
+                    # save
+                    ifrom.save()
+                    ito.save()
+                    initito = new_trans.ito_id
+                    return redirect('/')
+                except:
+                    raise Http404
+        else:
+            initito = request.POST['ito']
+    else:
+        initito = transfer.ito_id
+     # trans select
+    jsevent = "update_trans('ito','ifrom', " + str(initito) + ")"
+    form.fields['ifrom'].widget = forms.Select(attrs={
+        'id': 'trans_ifrom',
+        'onchange': jsevent})
+    form.fields['ifrom'].choices = [(s.id, s.name) for s in Invoice.objects.filter(user=request.user)]
+    return direct_to_template(request, vtemplate, {
+        'form': form, 'initito': initito
+        })

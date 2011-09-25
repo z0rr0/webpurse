@@ -47,4 +47,11 @@ class TransferForm(forms.ModelForm):
         fields = ('ifrom', 'value', 'comment', 'pdate')
 
 class TransSmallForm(forms.Form):
-    fselect = forms.ChoiceField(label='', widget=forms.Select(attrs={'id': 'trans_ito'}))
+    ito = forms.ChoiceField(label='', widget=forms.Select(attrs={'id': 'trans_ito'}))
+
+class TransferEditForm(forms.ModelForm):
+    # pass
+
+    class Meta:
+        model = models.Transfer
+        fields = ('ifrom', 'ito', 'value', 'comment', 'pdate')

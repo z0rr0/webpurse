@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}
+    Правка перевода
+{% endblock title %}
+
+{% block pagejs %}
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#trans_pdate').datepicker();
+    update_trans('ito', 'ifrom', {{ initito }});
+
+    // $('#editform').submit(function () {
+    //     prefix = '#id_value';
+    //     val = val_validate(prefix);
+    //     if (!val) {
+    //         alert('Пожалуйста проверьте введенные значения.');
+    //         return false;
+    //     }
+    //     else {
+    //         $(prefix).val(val, false);
+    //         // alert('ok');
+    //     }
+    //     return true;
+    // });
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<h1>Редактирование перевода</h1><br>
+<form method="POST" id="editform" action="" class="formstyle">
+{% csrf_token %}{{ form.management_form }}
+ <table>
+        <tr>
+            <th>{{ form.pdate.label }}</th>
+            <td>
+                {{ form.pdate }}
+                <div class="italicp">{{ form.pdate.help_text }}</div>
+                {{ form.pdate.errors|lower }}
+            </td>
+        </tr>
+        <tr>
+            <th>{{ form.value.label }}*</th>
+            <td>
+                {{ form.value }}
+                <div class="italicp">{{ form.value.help_text }}</div>
+                {{ form.value.errors|lower }}
+            </td>
+        </tr>
+        <tr>
+            <th>{{ form.ifrom.label }}</th>
+            <td>
+                {{ form.ifrom }}
+                <div class="italicp">{{ form.ifrom.help_text }}</div>
+                {{ form.ifrom.errors|lower }}
+            </td>
+        </tr>
+        <tr>
+             <th>{{ form.ito.label }}</th>
+            <td>
+                <span id="tr_ito"></span>
+                <div class="italicp">{{ form.ito.help_text }}</div>
+                {{ form.ito.errors|lower }}
+            </td>
+        </tr>
+        <tr>
+            <th>{{ form.comment.label }}</th>
+            <td>
+                {{ form.comment }}
+                <div class="italicp">{{ form.comment.help_text }}</div>
+                {{ form.comment.errors|lower }}
+            </td>
+        </tr>
+    </table><br>
+<input type="submit" value="Сохранить" />
+<br><br>
+<div class="smallsym">*сумма указывается в валюте счета списания.</div>
+{% endblock %}

@@ -133,11 +133,18 @@ class Dept(models.Model):
 
 # transfer pays
 class Transfer(models.Model):
-    ifrom = models.ForeignKey(Invoice, related_name='invfrom')
-    ito = models.ForeignKey(Invoice, related_name='invto')
-    value = models.FloatField(default=0, verbose_name = u'сумма')
-    pdate = models.DateField(verbose_name = u'дата')    
-    comment = models.TextField(verbose_name=u'примечание', blank=True, null=True)
+    ifrom = models.ForeignKey(Invoice, related_name='invfrom', 
+        verbose_name = u'счет списания',
+        help_text=u'с этого счета будут списаны сердства')
+    ito = models.ForeignKey(Invoice, related_name='invto', 
+        verbose_name = u'счет зачисления',
+        help_text=u'на этот счет будут зачислены сердства')
+    value = models.FloatField(default=0, 
+        verbose_name = u'сумма',
+        help_text=u'сумма перевода')
+    pdate = models.DateField(verbose_name = u'дата', help_text=u'дата перевода')    
+    comment = models.TextField(verbose_name=u'примечание', blank=True, null=True,
+        help_text=u'комментарий к переводу')
     modified = models.DateTimeField(auto_now=True, auto_now_add=True, editable=False)
     created = models.DateTimeField(auto_now_add=True, editable=False)
 

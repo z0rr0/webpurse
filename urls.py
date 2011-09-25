@@ -79,6 +79,9 @@ urlpatterns = patterns('',
     # delete transfer
     (r'^transfer/del/(?P<id>\d+)/?$' , pv.transfer_del, {
         'vtemplate': 'pay_add.html'}),
+    # edit transfer
+    (r'^transfer/edit/(?P<id>\d+)/?$' , pv.transfer_edit, {
+        'vtemplate': 'transfer_edit.html'}),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
