@@ -590,3 +590,34 @@ def dept_del(request, id, vtemplate):
         qstatus = 'faile'
     qstatus = 'ok'
     return direct_to_template(request, vtemplate, {'qstatus': qstatus})
+
+# EDIT PAY
+@permission_required('purse.change_pay')
+def dept_edit(request, id, vtemplate):
+    c = {}
+    c.update(csrf(request))
+    user_invoices = Invoice.objects.filter(user=request.user)
+    # get pay by id
+    dept = get_object_or_404(Dept, id=int(id), invoice__user=request.user)
+    if request.method == 'POST':
+        old_invoice, old_value = dept.invoice_id, dept.value
+        form = DeptForm(request.POST or None, instance=dept) 
+        if form.is_valid():
+            with transaction.commit_on_success():
+                # del pay value in old invoice
+                old_invoice.balance = F('balance') + old_value
+                old_invoice.save()
+                # new pay
+                new_dept = form.save(commit=False)
+                # new_dept.value = -abs(dept.value) if dept.itype.sign else abs(dept.value)
+                new_dept.save()
+                # edit balance new invoice
+                invoice = Invoice.objects.filter(id=new_dept.invoice_id)
+                invoice.balace = F('balance') - new_dept.value
+                invoice.dave()
+                return redirect('/')
+    else:
+        Dept.value = abs(dept.value)
+        form = DeptForm(instance=dept)
+    form.fields['invoice'].choices = [(s.id, s.name) for s in user_invoices]
+    return direct_to_template(request, vtemplate, { 'form': form })
