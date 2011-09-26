@@ -222,6 +222,7 @@ function send_depts(pref) {
             },
         });
         // clear form
+        $(prefix + 'taker').val('')
         $(prefix + 'value').val(0);
         $(prefix + 'comment').val('');
     }
