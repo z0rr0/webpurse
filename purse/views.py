@@ -81,7 +81,6 @@ def get_pay_forms(vuser, form_def):
     return form_in, form_out, form_cor, form_trans, form_dept
 
  # INVOICE *************************
- @login_required
 def user_invoices(user_id):
     invoices = Invoice.objects.select_related().filter(user=user_id)
     summ_inv = invoices.filter(other=False)
