@@ -90,6 +90,9 @@ urlpatterns = patterns('',
      # add itype
     (r'^dept/add/$' , pv.dept_add, {
         'vtemplate': 'pay_add.html'}),
+    # delete dept
+    (r'^dept/del/(?P<id>\d+)/?$' , pv.dept_del, {
+        'vtemplate': 'pay_add.html'}),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

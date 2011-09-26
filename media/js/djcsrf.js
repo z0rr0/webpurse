@@ -340,6 +340,15 @@ function deltrans(id) {
         })
         .error(function() { alert("sorry, error"); });
 }
+// delete dept
+function deldepts(id) {
+    $.get('/dept/del/' + id, function(data) {
+        invoices_update('/invoice/view/', '#leftm'); 
+        get_depts_last('#pay_last');
+        // alert("ok");
+        })
+        .error(function() { alert("sorry, error"); });
+}
 // update trans select
 function update_trans(num, exval, defid) {
     $.ajax({

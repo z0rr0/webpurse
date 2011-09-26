@@ -571,3 +571,22 @@ def dept_add(request, vtemplate):
     else:
         qstatus = 'faile'
     return direct_to_template(request, vtemplate, {'qstatus': qstatus})
+
+# DELETE DEPT
+@permission_required('purse.delete_dept')
+def dept_del(request, id, vtemplate):
+    dept = get_object_or_404(Dept, id=int(id), invoice__user=request.user)
+    try:
+        with transaction.commit_on_success():
+            # invoices
+            # invoice = Invoice.objects.get(pk=dept.invoice_id, user=request.user)
+            invoice = dept.invoice
+            invoice.balance = F('balance') - dept.value
+            invoice.save()
+            # delete
+            dept.delete()
+    except:
+        raise Http404
+        qstatus = 'faile'
+    qstatus = 'ok'
+    return direct_to_template(request, vtemplate, {'qstatus': qstatus})
