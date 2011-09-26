@@ -435,7 +435,6 @@ def transfer_add(request, vtemplate):
 # LAST TRANSFER'S
 @login_required
 def transfer_last(request, vtemplate):
-    invoices = Invoice.objects.filter(user=request.user).only('id')
     transfers = Transfer.objects.filter(Q(ifrom__user=request.user) | Q(ito__user=request.user))
     transfers = transfers.order_by('-pdate', '-modified')[:LAST_PAYS]
     return direct_to_template(request, vtemplate, {'transfers': transfers})
@@ -527,8 +526,15 @@ def dept_complete(request):
     if request.method == 'POST':
         try:
             depts = Dept.objects.filter(invoice__user=request.user, 
-                taker__istartswith=request.POST['val']).only('taker')
+                taker__istartswith=request.POST['val']).order_by('taker').only('taker')
             result = [ x.taker for x in depts ]
         except IndexError:
             pass
     return HttpResponse(simplejson.dumps(result), mimetype='application/json')
+
+# LAST DEPTS
+@login_required
+def depts_last(request, vtemplate):
+    depts = Dept.objects.filter(invoice__user=request.user)
+    depts = depts.order_by('-pdate', '-modified')[:LAST_PAYS]
+    return direct_to_template(request, vtemplate, {'depts': depts})

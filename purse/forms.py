@@ -58,7 +58,7 @@ class TransferEditForm(forms.ModelForm):
 
 class DeptForm(forms.ModelForm):
     # pass
-    credit = forms.BooleanField(label=u'мой долг')
+    credit = forms.BooleanField(label=u'берём в долг')
 
     class Meta:
         model = models.Dept

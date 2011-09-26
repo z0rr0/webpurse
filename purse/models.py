@@ -125,8 +125,8 @@ class Dept(models.Model):
     created = models.DateTimeField(auto_now_add=True, editable=False)
 
     def __unicode__(self):
-        return '%s: %s -> %s (%s)' % (str(self.pdate), 
-            self.Invoice.name, str(self.value), self.taker)
+        return '%s %s: %s (%s)' % (str(self.pdate), 
+            self.invoice.name, str(self.value), self.taker)
 
     class Meta:
         ordering = ['pdate']
@@ -149,7 +149,7 @@ class Transfer(models.Model):
     created = models.DateTimeField(auto_now_add=True, editable=False)
 
     def __unicode__(self):
-        return '%s: %s -> %s' % (str(self.value), self.ifrom.name, self.ito.name)
+        return '%s %s: %s' % (str(self.value), self.ifrom.name, self.ito.name)
 
     class Meta:
         ordering = ['pdate']

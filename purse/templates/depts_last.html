@@ -1,0 +1,45 @@
+{% load jtags %}    
+
+{% if depts %}
+    <table border="0" align="center" class="pay_last">
+       <!--  <tr>
+            <th>Счет</th>
+            <th>Сумма</th>
+            <th>Получатель/Кредитор</th>
+            <th>Направление</th>
+            <th>Примечание</th>
+            <th>edit</th>
+        </tr> -->
+        {% for dept in depts %}
+            {% ifchanged %}
+                <tr>
+                    <th colspan="7" class="pay_last_date">
+                        <span ><em>{{ dept.pdate|date:"d.m.Y" }}</em></span>
+                    </th>
+                </tr>
+            {% endifchanged %}
+        <tr>
+            <td>{{ dept.invoice.name }}</td>
+            <td class="pay_last_add">
+                {{ dept.value|rusnum }}
+                <span class="smallsym">{{ dept.invoice.valuta.code }}</span>
+            </td>
+            <td>{{ dept.value|arrow|safe }}</td>
+            <td>{{ dept.taker }}</td>
+            <td valign="top"><em><pre>{{ dept.comment }}</pre></em></td>
+            <td>
+                <span class="dellink" onMouseOver="up_view(this)" onMouseOut="down_view(this)">
+                    <a href="/dept/edit/{{ dept.id }}"><img src="{{ MEDIA_URL }}img/edit.png" alt="правка"></a>
+                </span>
+            </td>
+            <td>
+                <span class="dellink" onMouseOver="up_view(this)" onMouseOut="down_view(this)">
+                    <a href="javascript:deldepts({{ dept.id }})"><img src="{{ MEDIA_URL }}img/delete.png" alt="удалить"></a>
+                </span>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <em>платежей нет</em>
+{% endif %}

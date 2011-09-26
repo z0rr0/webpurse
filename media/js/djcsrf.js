@@ -186,6 +186,46 @@ function send_trans(pref) {
         $(prefix + 'comment').val('');
     }
 }
+// send dept
+function send_depts(pref) {
+    prefix = '#' + pref + '_';
+    val = val_validate(prefix + 'value', true);
+    if (!val) alert('Пожалуйста проверьте введенные значения.');
+    else {
+        if ($(prefix + 'credit').is(':checked')) credit = 1;
+        else credit = 0;
+        // ok send form
+        $.ajax({
+            url: '/dept/add/',
+            type: 'POST',
+            data: {
+                value : val,
+                invoice : $(prefix + 'invoice').val(),
+                taker : $(prefix + 'taker').val(),
+                credit : credit,
+                pdate : $('#datepicker_' + pref).val(),
+                comment : $(prefix + 'comment').val(),
+            },
+            dataType: 'html',
+            context: document.body,
+            async: true,
+            success: function (data) {
+                $(prefix + 'status').html('Сохранено');
+                $(prefix + 'status').show();
+                invoices_update('/invoice/view/', '#leftm'); 
+                $(prefix + 'status').hide(8000);
+                get_depts_last('#pay_last');
+                // alert("ok");
+            },
+            error: function () {
+                alert('sorry, error'); 
+            },
+        });
+        // clear form
+        $(prefix + 'value').val(0);
+        $(prefix + 'comment').val('');
+    }
+}
 // update itype div, 1 from 2
 function itype_update(sign) {
     to_page = '/type/view/' + sign +'/';
@@ -273,6 +313,13 @@ function get_pay_last(divid)  {
 // update last transfer
 function get_trans_last(divid)  {
     $.get('/transfer/last/', function(data) {
+        $(divid).html(data);
+    })
+    .error(function() { alert("sorry, error"); });
+}
+// update last depts
+function get_depts_last(divid)  {
+    $.get('/depts/last/', function(data) {
         $(divid).html(data);
     })
     .error(function() { alert("sorry, error"); });
