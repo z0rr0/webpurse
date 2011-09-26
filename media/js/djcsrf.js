@@ -54,12 +54,9 @@ function invoices_update(vurl, vdiv) {
         success: function (data) {
             $(vdiv).html(data);
         },
-        statusCode: {
-            404: function() {
-                $(vdiv).html('Page not found');
-                // alert('Invoices page not found');
-             },
-        }
+        error: function () {
+                alert('sorry, error'); 
+            },
     });
 }
 // validate pays data

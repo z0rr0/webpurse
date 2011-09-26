@@ -32,3 +32,29 @@
     У вас еще нет счетов, но Вы можете их 
     <a href="/invoice/edit/" title="добавить новые счета">добавить</a>.
 {% endif %}
+{% if depts %}
+    <hr>
+    <div id="mydepts">Долги</div>
+    {% if depts.dgt %}
+    <div class="depts_my">Я должен:</div>
+        {% for dept in depts.dgt %}
+            {{ dept.taker }}
+            <span class="sumdept">
+                {{ dept.sdept|rusnum }}
+                <span class="smallsym">{{ dept.invoice__valuta__code }}</span>
+            </span>
+            <br>
+        {% endfor %}
+    {% endif %}
+     {% if depts.dlt %}
+    <div class="depts_my">Мне должены:</div>
+        {% for dept in depts.dlt %}
+            {{ dept.taker }}
+            <span class="sumdept">
+                {{ dept.sdept|vabs|rusnum }}
+                <span class="smallsym">{{ dept.invoice__valuta__code }}</span>
+            </span>
+            <br>
+        {% endfor %}
+    {% endif %}
+{% endif %}

@@ -149,7 +149,23 @@ a:hover {
      */
     font-weight:bold;
 }
-
+#mydepts {
+    text-align: center;
+    font-size: 130%;
+    font-weight: bold;
+    padding: 2px;
+    /*color: #729fcf;*/
+}
+.depts_my {
+    font-size: 110%;
+    font-style: italic;
+    padding: 5px;
+}
+.sumdept {
+    font-size: 110%;
+    padding: 2px;
+    color: #729fcf;
+}
 #content-main {
     /*background: #dfe0e3;*/
     padding: 20px;

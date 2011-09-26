@@ -24,3 +24,7 @@ def arrow(value):
 @register.filter(name='unarrow')
 def unarrow(value):
     return '&larr;' if value < 0 else '&rarr;'
+
+@register.filter(name='vabs')
+def vabs(value):
+    return abs(value)

@@ -88,20 +88,25 @@ def user_invoices(user_id):
     for s in summ_inv:
         summ += s.balance * s.valuta.kurs
     # summ = summ.aggregate(Sum('balance'))
-    return invoices, summ
+    # search depts
+    depts = Dept.objects.filter(invoice__user=user_id).order_by('taker').values('taker', 'invoice__valuta__code')
+    dgt = depts.annotate(sdept=Sum('value')).filter(sdept__gt=0)
+    dlt = depts.annotate(sdept=Sum('value')).filter(sdept__lt=0)
+    depts = {'dgt': dgt, 'dlt': dlt}
+    return invoices, summ, depts
 
 # VIEW INVOICES LIST AND ALL SUM BALANCE
 @login_required
 def invoice_view(request, vtemplate):
-    invoices, summ = user_invoices(request.user.id)
+    invoices, summ, depts = user_invoices(request.user.id)
     return direct_to_template(request, vtemplate, {
-        'invoices': invoices, 'summ': summ
+        'invoices': invoices, 'summ': summ, 'depts': depts
         });
 
 # TABLE USERS INVOICES
 @login_required
 def invoice_all(request, vtemplate):
-    invoices, summ = user_invoices(request.user.id)
+    invoices, summ, depts = user_invoices(request.user.id)
     # edit spec form
     c = {}
     c.update(csrf(request))
