@@ -81,6 +81,7 @@ def get_pay_forms(vuser, form_def):
     return form_in, form_out, form_cor, form_trans, form_dept
 
  # INVOICE *************************
+ @login_required
 def user_invoices(user_id):
     invoices = Invoice.objects.select_related().filter(user=user_id)
     summ_inv = invoices.filter(other=False)
@@ -410,8 +411,8 @@ def transfer_add(request, vtemplate):
             with transaction.commit_on_success():
                 value = abs(float(request.POST['value']))
                 # invoices
-                ifrom = Invoice.objects.get(pk=int(request.POST['ifrom']))
-                ito = Invoice.objects.get(pk=int(request.POST['ito']))
+                ifrom = Invoice.objects.get(pk=int(request.POST['ifrom']), user=request.user)
+                ito = Invoice.objects.get(pk=int(request.POST['ito']), user=request.user)
                 # change
                 ifrom.balance = F('balance') - value
                 value_by_kurs = round(ifrom.valuta.kurs * value / ito.valuta.kurs, 2)
@@ -446,8 +447,8 @@ def transfer_del(request, id, vtemplate):
     try:
         with transaction.commit_on_success():
             # invoices
-            ifrom = Invoice.objects.get(pk=transfer.ifrom_id)
-            ito = Invoice.objects.get(pk=transfer.ito_id)
+            ifrom = Invoice.objects.get(pk=transfer.ifrom_id, user=request.user)
+            ito = Invoice.objects.get(pk=transfer.ito_id, user=request.user)
             # change
             ifrom.balance = F('balance') + transfer.value
             value_by_kurs = round(ifrom.valuta.kurs * transfer.value / ito.valuta.kurs, 2)
@@ -472,8 +473,8 @@ def transfer_edit(request, id, vtemplate):
     transfer = get_object_or_404(Transfer, id=int(id), ifrom__user=request.user)
     old_value = transfer.value
     # invoices
-    ifrom = Invoice.objects.get(pk=transfer.ifrom_id)
-    ito = Invoice.objects.get(pk=transfer.ito_id)
+    ifrom = Invoice.objects.get(pk=transfer.ifrom_id, user=request.user)
+    ito = Invoice.objects.get(pk=transfer.ito_id, user=request.user)
     # init form
     form = TransferEditForm(auto_id='trans_%s', instance=transfer)
     if request.method == 'POST':
@@ -493,8 +494,8 @@ def transfer_edit(request, id, vtemplate):
                     ito.save()
                     # ************************
                     # create new trans invoice
-                    ifrom = Invoice.objects.get(pk=new_trans.ifrom_id)
-                    ito = Invoice.objects.get(pk=new_trans.ito_id)
+                    ifrom = Invoice.objects.get(pk=new_trans.ifrom_id, user=request.user)
+                    ito = Invoice.objects.get(pk=new_trans.ito_id, user=request.user)
                     ifrom.balance = F('balance') - new_trans.value
                     value_by_kurs = round(ifrom.valuta.kurs * new_trans.value / ito.valuta.kurs, 2)
                     ito.balance = F('balance') + value_by_kurs
@@ -550,7 +551,8 @@ def dept_add(request, vtemplate):
                 credit = int(request.POST['credit'])
                 value = value if credit else -value
                 # invoices
-                invoice = Invoice.objects.get(pk=int(request.POST['invoice']))
+                invoice = Invoice.objects.get(pk=int(request.POST['invoice']), 
+                    user=request.user)
                 invoice.balance = F('balance') + value
                 invoice.save()
                 # transfer
