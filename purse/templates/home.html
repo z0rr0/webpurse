@@ -188,7 +188,7 @@ $(document).ready(function() {
                             <div>{{ form_dept.value }} <span class="smallsym">сумма долга</span></div>
                             <div>{{ form_dept.invoice }} <span class="smallsym">счет долга</span></div>
                             <div>{{ form_dept.taker }} <span class="smallsym">заёмщик (кредитор)</span>
-                            <div>{{ form_dept.credit }} {{ form_dept.credit.label }}
+                            <div>{{ form_dept.credit }} {{ form_dept.credit.label|lower }}
                             <div><span class="smallsym">примечание (текстовая заметка о транзакции)</span>
                                 <br>{{ form_dept.comment }}
                             </div>

@@ -1,1 +1,94 @@
-123
+{% extends "base.html" %}
+{% block title %}
+    Правка долга (кредита)
+{% endblock title %}
+
+{% block pagejs %}
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#id_pdate').datepicker();
+    $('#editform').submit(function () {
+        prefix = '#id_value';
+        val = val_validate(prefix);
+        if (!val) {
+            alert('Пожалуйста проверьте введенные значения.');
+            return false;
+        }
+        else {
+            $(prefix).val(val, false);
+            // alert('ok');
+        }
+        return true;
+    });
+    $("#id_taker").autocomplete({
+        minLength: 1,
+        source: function (request, response) {
+            $.ajax({
+                url: "/dept/complete/",
+                dataType: "json",
+                data: { val: request.term },
+                type: 'POST',
+                success: response
+            })
+        },
+    });
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<h1>Редактирование долга (кредита)</h1><br>
+<form method="POST" id="editform" action="" class="formstyle">
+{% csrf_token %}{{ form.management_form }}
+{{ form.errors }}
+    <table>
+        <tr>
+            <th>{{ form.pdate.label }}</th>
+            <td>
+                {{ form.pdate }}
+                <div class="italicp">{{ form.pdate.help_text }}</div>
+                {{ form.pdate.errors|lower }}
+            </td>
+        </tr>
+        <tr>
+            <th>{{ form.value.label }}</th>
+            <td>
+                {{ form.value }}
+                <div class="italicp">{{ form.value.help_text }}</div>
+                {{ form.value.errors|lower }}
+            </td>
+        </tr>
+        <tr>
+            <th>{{ form.invoice.label }}</th>
+            <td>
+                {{ form.invoice }}
+                <div class="italicp">{{ form.invoice.help_text }}</div>
+                {{ form.invoice.errors|lower }}
+            </td>
+        </tr>
+        <tr>
+            <th>{{ form.taker.label }}</th>
+            <td>
+                {{ form.taker }}
+                <div class="italicp">{{ form.taker.help_text }}</div>
+                {{ form.taker.errors|lower }}
+            </td>
+        </tr>
+        <tr>
+            <th>{{ form.credit.label }}</th>
+            <td>
+                {{ form.credit }}
+                <div class="italicp">необходимо отметить, если берется долг</div>
+            </td>
+        </tr>
+        <tr>
+            <th>{{ form.comment.label }}</th>
+            <td>
+                {{ form.comment }}
+                <div class="italicp">{{ form.comment.help_text }}</div>
+                {{ form.comment.errors|lower }}
+            </td>
+        </tr>
+    </table><br>
+<input type="submit" value="Сохранить" />
+{% endblock content %}

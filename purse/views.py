@@ -28,7 +28,7 @@ from webpurse.settings import BANK_FILE
 import datetime
 import logging
 
-LAST_PAYS = 10
+LAST_PAYS = 20
 CORRECT_PAY_NAME = u'Корректировка'
 logger = logging.getLogger(__name__)
 
@@ -194,7 +194,6 @@ def pay_add(request, vtemplate):
             itype = get_object_or_404(Itype, pk=int(request.POST['itype']), user=request.user)
             invoice = get_object_or_404(Invoice, pk=int(request.POST['invoice']), user=request.user)
             value = -abs(value) if itype.sign else abs(value)
-            new_balance = invoice.balance + value
             with transaction.commit_on_success():
                 pay = Pay.objects.create(invoice=invoice,
                     itype=itype,   
@@ -203,8 +202,8 @@ def pay_add(request, vtemplate):
                     comment=request.POST['comment']
                 )
                 # update invoice
-                invoice = Invoice.objects.filter(id=pay.invoice_id)
-                invoice.update(balance=F('balance') + value, modified=datetime.datetime.now())
+                pay.invoice.balance = F('balance') + pay.value
+                pay.invoice.save()
         except:
             raise Http404
             qstatus = 'faile'
@@ -278,10 +277,9 @@ def pay_edit(request, id, vtemplate):
                 new_pay.value = -abs(pay.value) if pay.itype.sign else abs(pay.value)
                 new_pay.save()
                 # edit balance new invoice
-                invoice = new_pay.invoice
-                invoice.balance = F('balance') + new_pay.value
-                invoice.save()
-                # return redirect('/')
+                new_pay.invoice.balance = F('balance') + new_pay.value
+                new_pay.invoice.save()
+                return redirect('/')
     else:
         pay.value = abs(pay.value)
         form = PayEditForm(instance=pay)
@@ -444,15 +442,13 @@ def transfer_del(request, id, vtemplate):
     transfer = get_object_or_404(Transfer, id=int(id), ifrom__user=request.user)
     try:
         with transaction.commit_on_success():
-            # invoices
-            ifrom, ito = transfer.ifrom, transfer.ito
             # change
-            ifrom.balance = F('balance') + transfer.value
-            value_by_kurs = round(ifrom.valuta.kurs * transfer.value / ito.valuta.kurs, 2)
-            ito.balance = F('balance') - value_by_kurs
+            transfer.ifrom.balance = F('balance') + transfer.value
+            value_by_kurs = round(transfer.ifrom.valuta.kurs * transfer.value / transfer.ito.valuta.kurs, 2)
+            transfer.ito.balance = F('balance') - value_by_kurs
             # save
-            ifrom.save()
-            ito.save()
+            transfer.ifrom.save()
+            transfer.ito.save()
             # delete
             transfer.delete()
     except:
@@ -491,12 +487,12 @@ def transfer_edit(request, id, vtemplate):
                     # ************************
                     # create new trans invoice
                     ifrom, ito = new_trans.ifrom, new_trans.ito
-                    ifrom.balance = F('balance') - new_trans.value
-                    value_by_kurs = round(ifrom.valuta.kurs * new_trans.value / ito.valuta.kurs, 2)
-                    ito.balance = F('balance') + value_by_kurs
+                    new_trans.ifrom.balance = F('balance') - new_trans.value
+                    value_by_kurs = round(new_trans.ifrom.valuta.kurs * new_trans.value / new_trans.ito.valuta.kurs, 2)
+                    new_trans.ito.balance = F('balance') + value_by_kurs
                     # save
-                    ifrom.save()
-                    ito.save()
+                    new_trans.ifrom.save()
+                    new_trans.ito.save()
                     initito = new_trans.ito_id
                     return redirect('/')
                 except:
@@ -548,7 +544,7 @@ def dept_add(request, vtemplate):
                     user=request.user)
                 invoice.balance = F('balance') + value
                 invoice.save()
-                # transfer
+                # dept
                 dept = Dept.objects.create(invoice=invoice, taker=request.POST['taker'], 
                     pdate=datetime.datetime.strptime(request.POST['pdate'], "%d.%m.%Y").date(), 
                     comment=request.POST['comment'],
@@ -568,10 +564,8 @@ def dept_del(request, id, vtemplate):
     try:
         with transaction.commit_on_success():
             # invoices
-            # invoice = Invoice.objects.get(pk=dept.invoice_id, user=request.user)
-            invoice = dept.invoice
-            invoice.balance = F('balance') - dept.value
-            invoice.save()
+            dept.invoice.balance = F('balance') - dept.value
+            dept.invoice.save()
             # delete
             dept.delete()
     except:
@@ -581,7 +575,7 @@ def dept_del(request, id, vtemplate):
     return direct_to_template(request, vtemplate, {'qstatus': qstatus})
 
 # EDIT PAY
-@permission_required('purse.change_pay')
+@permission_required('purse.change_dept')
 def dept_edit(request, id, vtemplate):
     c = {}
     c.update(csrf(request))
@@ -589,24 +583,30 @@ def dept_edit(request, id, vtemplate):
     # get pay by id
     dept = get_object_or_404(Dept, id=int(id), invoice__user=request.user)
     if request.method == 'POST':
-        old_invoice, old_value = dept.invoice_id, dept.value
+        old_invoice, old_value = dept.invoice, dept.value
         form = DeptForm(request.POST or None, instance=dept) 
         if form.is_valid():
             with transaction.commit_on_success():
                 # del pay value in old invoice
-                old_invoice.balance = F('balance') + old_value
+                old_invoice.balance = F('balance') - old_value
                 old_invoice.save()
                 # new pay
+                credit = form.cleaned_data['credit']
                 new_dept = form.save(commit=False)
-                # new_dept.value = -abs(dept.value) if dept.itype.sign else abs(dept.value)
+                new_dept.value = abs(dept.value) if credit else -abs(dept.value)
+                new_dept.invoice.balance = F('balance') + new_dept.value
                 new_dept.save()
-                # edit balance new invoice
-                invoice = Invoice.objects.filter(id=new_dept.invoice_id)
-                invoice.balace = F('balance') - new_dept.value
-                invoice.dave()
+                new_dept.invoice.save()
                 return redirect('/')
     else:
-        Dept.value = abs(dept.value)
+        if dept.value > 0:
+            credit = True
+        else:
+            dept.value = abs(dept.value)
+            credit = False
         form = DeptForm(instance=dept)
-    form.fields['invoice'].choices = [(s.id, s.name) for s in user_invoices]
+        # checked
+        if credit:
+            form.fields['credit'].widget = forms.CheckboxInput(check_test=True, attrs={'checked': 'checked'})
+    form.fields['invoice'].choices = [(s.id, s.name + ' (' + s.valuta.code + ')' ) for s in user_invoices]
     return direct_to_template(request, vtemplate, { 'form': form })

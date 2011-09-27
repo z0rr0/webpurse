@@ -116,11 +116,16 @@ class Futpay(models.Model):
 
 # dept pays
 class Dept(models.Model):
-    invoice = models.ForeignKey(Invoice, verbose_name = u'счет')
-    value = models.FloatField(default=0, verbose_name = u'сумма')
-    taker = models.CharField(max_length=255, verbose_name = u'получатель/кредитор')
-    pdate = models.DateField(verbose_name = u'дата')    
-    comment = models.TextField(verbose_name=u'примечание', blank=True, null=True)
+    invoice = models.ForeignKey(Invoice, verbose_name = u'счет',
+        help_text=u'счет для списания (полученя) долга')
+    value = models.FloatField(default=0, verbose_name = u'сумма',
+        help_text=u'сумма долга (кредита)')
+    taker = models.CharField(max_length=255, 
+        verbose_name = u'Кредитор/заёмщик',
+        help_text=u'люди или организации')
+    pdate = models.DateField(verbose_name = u'дата', help_text=u'дата операции')    
+    comment = models.TextField(verbose_name=u'примечание', blank=True, null=True,
+        help_text=u'комментарий к операции')
     modified = models.DateTimeField(auto_now=True, auto_now_add=True, editable=False)
     created = models.DateTimeField(auto_now_add=True, editable=False)
 

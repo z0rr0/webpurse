@@ -58,7 +58,8 @@ class TransferEditForm(forms.ModelForm):
 
 class DeptForm(forms.ModelForm):
     # pass
-    credit = forms.BooleanField(label=u'получение средств')
+    credit = forms.BooleanField(label=u'Получение средств', required=False,
+        widget=forms.CheckboxInput(check_test=True))
 
     class Meta:
         model = models.Dept
