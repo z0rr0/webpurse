@@ -385,16 +385,17 @@ def transfer_update(request, vtemplate):
     form = TransSmallForm()
     if request.method == 'POST':
         try:
+            if 'defaulid' in request.POST:
             form = TransSmallForm(initial={'ito': int(request.POST['defaulid'])})
-            # jsevent = "update_trans('" + request.POST['eventid'] + "','" + request.POST['form_id'] + "')"
-            form.fields['ito'].widget = forms.Select(attrs={
-                'id': 'trans_' + request.POST['form_id'],
-                # 'onchange': jsevent
-                })
-            # invoice
-            user_invoice = Invoice.objects.filter(user=request.user).exclude(id=int(request.POST['val']))
-            invoice_choices = [(s.id, s.name) for s in user_invoice]
-            form.fields['ito'].choices = invoice_choices
+                # jsevent = "update_trans('" + request.POST['eventid'] + "','" + request.POST['form_id'] + "')"
+                form.fields['ito'].widget = forms.Select(attrs={
+                    'id': 'trans_' + request.POST['form_id'],
+                    # 'onchange': jsevent
+                    })
+                # invoice
+                user_invoice = Invoice.objects.filter(user=request.user).exclude(id=int(request.POST['val']))
+                invoice_choices = [(s.id, s.name) for s in user_invoice]
+                form.fields['ito'].choices = invoice_choices
         except:
             raise Http404
     return direct_to_template(request, vtemplate, {'form': form})
