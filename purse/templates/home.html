@@ -20,6 +20,9 @@ $(document).ready(function() {
         },
     });
     $('div[id*="datepicker"]').datepicker();
+    $('input').addClass('paystyle-input');
+    $('input[type*="checkbox"]').addClass('checkboxstyle');
+
     $( "#datepicker_in" ).click(function(){
         data = $( "#datepicker_in" ).val();
         $('#datein_label').html(data);

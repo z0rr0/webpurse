@@ -5,9 +5,8 @@
 {% block pagejs %}
 <script type="text/javascript">
 $(document).ready(function() {
-    // $( "#tabs" ).tabs({
-    //     // event: "mouseover"
-    // });
+    $('input[name*="balance"]').css('width', '80px');
+    $('input[type*="checkbox"]').css('width', '15px');
 });
 </script>
 {% endblock %}
