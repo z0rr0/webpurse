@@ -266,23 +266,22 @@ def pay_edit(request, id, vtemplate):
     # get pay by id
     pay = get_object_or_404(Pay, id=int(id), invoice__user=request.user)
     if request.method == 'POST':
-        old_invoice, old_value = pay.invoice_id, pay.value
+        old_invoice, old_value = pay.invoice, pay.value
         form = PayEditForm(request.POST or None, instance=pay) 
         if form.is_valid():
             with transaction.commit_on_success():
                 # del pay value in old invoice
-                invoice = Invoice.objects.filter(id=old_invoice)
-                invoice.update(balance=F('balance') - old_value, 
-                    modified=datetime.datetime.now())
+                old_invoice.balance = F('balance') - old_value
+                old_invoice.save()
                 # new pay
                 new_pay = form.save(commit=False)
                 new_pay.value = -abs(pay.value) if pay.itype.sign else abs(pay.value)
                 new_pay.save()
                 # edit balance new invoice
-                invoice = Invoice.objects.filter(id=new_pay.invoice_id)
-                invoice.update(balance=F('balance') + new_pay.value,
-                    modified=datetime.datetime.now())
-                return redirect('/')
+                invoice = new_pay.invoice
+                invoice.balance = F('balance') + new_pay.value
+                invoice.save()
+                # return redirect('/')
     else:
         pay.value = abs(pay.value)
         form = PayEditForm(instance=pay)
@@ -291,9 +290,7 @@ def pay_edit(request, id, vtemplate):
     items=[(u"Доход", [(s.id, s.name) for s in user_itypes.filter(sign=False)]),
         (u"Расход", [(s.id, s.name) for s in user_itypes.filter(sign=True)])]
     form.fields['itype'].choices = items
-    return direct_to_template(request, vtemplate, {
-        'form': form,
-        })
+    return direct_to_template(request, vtemplate, { 'form': form })
 
 # DELETE PAY
 @permission_required('purse.delete_pay')
@@ -310,9 +307,6 @@ def pay_del(request, id, vtemplate):
 # VIEW LAST PAY'S
 @login_required
 def pay_last(request, vtemplate):
-    # day_border = datetime.datetime.now().date() - datetime.timedelta(days=LAST_PAYS)
-    # pays = Pay.objects.filter(invoice__in=[ val.id for val in invoices ]).order_by('-pdate')[:LAST_PAYS]
-    # invoices = Invoice.objects.filter(user=request.user).only('id')
     pays = Pay.objects.filter(invoice__user=request.user).order_by('-pdate', '-modified')[:LAST_PAYS]
     return direct_to_template(request, vtemplate, {'pays': pays, })
 
@@ -451,8 +445,7 @@ def transfer_del(request, id, vtemplate):
     try:
         with transaction.commit_on_success():
             # invoices
-            ifrom = Invoice.objects.get(pk=transfer.ifrom_id, user=request.user)
-            ito = Invoice.objects.get(pk=transfer.ito_id, user=request.user)
+            ifrom, ito = transfer.ifrom, transfer.ito
             # change
             ifrom.balance = F('balance') + transfer.value
             value_by_kurs = round(ifrom.valuta.kurs * transfer.value / ito.valuta.kurs, 2)
@@ -477,8 +470,7 @@ def transfer_edit(request, id, vtemplate):
     transfer = get_object_or_404(Transfer, id=int(id), ifrom__user=request.user)
     old_value = transfer.value
     # invoices
-    ifrom = Invoice.objects.get(pk=transfer.ifrom_id, user=request.user)
-    ito = Invoice.objects.get(pk=transfer.ito_id, user=request.user)
+    ifrom, ito = transfer.ifrom, transfer.ito
     # init form
     form = TransferEditForm(auto_id='trans_%s', instance=transfer)
     if request.method == 'POST':
@@ -498,8 +490,7 @@ def transfer_edit(request, id, vtemplate):
                     ito.save()
                     # ************************
                     # create new trans invoice
-                    ifrom = Invoice.objects.get(pk=new_trans.ifrom_id, user=request.user)
-                    ito = Invoice.objects.get(pk=new_trans.ito_id, user=request.user)
+                    ifrom, ito = new_trans.ifrom, new_trans.ito
                     ifrom.balance = F('balance') - new_trans.value
                     value_by_kurs = round(ifrom.valuta.kurs * new_trans.value / ito.valuta.kurs, 2)
                     ito.balance = F('balance') + value_by_kurs
@@ -520,9 +511,7 @@ def transfer_edit(request, id, vtemplate):
         'id': 'trans_ifrom',
         'onchange': jsevent})
     form.fields['ifrom'].choices = [(s.id, s.name) for s in Invoice.objects.filter(user=request.user)]
-    return direct_to_template(request, vtemplate, {
-        'form': form, 'initito': initito
-        })
+    return direct_to_template(request, vtemplate, { 'form': form, 'initito': initito })
 
 # DEPTS AUTOCOMLETE
 @login_required
