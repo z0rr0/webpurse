@@ -21,7 +21,7 @@ $(document).ready(function() {
     });
     $('div[id*="datepicker"]').datepicker();
     $('input').addClass('paystyle-input');
-    $('input[type*="checkbox"]').addClass('checkboxstyle');
+    $('input[type*="checkbox"]').css('width', '15px');
 
     $( "#datepicker_in" ).click(function(){
         data = $( "#datepicker_in" ).val();
