@@ -385,7 +385,7 @@ def transfer_update(request, vtemplate):
     form = TransSmallForm()
     if request.method == 'POST':
         try:
-            if 'defaulid' in request.POST:
+            if 'ito' in request.POST:
                 form = TransSmallForm(initial={'ito': int(request.POST['defaulid'])})
                 # jsevent = "update_trans('" + request.POST['eventid'] + "','" + request.POST['form_id'] + "')"
                 form.fields['ito'].widget = forms.Select(attrs={
