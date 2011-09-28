@@ -289,6 +289,7 @@ function savetype(sign, id) {
 }
 // delete itype
 function deltype(sign, id) {
+    if (confirm("Уверены, что хотите удалить данные?")) 
     $.get('/type/del/' + id, function(data) {
             itype_update(sign);
         })
@@ -324,6 +325,7 @@ function get_depts_last(divid)  {
 }
 // delete pay
 function delpay(id) {
+    if (confirm("Уверены, что хотите удалить данные?"))
     $.get('/pay/del/' + id, function(data) {
         invoices_update('/invoice/view/', '#leftm'); 
         get_pay_last('#pay_last');
@@ -333,6 +335,7 @@ function delpay(id) {
 }
 // delete transfer
 function deltrans(id) {
+    if (confirm("Уверены, что хотите удалить данные?"))
     $.get('/transfer/del/' + id, function(data) {
         invoices_update('/invoice/view/', '#leftm'); 
         get_trans_last('#pay_last');
@@ -342,6 +345,7 @@ function deltrans(id) {
 }
 // delete dept
 function deldepts(id) {
+    if (confirm("Уверены, что хотите удалить данные?"))
     $.get('/dept/del/' + id, function(data) {
         invoices_update('/invoice/view/', '#leftm'); 
         get_depts_last('#pay_last');
