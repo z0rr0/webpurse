@@ -3,7 +3,8 @@
     {% if summ %}
         {{ summ|rusnum }} руб.
     {% endif %}
-</div><br>
+</div>
+<br>
 {% if invoices %}
     {% for invoice in invoices %}
         <div>
@@ -28,6 +29,9 @@
         </em>
         </div><br>
     {% endfor %}
+    {% if summ_other %}
+        <div id="isum" align="center">{{ summ_other|rusnum }} руб.</div>
+    {% endif %}
 {% else %}
     У вас еще нет счетов, но Вы можете их 
     <a href="/invoice/edit/" title="добавить новые счета">добавить</a>.

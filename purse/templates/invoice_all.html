@@ -30,7 +30,9 @@ $(document).ready(function() {
         <tfoot>
             <tr>
                 <td>Итого</td>
-                <td colspan="5">{{ summ|rusnum }} руб.</td>
+                <td colspan="5">
+                {{ summ_all|rusnum }} руб.: своих {{ summ|rusnum }}, чужих {{ summ_other|rusnum }}
+                </td>
             </tr>
         </tfoot>    
         <tbody>

@@ -81,32 +81,35 @@ def get_pay_forms(vuser, form_def):
     return form_in, form_out, form_cor, form_trans, form_dept
 
  # INVOICE *************************
-def user_invoices(user_id):
+def sum_user_invoices(user_id):
     invoices = Invoice.objects.select_related().filter(user=user_id)
     summ_inv = invoices.filter(other=False)
-    summ = 0
+    summ_invother = invoices.filter(other=True)
+    summ, summ_other = 0, 0
     for s in summ_inv:
         summ += s.balance * s.valuta.kurs
+    for s in summ_invother:
+        summ_other += s.balance * s.valuta.kurs
     # summ = summ.aggregate(Sum('balance'))
     # search depts
     depts = Dept.objects.filter(invoice__user=user_id).order_by('taker').values('taker', 'invoice__valuta__code')
     dgt = depts.annotate(sdept=Sum('value')).filter(sdept__gt=0)
     dlt = depts.annotate(sdept=Sum('value')).filter(sdept__lt=0)
     depts = {'dgt': dgt, 'dlt': dlt}
-    return invoices, summ, depts
+    return invoices, summ, summ_other, depts
 
 # VIEW INVOICES LIST AND ALL SUM BALANCE
 @login_required
 def invoice_view(request, vtemplate):
-    invoices, summ, depts = user_invoices(request.user.id)
+    invoices, summ, summ_other, depts = sum_user_invoices(request.user.id)
     return direct_to_template(request, vtemplate, {
-        'invoices': invoices, 'summ': summ, 'depts': depts
-        });
+        'invoices': invoices, 'summ': summ, 'summ_other': summ_other, 'depts': depts
+    });
 
 # TABLE USERS INVOICES
 @login_required
 def invoice_all(request, vtemplate):
-    invoices, summ, depts = user_invoices(request.user.id)
+    invoices, summ, summ_other, depts = sum_user_invoices(request.user.id)
     # edit spec form
     c = {}
     c.update(csrf(request))
@@ -119,7 +122,9 @@ def invoice_all(request, vtemplate):
     # form.fields['comment'].widget = forms.forms.Textarea(attrs={'cols': '60', 'rows': '2'})
     # return response request
     return direct_to_template(request, vtemplate, {
-        'invoices': invoices, 'summ': summ, 'form': form
+        'invoices': invoices, 'form': form, 
+        'summ': summ, 'summ_other': summ_other,
+        'summ_all': summ + summ_other
         });
 
 # AUTH USER
