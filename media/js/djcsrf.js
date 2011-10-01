@@ -375,3 +375,33 @@ function update_trans(num, exval, defid) {
         },
     });
 }
+// search in operations history
+function histsearch() {
+    // regexp
+    re = /^\d{1,2}(\.)\d{1,2}(\.)\d{2,4}$/;
+    // get values
+    d1 = $('#date_start').val();
+    d2 = $('#date_end').val();
+    if (re.test(d1) && re.test(d2)) {
+        $.ajax({
+            url: '/history/update/',
+            type: 'POST',
+            data: {
+                date_start: d1,
+                date_end: d2,
+                category: $('input[name|="radiokat"]:checked').val(),
+                comment: $('#doptext').val(),
+            },
+            dataType: 'html',
+            context: document.body,
+            async: true,
+            success: function (data) {
+                $('#hcontext').html(data);
+            },
+            error: function () {
+                alert('sorry, error'); 
+            },
+        });
+    }
+    else alert("Пожалуйста проверьте введенные даты");
+}

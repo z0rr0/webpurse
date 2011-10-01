@@ -618,8 +618,39 @@ def dept_edit(request, id, vtemplate):
     form.fields['invoice'].choices = [(s.id, s.name + ' (' + s.valuta.code + ')' ) for s in user_invoices]
     return direct_to_template(request, vtemplate, { 'form': form })
 
-# history page
+# HISTORY PAGE
 @login_required
 def history(request, vtemplate):
+    date2 = datetime.datetime.now().date()
+    date1 = date2 - datetime.timedelta(days=30)
+    return TemplateResponse(request, vtemplate, {'pdate': {'start': date1, 'end': date2}})
 
-    return TemplateResponse(request, vtemplate, {'array': 0})
+# ALL HISTORY VIEW, num 0-2
+def search_result_history(user_id, num, d1, d2, comment):
+    models = (Pay, Transfer, Dept)
+    try:
+        if num == 1:
+            result = models[num].objects.filter(Q(ifrom__user=user_id) | Q(ito__user=user_id))
+        else:
+            result = models[num].objects.filter(invoice__user=user_id)
+    except IndexError:
+        return False
+    # additional filter
+    result = result.filter(pdate__gte=d1, pdate__lte=d2)
+    if comment:
+        result = result.filter(comment__icontains=comment)
+    return result.order_by('-pdate', '-modified')
+
+# HISTORY UPDATE PAGE
+@login_required
+def history_update(request, vtemplate):
+    status = False
+    if request.method == 'POST':
+        try:
+            date_start = datetime.datetime.strptime(request.POST['date_start'], "%d.%m.%Y").date()
+            date_end = datetime.datetime.strptime(request.POST['date_end'], "%d.%m.%Y").date()
+            category = int(request.POST['category'])
+            search_result_history(request.user, category, date_start, date_end, request.POST['comment'])
+        except IndexError:
+            pass
+    return TemplateResponse(request, vtemplate, {})

@@ -364,3 +364,20 @@ ul.errorlist li {
     text-align: center;
     padding-top: 20px;
 }
+.formhist th {
+    text-align: left;
+    font-weight: bold;
+    /*background-color: #232323;*/
+    padding: 5px;
+    /*vertical-align: top;*/
+    font-size: 110%;
+}
+.formhist input {
+    background-color: #d2d6ce;
+    width: 100px;
+    /*font-size: 90%;*/
+}
+.formhist span {
+    float: left;
+    width: 75px;
+}

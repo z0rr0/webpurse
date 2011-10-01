@@ -1,1 +1,51 @@
-123
+{% extends "base.html" %}
+{% block title %}
+    История операций
+{% endblock title %}
+
+{% block pagejs %}
+<script type="text/javascript">
+$(document).ready(function() {
+    $('input[id*="date"]').datepicker();
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<h1>История операций</h1>
+<form method="POST" id="editform" action="javascript:histsearch()" class="formhist">
+    <fieldset>
+        <legend>Параметры поиска</legend>
+        <table cellpadding="8" >
+            <tr>
+                <th>Период</th>
+                <th>Категория</th>
+                <th>Дополнительно</th>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <span>начало</span>
+                        <input id="date_start" type="text" name="date_start" value="{{ pdate.start|date:"d.m.Y" }}">
+                    </div><br>
+                    <div>
+                        <span>окончание</span>
+                        <input id="date_end" type="text" name="date_end" value="{{ pdate.end|date:"d.m.Y" }}">
+                    </div>
+                </td>
+                <td>
+                    <input type="radio" name="radiokat" value="0" checked >платежи<br>
+                    <input type="radio" name="radiokat" value="1">переводы<br>
+                    <input type="radio" name="radiokat" value="2">долги<br>
+                </td>
+                <td>
+                    содержит в примечании:<br><br>
+                    <input type="text" id="doptext" style="width: 200px;">
+                </td>
+            </tr>
+        </table>
+        <br> <input type="submit" value="искать" />
+    </fieldset>
+</form>
+<div id="hcontext"></div>
+{% endblock content %}
