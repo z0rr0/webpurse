@@ -1,5 +1,6 @@
 #-*- coding: utf-8 -*-
 from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.template.response import TemplateResponse
 from django.core.context_processors import csrf
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template import RequestContext
@@ -616,3 +617,9 @@ def dept_edit(request, id, vtemplate):
             form.fields['credit'].widget = forms.CheckboxInput(check_test=True, attrs={'checked': 'checked'})
     form.fields['invoice'].choices = [(s.id, s.name + ' (' + s.valuta.code + ')' ) for s in user_invoices]
     return direct_to_template(request, vtemplate, { 'form': form })
+
+# history page
+@login_required
+def history(request, vtemplate):
+
+    return TemplateResponse(request, vtemplate, {'array': 0})

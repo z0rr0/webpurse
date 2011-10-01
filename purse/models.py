@@ -30,7 +30,7 @@ class Valuta(models.Model):
 class Invoice(models.Model):
     user = models.ForeignKey(User, verbose_name=u'пользователь')
     valuta = models.ForeignKey(Valuta, default=643,
-        verbose_name=u'валюта', 
+        verbose_name=u'валюта', on_delete=models.SET_DEFAULT,
         help_text=u'валюта счета')
     name = models.CharField(max_length=255, 
         verbose_name=u'название',
