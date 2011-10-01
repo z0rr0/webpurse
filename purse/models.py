@@ -6,7 +6,7 @@ import datetime
 # new manager
 class ActiveManager(models.Manager):
     def get_query_set(self):
-        return super(ActiveManager, self).get_query_set().filter(status=True, correction=False)
+        return super(ActiveManager, self).get_query_set().filter(status=True)
 
 # adding methods
 def none2str(x):

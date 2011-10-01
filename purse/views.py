@@ -57,7 +57,7 @@ def home(request, vtemplate):
             })
 
 def get_pay_forms(vuser, form_def):
-    user_itype = Itype.aobjects.filter(user=vuser)
+    user_itype = Itype.aobjects.filter(user=vuser, correction=False)
     user_invoice = Invoice.objects.filter(user=vuser)
     form_in = PayForm(initial=form_def['in_'], auto_id='in_%s')
     form_out = PayForm(initial=form_def['out_'], auto_id='out_%s')
@@ -242,7 +242,7 @@ def pay_correct(request, vtemplate):
                     value = float(request.POST['value'])
                 # create or search cor itype
                 itype, created = Itype.objects.get_or_create(correction=True, 
-                    user=request.user, name=CORRECT_PAY_NAME)     
+                    user=request.user, name=CORRECT_PAY_NAME) 
                 # save new pay
                 pay = Pay.objects.create(invoice=invoice,
                     itype=itype,   
@@ -280,14 +280,16 @@ def pay_edit(request, id, vtemplate):
                 old_invoice.save()
                 # new pay
                 new_pay = form.save(commit=False)
-                new_pay.value = -abs(pay.value) if pay.itype.sign else abs(pay.value)
+                if not new_pay.itype.correction:
+                    new_pay.value = -abs(pay.value) if pay.itype.sign else abs(pay.value)
                 new_pay.save()
                 # edit balance new invoice
                 new_pay.invoice.balance = F('balance') + new_pay.value
                 new_pay.invoice.save()
                 return redirect('/')
     else:
-        pay.value = abs(pay.value)
+        if not pay.itype.correction:
+            pay.value = abs(pay.value)
         form = PayEditForm(instance=pay)
     form.fields['invoice'].choices = [(s.id, s.name) for s in user_invoices]
     # itype items
