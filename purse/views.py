@@ -641,18 +641,47 @@ def search_result_history(user_id, num, d1, d2, comment):
     result = result.filter(pdate__gte=d1, pdate__lte=d2)
     if comment:
         result = result.filter(comment__icontains=comment)
-    return result.order_by('-pdate', '-modified')
+    return parse_result(result.order_by('-pdate', '-modified'), num)
+
+# PARSE SEARCH RESULT
+def parse_result(res, num):
+    result = []
+    for r in res:
+        field = {}
+        field['id'] = r.id
+        field['pdate'] = r.pdate
+        field['field2'] = r.value
+        field['field5'] = r.comment
+        field['field3'] = r.value
+        if num == 0:
+            field['url'] = 'pay'
+            field['field1'] = r.invoice.name
+            field['code'] = r.invoice.valuta.code
+            field['field4'] = r.itype.name
+        elif num == 1:
+            field['url'] = 'transfer'
+            field['field1'] = r.ifrom.name
+            field['code'] = r.ifrom.valuta.code
+            field['field4'] = r.ito.name
+            field['field3'] = -r.value
+        else:
+            field['url'] = 'dept'
+            field['field1'] = r.invoice.name
+            field['code'] = r.invoice.valuta.code
+            field['field4'] = r.taker
+        result.append(field)
+    return result
 
 # HISTORY UPDATE PAGE
 @login_required
 def history_update(request, vtemplate):
-    status = False
+    # status = False
     if request.method == 'POST':
         try:
             date_start = datetime.datetime.strptime(request.POST['date_start'], "%d.%m.%Y").date()
             date_end = datetime.datetime.strptime(request.POST['date_end'], "%d.%m.%Y").date()
             category = int(request.POST['category'])
-            search_result_history(request.user, category, date_start, date_end, request.POST['comment'])
+            result = search_result_history(request.user, category, date_start, date_end, request.POST['comment'])
         except IndexError:
             pass
-    return TemplateResponse(request, vtemplate, {})
+    return TemplateResponse(request, vtemplate, { 'result': result})

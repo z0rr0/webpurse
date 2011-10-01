@@ -1,0 +1,44 @@
+{% load jtags %}
+
+{% if result %}
+    <table border="0" align="center" class="pay_last">
+       <!--  <tr>
+            <th>Счет</th>
+            <th>Сумма</th>
+            <th>Получатель/Кредитор</th>
+            <th>Направление</th>
+            <th>Примечание</th>
+            <th>edit</th>
+        </tr> -->
+        {% for res in result %}
+            {% ifchanged %}
+                <tr>
+                    <th colspan="6" class="pay_last_date">
+                        <span ><em>{{ res.pdate|date:"d.m.Y" }}</em></span>
+                    </th>
+                </tr>
+            {% endifchanged %}
+        <tr>
+            <td>{{ res.field1 }}</td>
+            <td class="pay_last_add">
+                {{ res.field2|rusnum }}
+                <span class="smallsym">{{ res.code }}</span>
+            </td>
+            <td>{{ res.field3|arrow|safe }}</td>
+            <td>{{ res.field4 }}</td>
+            <td valign="top"><em><pre>{{ res.field5 }}</pre></em></td>
+            <td>
+                <span class="dellink" onMouseOver="up_view(this)" onMouseOut="down_view(this)">
+                    <a href="/{{ res.url }}/edit/{{ res.id }}"><img src="{{ MEDIA_URL }}img/edit.png" alt="правка"></a>
+                </span>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+
+
+
+{% else %}
+    <em>Данные на найдены.</em>
+{% endif %}
