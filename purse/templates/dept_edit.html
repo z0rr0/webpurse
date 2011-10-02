@@ -7,6 +7,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
     $('#id_pdate').datepicker();
+     $('input[type*="checkbox"]').css('width', '15px');
     $('#editform').submit(function () {
         prefix = '#id_value';
         val = val_validate(prefix);
