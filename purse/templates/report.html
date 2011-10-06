@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}
+    Статистика платежей
+{% endblock title %}
+
+{% block pagejs %}
+{% endblock %}
+
+{% block content %}
+<h1>Статистика платежей. Отчеты и графики.</h1><br>
+
+{% load googlecharts %}
+{# container #}
+<div id="out"></div>
+{% googlecharts %}
+    {# named data and options can be reused #}
+    {% data values "out_data" %}
+        {% col "string" "Name" %}"{{ val }}"{% endcol %}
+        {% col "number" "Value2" %}{{ val }}{% endcol %}
+    {% enddata %}
+    {# you can also use global javascript variables here, #}
+    {# and call functions #}
+    {% options "out_options" %}
+        kind: "LineChart",
+        options: {
+            backgroundColor: "#ffffff",
+            colors: ["#ff0000"],
+            gredlineColor: "#ddd",
+            chartArea: {left: 45, top: 25, width: 300, height: 220},
+            width: 420,
+            height: 270
+        }
+    {% endoptions %}
+    {# chart is assembled from container, data and options #}
+    {% graph "out" "out_data" "out_options" %}
+{% endgooglecharts %}
+{% endblock %}
+

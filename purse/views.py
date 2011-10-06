@@ -26,7 +26,9 @@ from webpurse.purse.models import *
 from webpurse.purse.forms import *
 from webpurse.settings import BANK_FILE
 
-from dateutil.relativedelta import *
+from dateutil.relativedelta import relativedelta
+# from googlecharts import time_series
+from qsstats import QuerySetStats
 import datetime
 import logging
 
@@ -687,3 +689,10 @@ def history_update(request, vtemplate):
         except IndexError:
             pass
     return TemplateResponse(request, vtemplate, { 'result': result})
+
+# REPORT PAGE
+@login_required
+def report(request, vtemplate):
+    values = [['foo', 32], ['bar', 64], ['baz', 96]]
+    # return TemplateResponse(request, vtemplate, {'values': values})
+    return render_to_response('report.html', {'values': values}, context_instance=RequestContext(request))

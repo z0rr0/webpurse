@@ -102,6 +102,9 @@ urlpatterns = patterns('',
     # history result search
     (r'^history/update/$' , pv.history_update, {
         'vtemplate': 'history_update.html'}),
+    # main report page
+    (r'^report/$' , pv.report, {
+        'vtemplate': 'report.html'}),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

@@ -149,8 +149,10 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
     'django.contrib.flatpages',
+    'googlecharts',
     'webpurse.purse',
 )
+GOOGLECHARTS_API = '1.1'
 
 if DEBUG:
     MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
