@@ -26,6 +26,7 @@ from webpurse.purse.models import *
 from webpurse.purse.forms import *
 from webpurse.settings import BANK_FILE
 
+from dateutil.relativedelta import *
 import datetime
 import logging
 
@@ -624,7 +625,8 @@ def dept_edit(request, id, vtemplate):
 @login_required
 def history(request, vtemplate):
     date2 = datetime.datetime.now().date()
-    date1 = date2 - datetime.timedelta(days=30)
+    date1 = date2 + relativedelta(months=-1)
+    # date1 = date2 - datetime.timedelta(days=30)
     return TemplateResponse(request, vtemplate, {'pdate': {'start': date1, 'end': date2}})
 
 # ALL HISTORY VIEW, num 0-2
