@@ -690,6 +690,12 @@ def history_update(request, vtemplate):
             pass
     return TemplateResponse(request, vtemplate, { 'result': result})
 
+def group_kurs(pay_dict):
+    alls = 0
+    for s in pay_dict:
+        alls += s['invoice__valuta__kurs'] * s['sdept']
+    return int(round(alls))
+
 def report_month(user_id, m, other=False):
     y = datetime.datetime.now().year
     now = datetime.datetime(y, m, 1)
@@ -698,12 +704,13 @@ def report_month(user_id, m, other=False):
     # result
     result = Pay.objects.filter(invoice__user=user_id, invoice__other=other)
     result = result.filter(pdate__gt=start, pdate__lt=end)
+    result = result.values('invoice__valuta__kurs').annotate(sdept=Sum('value'))
     # result
-    result1 = result.filter(value__gt=0).aggregate(Sum('value'))
-    result2 = result.filter(value__lt=0).aggregate(Sum('value'))
-    result1 = round(result1['value__sum'] or 0)
-    result2 = abs(round(result2['value__sum'] or 0))
-    return now, int(result1), int(result2), int(result1) - int(result2)
+    result1 = result.filter(value__gt=0)
+    result2 = result.filter(value__lt=0)
+    result1 = group_kurs(result1)
+    result2 = abs(group_kurs(result2))
+    return now, result1, result2, result1 - result2
 
 # REPORT PAGE
 @login_required
