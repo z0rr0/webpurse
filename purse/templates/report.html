@@ -8,31 +8,39 @@
 
 {% block content %}
 <h1>Статистика платежей. Отчеты и графики.</h1><br>
+<h3>Мои счета</h3>
+<div id="my_invoice"></div>
+<h3>Чужие счета</h3>
+<div id="other_invoice"></div>
 
 {% load googlecharts %}
-{# container #}
-<div id="out"></div>
 {% googlecharts %}
-    {# named data and options can be reused #}
-    {% data values.total.0 "out_data" %}
-        {% col "string" "Date" %}"{{ val|date:"M j" }}"{% endcol %}
-        {% col "number" "Value2" %}{{ val }}{% endcol %}
+    {% data values.my "my_data" %}
+        {% col "string" "Date" %}"{{ val|date:"b" }}"{% endcol %}
+        {% col "number" "Доход" %}{{ val }}{% endcol %}
+        {% col "number" "Расход" %}{{ val }}{% endcol %}
+        {% col "number" "Баланс" %}{{ val }}{% endcol %}
     {% enddata %}
-    {# you can also use global javascript variables here, #}
-    {# and call functions #}
+    {% data values.other "ot_data" %}
+        {% col "string" "Date" %}"{{ val|date:"b" }}"{% endcol %}
+        {% col "number" "Доход" %}{{ val }}{% endcol %}
+        {% col "number" "Расход" %}{{ val }}{% endcol %}
+        {% col "number" "Баланс" %}{{ val }}{% endcol %}
+    {% enddata %}
     {% options "out_options" %}
-        kind: "LineChart",
+        kind: "ColumnChart",
         options: {
             backgroundColor: "#7e898c",
             //colors: ["#ff0000"],
             //gredlineColor: "#ddd",
-            chartArea: {left: 45, top: 35, width: 300, height: 220},
-            width: 420,
+            chartArea: {left: 45, top: 35, width: 580, height: 220},
+            width: 720,
             height: 290
         }
     {% endoptions %}
     {# chart is assembled from container, data and options #}
-    {% graph "out" "out_data" "out_options" %}
+    {% graph "my_invoice" "my_data" "out_options" %}
+    {% graph "other_invoice" "ot_data" "out_options" %}
 {% endgooglecharts %}
 {% endblock %}
 

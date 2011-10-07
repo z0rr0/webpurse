@@ -690,15 +690,27 @@ def history_update(request, vtemplate):
             pass
     return TemplateResponse(request, vtemplate, { 'result': result})
 
+def report_month(user_id, m, other=False):
+    y = datetime.datetime.now().year
+    now = datetime.datetime(y, m, 1)
+    end = now + relativedelta(months=+1)
+    start = now - datetime.timedelta(days=1)
+    # result
+    result = Pay.objects.filter(invoice__user=user_id, invoice__other=other)
+    result = result.filter(pdate__gt=start, pdate__lt=end)
+    # result
+    result1 = result.filter(value__gt=0).aggregate(Sum('value'))
+    result2 = result.filter(value__lt=0).aggregate(Sum('value'))
+    result1 = round(result1['value__sum'] or 0)
+    result2 = abs(round(result2['value__sum'] or 0))
+    return now, int(result1), int(result2), int(result1) - int(result2)
+
 # REPORT PAGE
 @login_required
 def report(request, vtemplate):
-    values = {'mon': [], 'total': []}
+    values = {'my': [], 'other': []}
     queryset = Pay.objects.all()
-    y = 2011
-    for m in range(9, 10):
-        start = datetime.datetime(y, m, 1)
-        end = start + relativedelta(months=+1)
-        values['mon'].append(time_series(queryset, 'modified', [start, end]))
-        values['total'].append(time_series(queryset, 'modified', [start, end], func=Sum('value')))
+    for m in range(1, 13):
+        values['my'].append(report_month(request.user, m))
+        values['other'].append(report_month(request.user, m, True))
     return TemplateResponse(request, vtemplate, {'values': values})
