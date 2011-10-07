@@ -14,8 +14,8 @@
 <div id="out"></div>
 {% googlecharts %}
     {# named data and options can be reused #}
-    {% data values "out_data" %}
-        {% col "string" "Name" %}"{{ val }}"{% endcol %}
+    {% data values.total.0 "out_data" %}
+        {% col "string" "Date" %}"{{ val|date:"M j" }}"{% endcol %}
         {% col "number" "Value2" %}{{ val }}{% endcol %}
     {% enddata %}
     {# you can also use global javascript variables here, #}
@@ -23,9 +23,9 @@
     {% options "out_options" %}
         kind: "LineChart",
         options: {
-            backgroundColor: "#ffffff",
-            colors: ["#ff0000"],
-            gredlineColor: "#ddd",
+            backgroundColor: "#7e898c",
+            //colors: ["#ff0000"],
+            //gredlineColor: "#ddd",
             chartArea: {left: 45, top: 35, width: 300, height: 220},
             width: 420,
             height: 290
