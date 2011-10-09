@@ -690,7 +690,8 @@ def history_update(request, vtemplate):
             pass
     return TemplateResponse(request, vtemplate, { 'result': result})
 
-def group_kurs(pay_dict):
+# CALC RUB VALUTA KURS
+def group_valuta_kurs(pay_dict):
     alls = 0
     for s in pay_dict:
         alls += s['invoice__valuta__kurs'] * s['sdept']
@@ -708,9 +709,23 @@ def report_month(user_id, m, other=False):
     # result
     result1 = result.filter(value__gt=0)
     result2 = result.filter(value__lt=0)
-    result1 = group_kurs(result1)
-    result2 = abs(group_kurs(result2))
+    result1 = group_valuta_kurs(result1)
+    result2 = abs(group_valuta_kurs(result2))
     return now, result1, result2, result1 - result2
+
+def user_date_interval(user_id, pays):
+    pdate1, pdate2 = pays.order_by('pdate')[0], pays.order_by('-pdate')[0]
+    result = date_interval_year(pdate1, pdate2)
+    return result
+
+def date_interval_year(start, end):
+    result = []
+    cur_year = start.year
+    while cur_year <= end.year:
+        start_year = datetime.date(cur_year, 1, 1)
+        result.append(start_year)
+        cur_year += 1
+    return result
 
 # REPORT PAGE
 @login_required
@@ -720,5 +735,5 @@ def report(request, vtemplate):
     # for m in range(1, 13):
     #     values['my'].append(report_month(request.user, m))
     #     values['other'].append(report_month(request.user, m, True))
-    
+
     return TemplateResponse(request, vtemplate, {'values': values})
