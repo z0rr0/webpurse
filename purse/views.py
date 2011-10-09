@@ -716,8 +716,9 @@ def report_month(user_id, m, other=False):
 @login_required
 def report(request, vtemplate):
     values = {'my': [], 'other': []}
-    queryset = Pay.objects.all()
-    for m in range(1, 13):
-        values['my'].append(report_month(request.user, m))
-        values['other'].append(report_month(request.user, m, True))
+    # queryset = Pay.objects.all()
+    # for m in range(1, 13):
+    #     values['my'].append(report_month(request.user, m))
+    #     values['other'].append(report_month(request.user, m, True))
+    
     return TemplateResponse(request, vtemplate, {'values': values})

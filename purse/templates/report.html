@@ -7,41 +7,42 @@
 {% endblock %}
 
 {% block content %}
-<h1>Статистика платежей. Отчеты и графики.</h1><br>
-<h3>Мои счета</h3>
-<div id="my_invoice"></div>
-<h3>Чужие счета</h3>
-<div id="other_invoice"></div>
-
-{% block addmeta %}{% load googlecharts %}{% endblock %}
-
-{% googlecharts %}
-    {% data values.my "my_data" %}
-        {% col "string" "Date" %}"{{ val|date:"b" }}"{% endcol %}
-        {% col "number" "Доход" %}{{ val }}{% endcol %}
-        {% col "number" "Расход" %}{{ val }}{% endcol %}
-        {% col "number" "Баланс" %}{{ val }}{% endcol %}
-    {% enddata %}
-    {% data values.other "ot_data" %}
-        {% col "string" "Date" %}"{{ val|date:"b" }}"{% endcol %}
-        {% col "number" "Доход" %}{{ val }}{% endcol %}
-        {% col "number" "Расход" %}{{ val }}{% endcol %}
-        {% col "number" "Баланс" %}{{ val }}{% endcol %}
-    {% enddata %}
-    {% options "out_options" %}
-        kind: "ColumnChart",
-        options: {
-            backgroundColor: "#7e898c",
-            //colors: ["#ff0000"],
-            //gredlineColor: "#ddd",
-            chartArea: {left: 50, top: 35, width: 560, height: 220},
-            width: 720,
-            height: 290
-        }
-    {% endoptions %}
-    {# chart is assembled from container, data and options #}
-    {% graph "my_invoice" "my_data" "out_options" %}
-    {% graph "other_invoice" "ot_data" "out_options" %}
-{% endgooglecharts %}
+<h1>Статистика платежей. Отчеты и графики.</h1>
+<form method="POST" id="editform" action="javascript:newfunc()" class="formhist">
+    <fieldset>
+        <legend>Параметры</legend>
+        <table cellpadding="8" >
+            <tr>
+                <th>Период</th>
+                <th>Счета</th>
+                <th>Типы</th>
+                <th>Дополнительно</th>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <span>диапозон</span>
+                        <em>ТУТ</em>
+                    </div><br>
+                    <div>
+                        <span>значение</span>
+                         <em>ТУТ</em>
+                    </div>
+                </td>
+                <td>
+                     <em>ТУТ</em>
+                </td>
+                <td>
+                     <em>ТУТ</em>
+                </td>
+                <td>
+                    содержит в примечании:<br><br>
+                    <input type="text" id="doptext" style="width: 200px;">
+                </td>
+            </tr>
+        </table>
+        <br> <input type="submit" value="отчет" />
+    </fieldset>
+</form>
 {% endblock %}
 
