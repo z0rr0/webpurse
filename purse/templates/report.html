@@ -13,7 +13,8 @@
 <h3>Чужие счета</h3>
 <div id="other_invoice"></div>
 
-{% load googlecharts %}
+{% block addmeta %}{% load googlecharts %}{% endblock %}
+
 {% googlecharts %}
     {% data values.my "my_data" %}
         {% col "string" "Date" %}"{{ val|date:"b" }}"{% endcol %}

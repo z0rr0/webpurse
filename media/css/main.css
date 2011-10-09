@@ -86,17 +86,17 @@ a:hover {
 }
 #loginpage21 {
     float: left;
-    /*border: 2px solid black;*/
+    /*border: 1px solid black;*/
     width: 25%;
     min-height: 30px;
     color: #8b98ab;
 }
 #loginpage22 {
     float: left;
-    width: 50%;
+    width: 60%;
     /*text-align:justify;*/
     text-align: center;
-    /*border: 2px solid black;*/
+    /*border: 1px solid black;*/
     min-height: 30px;
 }
 #loginpage22 ul {
@@ -111,7 +111,7 @@ a:hover {
     padding: 0px;
 }
 #loginpage23 {
-    margin-left: 76%;
+    margin-left: 86%;
     text-align: right;
     /*border: 2px solid black;*/
     min-height: 30px;
