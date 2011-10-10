@@ -4,6 +4,12 @@
 {% endblock title %}
 
 {% block pagejs %}
+<script type="text/javascript">
+$(document).ready(function() {
+    ch_diapazone();
+    $( "#rep_diapazone" ).change(ch_diapazone);
+});
+</script>
 {% endblock %}
 
 {% block content %}
@@ -22,15 +28,15 @@
                 <td>
                     <div>
                         <span>диапозон</span>
-                        <select>
-                            <option>Год</option>
-                            <option>Месяц</option>
-                            <option>Неделя</option>
+                        <select id="rep_diapazone">
+                            <option value="y">Год</option>
+                            <option value="m" selected="selected">Месяц</option>
+                            <option value="w">Неделя</option>
                         </select>
                     </div><br>
                     <div>
                         <span>значение</span>
-                         <em>ТУТ</em>
+                         <span id="rep_diapvalue"></span>
                     </div>
                 </td>
                 <td>

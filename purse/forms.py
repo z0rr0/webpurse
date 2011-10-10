@@ -64,3 +64,6 @@ class DeptForm(forms.ModelForm):
     class Meta:
         model = models.Dept
         fields = ('invoice', 'taker', 'value', 'comment', 'pdate')
+
+class ChdiapazoneForm(forms.Form):
+    diapvalue = forms.ChoiceField(label='', widget=forms.Select(attrs={'id': 'diapvalue'}))

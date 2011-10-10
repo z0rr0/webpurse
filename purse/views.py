@@ -713,18 +713,33 @@ def report_month(user_id, m, other=False):
     result2 = abs(group_valuta_kurs(result2))
     return now, result1, result2, result1 - result2
 
-def user_date_interval(user_id, pays):
+def user_date_interval(pays, val_time):
     pdate1, pdate2 = pays.order_by('pdate')[0], pays.order_by('-pdate')[0]
-    result = date_interval_year(pdate1, pdate2)
+    date_func = {'y': date_interval_year, 'm': date_interval_month}
+    result = date_func[val_time](pdate1.pdate, pdate2.pdate, pays)
     return result
 
-def date_interval_year(start, end):
+def date_interval_year(start, end, pays):
     result = []
     cur_year = start.year
     while cur_year <= end.year:
         start_year = datetime.date(cur_year, 1, 1)
-        result.append(start_year)
+        result.append([start_year, cur_year])
         cur_year += 1
+    return result
+def date_interval_month(start, end, pays):
+    year_list = date_interval_year(start, end, pays)
+    result = []
+    for key, val in year_list:
+        pay_years = pays.filter(pdate__year=val)
+        current = pay_years.order_by('pdate')[0].pdate.month
+        ml = []
+        while current <= pay_years.order_by('-pdate')[0].pdate.month:
+            start_month = datetime.date(val, current, 1)
+            ml.append([start_month, start_month.strftime('%B')])
+            current += 1
+        new_row = (val, ml)
+        result.append(new_row)
     return result
 
 # REPORT PAGE
@@ -737,3 +752,18 @@ def report(request, vtemplate):
     #     values['other'].append(report_month(request.user, m, True))
 
     return TemplateResponse(request, vtemplate, {'values': values})
+
+# CHANGE REPORT DIAPAZONE
+def report_diapazone(request, vtemplate):
+    value = None
+    # try:
+    if request.method == 'GET':
+        val_time = request.GET['val']
+        # val_time = 'y'
+        pays = Pay.objects.filter(invoice__user=request.user)
+        value = user_date_interval(pays, val_time)
+    # except:
+    #     raise Http404
+    form = ChdiapazoneForm()
+    form.fields['diapvalue'].choices = value
+    return direct_to_template(request, vtemplate, {'form': form})

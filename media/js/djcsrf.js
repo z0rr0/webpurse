@@ -359,7 +359,7 @@ function update_trans(num, exval, defid) {
         url: '/transfer/update/',
         type: 'POST',
         data: {
-            val : $('#trans_' + exval) .val(),
+            val : $('#trans_' + exval).val(),
             form_id : num,
             eventid: exval,
             defaulid: defid
@@ -404,4 +404,23 @@ function histsearch() {
         });
     }
     else alert("Пожалуйста проверьте введенные даты");
+}
+// change report diapazone
+function ch_diapazone() {
+    $.ajax({
+        url: '/report/diapazone/',
+        type: 'GET',
+        data: {
+            val : $( "#rep_diapazone" ).val(),
+        },
+        dataType: 'html',
+        context: document.body,
+        async: true,
+        success: function (data) {
+            $('#rep_diapvalue').html(data);
+        },
+        error: function () {
+            alert('sorry, error'); 
+        },
+    });
 }
