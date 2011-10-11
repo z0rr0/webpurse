@@ -754,11 +754,13 @@ def date_interval_week(start, end, pays):
     result = []
     for year, month in months:
         for key, name in month:
-            # k = datetime.datetime.strptime(key, "%Y-%m-%d").date()
             ml = []
             current = search_monday(key)
-            while current.month <= key.month:
+            while current.month <= key.month and current <= end:
                 current2 = current + datetime.timedelta(days=+7)
+                if current2 < start: 
+                    current = current2
+                    continue
                 ml.append([current, "%s - %s" % (current.strftime('%d'), current2.strftime('%d'))])
                 current = current2
             val = "%s %s" % (key.strftime('%B'), "'" + str(year - 2000))
