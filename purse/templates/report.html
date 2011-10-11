@@ -8,6 +8,7 @@
 $(document).ready(function() {
     ch_diapazone();
     $( "#rep_diapazone" ).change(ch_diapazone);
+    $("#rep_diapvalue").css('width', '110px');
 });
 </script>
 {% endblock %}
@@ -17,12 +18,11 @@ $(document).ready(function() {
 <form method="POST" id="editform" action="javascript:newfunc()" class="formhist">
     <fieldset>
         <legend>Параметры</legend>
-        <table cellpadding="8" >
+        <table cellpadding="8" border="0">
             <tr>
                 <th>Период</th>
-                <th>Счета</th>
-                <th>Типы</th>
-                <th>Дополнительно</th>
+                <th colspan="2">Счета</th>
+                <th colspan="2">Типы</th>
             </tr>
             <tr>
                 <td>
@@ -30,24 +30,42 @@ $(document).ready(function() {
                         <span>диапозон</span>
                         <select id="rep_diapazone">
                             <option value="y">Год</option>
-                            <option value="m" selected="selected">Месяц</option>
+                            <option value="m">Месяц</option>
                             <option value="w">Неделя</option>
                         </select>
                     </div><br>
                     <div>
                         <span>значение</span>
-                         <span id="rep_diapvalue"></span>
+                        <span id="rep_diapvalue"></span>
                     </div>
                 </td>
                 <td>
-                     <em>ТУТ</em>
+                    {% for c in inv_cols.0 %}
+                        <input id="invoice0{{ forloop.counter }}" type="checkbox" value="{{ c.id }}" checked="checked">
+                        {{ c.name }}<br>
+                    {% endfor %}
+                    <input type="hidden" id="cinvoice0" value="{{ inv_cols.0.count }}">
                 </td>
                 <td>
-                     <em>ТУТ</em>
+                    {% for c in inv_cols.1 %}
+                        <input id="invoice1{{ forloop.counter }}" type="checkbox" value="{{ c.id }}">
+                        {{ c.name }}<br> 
+                    {% endfor %}
+                    <input type="hidden" id="cinvoice1" value="{{ inv_cols.1.count }}">
                 </td>
                 <td>
-                    содержит в примечании:<br><br>
-                    <input type="text" id="doptext" style="width: 200px;">
+                    {% for c in itype_cols.0 %}
+                        <input id="itype0{{ forloop.counter }}" type="checkbox" value="{{ c.id }}" checked="checked">
+                        {{ c.name }}<br>
+                    {% endfor %}
+                    <input type="hidden" id="citype0" value="{{ itype_cols.0.count }}">
+                </td>
+                <td>
+                    {% for c in inv_cols.1 %}
+                        <input id="itype0{{ forloop.counter }}" type="checkbox" value="{{ c.id }}" checked="checked">
+                        {{ c.name }}<br> 
+                    {% endfor %}
+                    <input type="hidden" id="citype1" value="{{ itype_cols.1.count }}">
                 </td>
             </tr>
         </table>

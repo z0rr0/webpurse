@@ -32,7 +32,7 @@ from qsstats import QuerySetStats
 import datetime
 import logging
 
-LAST_PAYS = 20
+LAST_PAYS = 15
 CORRECT_PAY_NAME = u'Корректировка'
 logger = logging.getLogger(__name__)
 
@@ -715,7 +715,9 @@ def report_month(user_id, m, other=False):
 
 def user_date_interval(pays, val_time):
     pdate1, pdate2 = pays.order_by('pdate')[0], pays.order_by('-pdate')[0]
-    date_func = {'y': date_interval_year, 'm': date_interval_month}
+    date_func = {'y': date_interval_year, 
+        'm': date_interval_month,
+        'w': date_interval_week}
     result = date_func[val_time](pdate1.pdate, pdate2.pdate, pays)
     return result
 
@@ -741,17 +743,55 @@ def date_interval_month(start, end, pays):
         new_row = (val, ml)
         result.append(new_row)
     return result
+def search_monday(pdate):
+    startw = pdate
+    while startw.weekday() != 0:
+        startw = startw - datetime.timedelta(days=-1)
+    return startw
+def date_interval_week(start, end, pays):
+    startw = search_monday(start)
+    months = date_interval_month(startw, end, pays)
+    result = []
+    for year, month in months:
+        for key, name in month:
+            # k = datetime.datetime.strptime(key, "%Y-%m-%d").date()
+            ml = []
+            current = search_monday(key)
+            while current.month <= key.month:
+                current2 = current + datetime.timedelta(days=+7)
+                ml.append([current, "%s - %s" % (current.strftime('%d'), current2.strftime('%d'))])
+                current = current2
+            val = "%s %s" % (key.strftime('%B'), "'" + str(year - 2000))
+            new_row = (val, ml)
+            result.append(new_row)
+    return result
+
+
+    year_list = date_interval_year(startw, end, pays)
+    result = []
+    for key, val in year_list:
+        pay_years = pays.filter(pdate__year=val)
+        current = pay_years.order_by('pdate')[0].pdate.month
+        ml = []
+        while current <= pay_years.order_by('-pdate')[0].pdate.month:
+            start_month = datetime.date(val, current, 1)
+            ml.append([start_month, start_month.strftime('%B')])
+            current += 1
+        new_row = (val, ml)
+        result.append(new_row)
+    return result
+
 
 # REPORT PAGE
 @login_required
 def report(request, vtemplate):
-    values = {'my': [], 'other': []}
-    # queryset = Pay.objects.all()
-    # for m in range(1, 13):
-    #     values['my'].append(report_month(request.user, m))
-    #     values['other'].append(report_month(request.user, m, True))
-
-    return TemplateResponse(request, vtemplate, {'values': values})
+    values = {}
+    user_invoices = Invoice.objects.filter(user=request.user)
+    col1, col2 = user_invoices.filter(other=False), user_invoices.filter(other=True)
+    user_itype = Itype.aobjects.filter(user=request.user)
+    type1, type2 = user_itype.filter(sign=False), user_itype.filter(sign=True)
+    return TemplateResponse(request, vtemplate, {'values': values, 
+        'inv_cols': (col1, col2), 'itype_cols': (type1, type2)})
 
 # CHANGE REPORT DIAPAZONE
 def report_diapazone(request, vtemplate):
