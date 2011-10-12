@@ -841,5 +841,5 @@ def report_generate(request, vtemplate):
             raise Http404
     # except:
     #     raise Http404
-    # result = {'gr': [['r1', 3, 4, 5], ['r2', 6, 7, 10]]}
+    result = [(datetime.datetime(2011, 1, 1, 0, 0), 1, 3, 5), (datetime.datetime(2011, 2, 1, 0, 0), 2, 3, 4)] 
     return direct_to_template(request, vtemplate, {'result': result })
