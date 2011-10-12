@@ -15,7 +15,8 @@ $(document).ready(function() {
 
 {% block content %}
 <h1>Статистика платежей. Отчеты и графики.</h1>
-<form method="POST" id="editform" action="javascript:creport()" class="formhist">
+{{ result }}
+<form method="POST" id="editform" action="" class="formhist">{% csrf_token %}
     <fieldset>
         <legend>Параметры</legend>
         <table cellpadding="8" border="0">
@@ -28,7 +29,7 @@ $(document).ready(function() {
                 <td>
                     <div>
                         <span>диапазон</span>
-                        <select id="rep_diapazone">
+                        <select id="rep_diapazone" name="rep_diapazone">
                             <option value="y" {% if 'y' == values.defdiap %} selected="selected" {% endif %}>Год</option>
                             <option value="m"{% if 'm' == values.defdiap %} selected="selected" {% endif %}>Месяц</option>
                             <option value="w"{% if 'w' == values.defdiap %} selected="selected" {% endif %}>Неделя</option>
@@ -42,7 +43,7 @@ $(document).ready(function() {
                 </td>
                 <td>
                     {% for c in inv_cols.0 %}
-                        <input id="invoice0{{ forloop.counter }}" 
+                        <input id="invoice0{{ forloop.counter }}" name="invoice0{{ forloop.counter }}" 
                             type="checkbox" value="{{ c.id }}" 
                             {% if c.id in values.definvoices %} checked="checked" {% endif %}>
                         {{ c.name }}<br>
@@ -52,6 +53,7 @@ $(document).ready(function() {
                 <td>
                     {% for c in inv_cols.1 %}
                         <input id="invoice1{{ forloop.counter }}" type="checkbox" value="{{ c.id }}"
+                        name="invoice1{{ forloop.counter }}" 
                         {% if c.id in values.definvoices %} checked="checked" {% endif %}>
                         {{ c.name }}<br> 
                     {% endfor %}
@@ -60,6 +62,7 @@ $(document).ready(function() {
                 <td>
                     {% for c in itype_cols.0 %}
                         <input id="itype0{{ forloop.counter }}" type="checkbox" value="{{ c.id }}" 
+                        name="itype0{{ forloop.counter }}" 
                         {% if c.id in values.defitype %} checked="checked" {% endif %}>
                         {{ c.name }}<br>
                     {% endfor %}
@@ -68,6 +71,7 @@ $(document).ready(function() {
                 <td>
                     {% for c in itype_cols.1 %}
                         <input id="itype1{{ forloop.counter }}" type="checkbox" value="{{ c.id }}" 
+                        name="itype1{{ forloop.counter }}" 
                         {% if c.id in values.defitype %} checked="checked" {% endif %}>
                         {{ c.name }}<br> 
                     {% endfor %}

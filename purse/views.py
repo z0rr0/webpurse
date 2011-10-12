@@ -748,6 +748,8 @@ def date_interval_week(start, end, pays):
 # REPORT PAGE
 @login_required
 def report(request, vtemplate):
+    c = {}
+    c.update(csrf(request))
     user_invoices = Invoice.objects.filter(user=request.user)
     col1, col2 = user_invoices.filter(other=False), user_invoices.filter(other=True)
     user_itype = Itype.aobjects.filter(user=request.user)
@@ -756,7 +758,11 @@ def report(request, vtemplate):
         'defitype': [x['id'] for x in type1.values('id')] + [x['id'] for x in type2.values('id')],
         'defdiap': 'm',
         'defval': '2011-10-01'}
-    return TemplateResponse(request, vtemplate, {'values': values, 
+    rr = '123'
+    if request.method == 'POST':
+        rr = request.POST
+
+    return TemplateResponse(request, vtemplate, {'values': values, 'result': rr,
         'inv_cols': (col1, col2), 'itype_cols': (type1, type2)})
 
 # CHANGE REPORT DIAPAZONE
