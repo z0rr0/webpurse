@@ -748,11 +748,14 @@ def date_interval_week(start, end, pays):
 # REPORT PAGE
 @login_required
 def report(request, vtemplate):
-    values = {}
     user_invoices = Invoice.objects.filter(user=request.user)
     col1, col2 = user_invoices.filter(other=False), user_invoices.filter(other=True)
     user_itype = Itype.aobjects.filter(user=request.user)
     type1, type2 = user_itype.filter(sign=False), user_itype.filter(sign=True)
+    values = {'definvoices': [x['id'] for x in col1.values('id')], 
+        'defitype': [x['id'] for x in type1.values('id')] + [x['id'] for x in type2.values('id')],
+        'defdiap': 'm',
+        'defval': '2011-10-01'}
     return TemplateResponse(request, vtemplate, {'values': values, 
         'inv_cols': (col1, col2), 'itype_cols': (type1, type2)})
 
@@ -760,15 +763,18 @@ def report(request, vtemplate):
 @login_required
 def report_diapazone(request, vtemplate):
     value = None
+    defval = 0
     try:
         if request.method == 'GET':
             val_time = request.GET['val']
             pays = Pay.objects.filter(invoice__user=request.user)
             value = user_date_interval(pays, val_time)
+            defval = request.GET['defval']
     except:
         raise Http404
-    form = ChdiapazoneForm()
+    form = ChdiapazoneForm(initial={'diapvalue': defval})
     form.fields['diapvalue'].choices = value
+
     return direct_to_template(request, vtemplate, {'form': form})
 
 def pdate_range(start, interval):

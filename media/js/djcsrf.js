@@ -412,6 +412,7 @@ function ch_diapazone() {
         type: 'GET',
         data: {
             val : $( "#rep_diapazone" ).val(),
+            defval: $('#defrepval').val()
         },
         dataType: 'html',
         context: document.body,

@@ -29,40 +29,46 @@ $(document).ready(function() {
                     <div>
                         <span>диапазон</span>
                         <select id="rep_diapazone">
-                            <option value="y">Год</option>
-                            <option value="m">Месяц</option>
-                            <option value="w">Неделя</option>
+                            <option value="y" {% if 'y' == values.defdiap %} selected="selected" {% endif %}>Год</option>
+                            <option value="m"{% if 'm' == values.defdiap %} selected="selected" {% endif %}>Месяц</option>
+                            <option value="w"{% if 'w' == values.defdiap %} selected="selected" {% endif %}>Неделя</option>
                         </select>
                     </div><br>
                     <div>
                         <span>значение</span>
                         <span id="rep_diapvalue"></span>
+                        <input type="hidden" id="defrepval" value="{{ values.defval }}">
                     </div>
                 </td>
                 <td>
                     {% for c in inv_cols.0 %}
-                        <input id="invoice0{{ forloop.counter }}" type="checkbox" value="{{ c.id }}" checked="checked">
+                        <input id="invoice0{{ forloop.counter }}" 
+                            type="checkbox" value="{{ c.id }}" 
+                            {% if c.id in values.definvoices %} checked="checked" {% endif %}>
                         {{ c.name }}<br>
                     {% endfor %}
                     <input type="hidden" id="cinvoice0" value="{{ inv_cols.0.count }}">
                 </td>
                 <td>
                     {% for c in inv_cols.1 %}
-                        <input id="invoice1{{ forloop.counter }}" type="checkbox" value="{{ c.id }}">
+                        <input id="invoice1{{ forloop.counter }}" type="checkbox" value="{{ c.id }}"
+                        {% if c.id in values.definvoices %} checked="checked" {% endif %}>
                         {{ c.name }}<br> 
                     {% endfor %}
                     <input type="hidden" id="cinvoice1" value="{{ inv_cols.1.count }}">
                 </td>
                 <td>
                     {% for c in itype_cols.0 %}
-                        <input id="itype0{{ forloop.counter }}" type="checkbox" value="{{ c.id }}" checked="checked">
+                        <input id="itype0{{ forloop.counter }}" type="checkbox" value="{{ c.id }}" 
+                        {% if c.id in values.defitype %} checked="checked" {% endif %}>
                         {{ c.name }}<br>
                     {% endfor %}
                     <input type="hidden" id="citype0" value="{{ itype_cols.0.count }}">
                 </td>
                 <td>
                     {% for c in itype_cols.1 %}
-                        <input id="itype1{{ forloop.counter }}" type="checkbox" value="{{ c.id }}" checked="checked">
+                        <input id="itype1{{ forloop.counter }}" type="checkbox" value="{{ c.id }}" 
+                        {% if c.id in values.defitype %} checked="checked" {% endif %}>
                         {{ c.name }}<br> 
                     {% endfor %}
                     <input type="hidden" id="citype1" value="{{ itype_cols.1.count }}">
