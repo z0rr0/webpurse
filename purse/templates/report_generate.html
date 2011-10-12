@@ -1,0 +1,25 @@
+{{ result }} <br>
+<div id="graphdiv"></div>
+{% load googlecharts %}
+
+
+{% googlecharts %}
+    {% data result "my_data" %}
+        {% col "string" "Date" %}"{{ val }}"{% endcol %}
+        {% col "number" "Доход" %}{{ val }}{% endcol %}
+        {% col "number" "Расход" %}{{ val }}{% endcol %}
+        {% col "number" "Баланс" %}{{ val }}{% endcol %}
+    {% enddata %}
+    {% options "out_options" %}
+        kind: "ColumnChart",
+        options: {
+            backgroundColor: "#7e898c",
+            //colors: ["#ff0000"],
+            //gredlineColor: "#ddd",
+            chartArea: {left: 50, top: 35, width: 560, height: 220},
+            width: 720,
+            height: 290
+        }
+    {% endoptions %}
+    {% graph "graphdiv" "my_data" "out_options" %}
+{% endgooglecharts %}

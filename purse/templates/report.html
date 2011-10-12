@@ -15,7 +15,7 @@ $(document).ready(function() {
 
 {% block content %}
 <h1>Статистика платежей. Отчеты и графики.</h1>
-<form method="POST" id="editform" action="javascript:newfunc()" class="formhist">
+<form method="POST" id="editform" action="javascript:creport()" class="formhist">
     <fieldset>
         <legend>Параметры</legend>
         <table cellpadding="8" border="0">
@@ -61,8 +61,8 @@ $(document).ready(function() {
                     <input type="hidden" id="citype0" value="{{ itype_cols.0.count }}">
                 </td>
                 <td>
-                    {% for c in inv_cols.1 %}
-                        <input id="itype0{{ forloop.counter }}" type="checkbox" value="{{ c.id }}" checked="checked">
+                    {% for c in itype_cols.1 %}
+                        <input id="itype1{{ forloop.counter }}" type="checkbox" value="{{ c.id }}" checked="checked">
                         {{ c.name }}<br> 
                     {% endfor %}
                     <input type="hidden" id="citype1" value="{{ itype_cols.1.count }}">
@@ -72,5 +72,6 @@ $(document).ready(function() {
         <br> <input type="submit" value="отчет" />
     </fieldset>
 </form>
+<div id="genrep"></div>
 {% endblock %}
 

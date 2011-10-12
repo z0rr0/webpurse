@@ -690,29 +690,7 @@ def history_update(request, vtemplate):
             pass
     return TemplateResponse(request, vtemplate, { 'result': result})
 
-# CALC RUB VALUTA KURS
-def group_valuta_kurs(pay_dict):
-    alls = 0
-    for s in pay_dict:
-        alls += s['invoice__valuta__kurs'] * s['sdept']
-    return int(round(alls))
-
-def report_month(user_id, m, other=False):
-    y = datetime.datetime.now().year
-    now = datetime.datetime(y, m, 1)
-    end = now + relativedelta(months=+1)
-    start = now - datetime.timedelta(days=1)
-    # result
-    result = Pay.objects.filter(invoice__user=user_id, invoice__other=other)
-    result = result.filter(pdate__gt=start, pdate__lt=end)
-    result = result.values('invoice__valuta__kurs').annotate(sdept=Sum('value'))
-    # result
-    result1 = result.filter(value__gt=0)
-    result2 = result.filter(value__lt=0)
-    result1 = group_valuta_kurs(result1)
-    result2 = abs(group_valuta_kurs(result2))
-    return now, result1, result2, result1 - result2
-
+# USER INTERVAL FOR CALC DIAPAZONE
 def user_date_interval(pays, val_time):
     pdate1, pdate2 = pays.order_by('pdate')[0], pays.order_by('-pdate')[0]
     date_func = {'y': date_interval_year, 
@@ -720,7 +698,6 @@ def user_date_interval(pays, val_time):
         'w': date_interval_week}
     result = date_func[val_time](pdate1.pdate, pdate2.pdate, pays)
     return result
-
 def date_interval_year(start, end, pays):
     result = []
     cur_year = start.year
@@ -768,22 +745,6 @@ def date_interval_week(start, end, pays):
             result.append(new_row)
     return result
 
-
-    year_list = date_interval_year(startw, end, pays)
-    result = []
-    for key, val in year_list:
-        pay_years = pays.filter(pdate__year=val)
-        current = pay_years.order_by('pdate')[0].pdate.month
-        ml = []
-        while current <= pay_years.order_by('-pdate')[0].pdate.month:
-            start_month = datetime.date(val, current, 1)
-            ml.append([start_month, start_month.strftime('%B')])
-            current += 1
-        new_row = (val, ml)
-        result.append(new_row)
-    return result
-
-
 # REPORT PAGE
 @login_required
 def report(request, vtemplate):
@@ -796,16 +757,89 @@ def report(request, vtemplate):
         'inv_cols': (col1, col2), 'itype_cols': (type1, type2)})
 
 # CHANGE REPORT DIAPAZONE
+@login_required
 def report_diapazone(request, vtemplate):
     value = None
-    # try:
-    if request.method == 'GET':
-        val_time = request.GET['val']
-        # val_time = 'y'
-        pays = Pay.objects.filter(invoice__user=request.user)
-        value = user_date_interval(pays, val_time)
-    # except:
-    #     raise Http404
+    try:
+        if request.method == 'GET':
+            val_time = request.GET['val']
+            pays = Pay.objects.filter(invoice__user=request.user)
+            value = user_date_interval(pays, val_time)
+    except:
+        raise Http404
     form = ChdiapazoneForm()
     form.fields['diapvalue'].choices = value
     return direct_to_template(request, vtemplate, {'form': form})
+
+def pdate_range(start, interval):
+    delta = {'y': relativedelta(years=+1), 
+        'm': relativedelta(months=+1),
+        'w': relativedelta(days=+7)}
+    if interval in 'ymw':
+        end = start + delta[interval] + datetime.timedelta(days=-1)
+    else:
+        return False
+    return start, end
+
+def ger_strkey(current, interval):
+    if interval == 'y':
+        return current.strftime('%b')
+    elif interval == 'm':
+        border = current + datetime.timedelta(days=+2)
+        return "%s-%s" % (current.strftime('%d'), border.strftime('%d'))
+    else:
+        return current.strftime('%d')
+    return None
+
+# CALC RUB VALUTA KURS
+def group_valuta_kurs(pay_dict):
+    alls = 0
+    for s in pay_dict:
+        alls += s['invoice__valuta__kurs'] * s['sdept']
+    return int(round(alls))
+
+def get_pdate_graph(start_end, interval, pays):
+    result = []
+    delta = {'y': relativedelta(months=+1), 
+        'm': relativedelta(days=+3),
+        'w': relativedelta(days=+1)}
+    current = start_end[0]
+    while current <= start_end[1]:
+        strdate = ger_strkey(current, interval)
+        d1 = current
+        d2 = current + delta[interval]
+        psum = pays.filter(pdate__gte=d1, pdate__lt=d2)
+        psum = psum.values('invoice__valuta__kurs').annotate(sdept=Sum('value'))
+        # result
+        result1 = psum.filter(value__gte=0)
+        result2 = psum.filter(value__lt=0)
+        result1 = group_valuta_kurs(result1)
+        result2 = abs(group_valuta_kurs(result2))
+        newrow = strdate, result1, result2, result1 - result2
+        result.append(newrow)
+        current += delta[interval] 
+    return result
+
+
+# GENERATE GRAPH REPORT
+@login_required
+def report_generate(request, vtemplate):
+    result = None
+    # try:
+    if request.method == 'POST':
+        invoices = request.POST['invoice'].strip(',')
+        itypes = request.POST['itype'].strip(',')
+        interval = request.POST['diap0']
+        start = datetime.datetime.strptime(request.POST['diap1'], "%Y-%m-%d").date()
+        pdater = pdate_range(start, interval)
+        if pdater: 
+            result = Pay.objects.filter(invoice__user=request.user, itype__user=request.user,
+                invoice__in=invoices.split(','), itype__in=itypes.split(','),
+                pdate__range=pdater)
+            result = get_pdate_graph(pdater, interval, result)
+        else:
+            raise Http404
+    # except:
+    #     raise Http404
+    # result = {'gr': [['r1', 3, 4, 5], ['r2', 6, 7, 10]]}
+    return direct_to_template(request, vtemplate, {'result': result })

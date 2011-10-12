@@ -424,3 +424,36 @@ function ch_diapazone() {
         },
     });
 }
+function getstr_checbox(name, maxn) {
+    result = new Array();
+    j = 0;
+    for (i = 1; i <= maxn; i++) {
+        if ($(name + i).is(':checked')) result[j++] = $(name + i).val();
+    }
+    return result.join(",");
+}
+// create new report graph
+function creport() {
+    allinv = [getstr_checbox('#invoice0', $('#cinvoice0').val()), getstr_checbox('#invoice1', $('#cinvoice1').val())];
+    alltype = [getstr_checbox('#itype0', $('#citype0').val()), getstr_checbox('#itype1', $('#citype1').val())];
+    $.ajax({
+        url: '/report/generate/',
+        type: 'POST',
+        data: {
+            diap0: $( "#rep_diapazone" ).val(),
+            diap1: $( "#diapvalue" ).val(),
+            invoice: allinv.join(','),
+            itype: alltype.join(',')
+        },
+        dataType: 'html',
+        context: document.body,
+        async: true,
+        success: function (data) {
+            $('#genrep').html(data);
+            // alert('ok');
+        },
+        error: function () {
+            alert('sorry, error'); 
+        },
+    });
+}
