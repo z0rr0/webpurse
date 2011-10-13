@@ -368,7 +368,7 @@ def itype_add(request, vtemplate):
     return direct_to_template(request, vtemplate, {'qstatus': qstatus})
 
 # DELETE ITYPE (STATUS=FALSE)
-@permission_required('purse.chage_itype')
+@permission_required('purse.change_itype')
 @transaction.autocommit
 def itype_del(request, id, vtemplate):
     itype = Itype.objects.filter(id=int(id), user=request.user)
@@ -380,7 +380,7 @@ def itype_del(request, id, vtemplate):
     return direct_to_template(request, vtemplate, {'qstatus': qstatus})
 
 # VIEW ITYPE FOR EDIT FORM
-@permission_required('purse.chage_itype')
+@permission_required('purse.change_itype')
 @transaction.autocommit
 def itype_edit(request, id, vtemplate):
     try:
