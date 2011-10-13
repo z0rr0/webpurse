@@ -15,7 +15,9 @@ $(document).ready(function() {
 
 {% block content %}
 <h1>Статистика платежей. Отчеты и графики.</h1>
-{{ result }}
+{% comment %}
+    POST: {{ result }}
+{% endcomment %}
 <form method="POST" id="editform" action="" class="formhist">{% csrf_token %}
     <fieldset>
         <legend>Параметры</legend>
@@ -43,45 +45,60 @@ $(document).ready(function() {
                 </td>
                 <td>
                     {% for c in inv_cols.0 %}
-                        <input id="invoice0{{ forloop.counter }}" name="invoice0{{ forloop.counter }}" 
+                        <input id="invoice{{ c.id }}" name="invoice" 
                             type="checkbox" value="{{ c.id }}" 
                             {% if c.id in values.definvoices %} checked="checked" {% endif %}>
                         {{ c.name }}<br>
                     {% endfor %}
-                    <input type="hidden" id="cinvoice0" value="{{ inv_cols.0.count }}">
                 </td>
                 <td>
                     {% for c in inv_cols.1 %}
-                        <input id="invoice1{{ forloop.counter }}" type="checkbox" value="{{ c.id }}"
-                        name="invoice1{{ forloop.counter }}" 
+                        <input id="invoice{{ c.id }}" type="checkbox" value="{{ c.id }}"
+                        name="invoice" 
                         {% if c.id in values.definvoices %} checked="checked" {% endif %}>
                         {{ c.name }}<br> 
                     {% endfor %}
-                    <input type="hidden" id="cinvoice1" value="{{ inv_cols.1.count }}">
                 </td>
                 <td>
                     {% for c in itype_cols.0 %}
-                        <input id="itype0{{ forloop.counter }}" type="checkbox" value="{{ c.id }}" 
-                        name="itype0{{ forloop.counter }}" 
+                        <input id="itype{{ c.id }}" type="checkbox" value="{{ c.id }}" 
+                        name="itype" 
                         {% if c.id in values.defitype %} checked="checked" {% endif %}>
                         {{ c.name }}<br>
                     {% endfor %}
-                    <input type="hidden" id="citype0" value="{{ itype_cols.0.count }}">
                 </td>
                 <td>
                     {% for c in itype_cols.1 %}
-                        <input id="itype1{{ forloop.counter }}" type="checkbox" value="{{ c.id }}" 
-                        name="itype1{{ forloop.counter }}" 
+                        <input id="itype{{ c.id }}" type="checkbox" value="{{ c.id }}" 
+                        name="itype" 
                         {% if c.id in values.defitype %} checked="checked" {% endif %}>
                         {{ c.name }}<br> 
                     {% endfor %}
-                    <input type="hidden" id="citype1" value="{{ itype_cols.1.count }}">
                 </td>
             </tr>
         </table>
         <br> <input type="submit" value="отчет" />
     </fieldset>
-</form>
-<div id="genrep"></div>
+</form><br>
+<div id="genrep" style="text-align: center;"></div>
+{% load googlecharts %}
+{% googlecharts %}
+    {% data result "repdata" %}
+        {% col "string" "Время" %}"{{ val }}"{% endcol %}
+        {% col "number" "Доход" %}{{ val }}{% endcol %}
+        {% col "number" "Расход" %}{{ val }}{% endcol %}
+        {% col "number" "Баланс" %}{{ val }}{% endcol %}
+    {% enddata %}
+    {% options "repoptions" %}
+        kind: "ColumnChart",
+        options: {
+            backgroundColor: "#7e898c",
+            chartArea: {left: 65, top: 35, width: 560, height: 220},
+            width: 720,
+            height: 290
+        }
+    {% endoptions %}
+    {% graph "genrep" "repdata" "repoptions" %}
+{% endgooglecharts %}
 {% endblock %}
 

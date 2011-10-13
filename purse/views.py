@@ -754,15 +754,39 @@ def report(request, vtemplate):
     col1, col2 = user_invoices.filter(other=False), user_invoices.filter(other=True)
     user_itype = Itype.aobjects.filter(user=request.user)
     type1, type2 = user_itype.filter(sign=False), user_itype.filter(sign=True)
-    values = {'definvoices': [x['id'] for x in col1.values('id')], 
-        'defitype': [x['id'] for x in type1.values('id')] + [x['id'] for x in type2.values('id')],
-        'defdiap': 'm',
-        'defval': '2011-10-01'}
-    rr = '123'
+    values = {'defdiap': 'y'}
+    result = {}
     if request.method == 'POST':
-        rr = request.POST
-
-    return TemplateResponse(request, vtemplate, {'values': values, 'result': rr,
+        invoices = request.POST.getlist('invoice')
+        itypes = request.POST.getlist('itype')
+        interval = request.POST['rep_diapazone']
+        # default
+        definvoices = [x['id'] for x in Invoice.objects.filter(user=request.user, id__in=invoices).values('id')]
+        defitypes = [x['id'] for x in Itype.objects.filter(user=request.user, id__in=itypes).values('id')]
+        defval = request.POST['diapvalue']
+        defdiap = interval
+    else:
+        defval = Pay.objects.filter(invoice__user=request.user).only('pdate').order_by('pdate')[0]
+        defval = datetime.date(defval.pdate.year,1,1).strftime('%Y-%m-%d')
+        definvoices = [x['id'] for x in col1.values('id')]
+        defitypes = [x['id'] for x in type1.values('id')] + [x['id'] for x in type2.values('id')]
+        defdiap = 'y'
+    values['defval'] = defval
+    values['defdiap'] = defdiap
+    values['defitype'] = defitypes
+    values['definvoices'] = definvoices
+    # create graph
+    start = datetime.datetime.strptime(defval, "%Y-%m-%d").date()
+    pdater = pdate_range(start, defdiap)
+    if pdater: 
+        result = Pay.objects.filter(invoice__user=request.user, itype__user=request.user,
+            invoice__in=definvoices, itype__in=defitypes,
+            pdate__range=pdater)
+        result = get_pdate_graph(pdater, defdiap, result)
+    else:
+        raise Http404
+    # return data
+    return TemplateResponse(request, vtemplate, {'values': values, 'result': result,
         'inv_cols': (col1, col2), 'itype_cols': (type1, type2)})
 
 # CHANGE REPORT DIAPAZONE
