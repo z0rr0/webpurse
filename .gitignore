@@ -4,4 +4,4 @@
 local_settings.py
 bank.log
 bank.xml
-
+static/*
