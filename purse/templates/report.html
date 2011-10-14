@@ -6,6 +6,9 @@
 {% block pagejs %}
 <script type="text/javascript">
 $(document).ready(function() {
+    $('input[type*="radio"]').css('width', '20px');
+    $('input[type*="checkbox"]').css('width', '15px');
+
     ch_diapazone();
     $( "#rep_diapazone" ).change(ch_diapazone);
     $("#rep_diapvalue").css('width', '110px');
