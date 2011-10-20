@@ -108,9 +108,6 @@ urlpatterns = patterns('',
     # change report diapazone
     (r'^report/diapazone/$' , pv.report_diapazone, {
         'vtemplate': 'report_diapazone.html'}),
-    # generate report page
-    (r'^report/generate/$' , pv.report_generate, {
-        'vtemplate': 'report_generate.html'}),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

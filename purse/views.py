@@ -779,10 +779,11 @@ def report(request, vtemplate):
     start = datetime.datetime.strptime(defval, "%Y-%m-%d").date()
     pdater = pdate_range(start, defdiap)
     if pdater: 
-        result = Pay.objects.filter(invoice__user=request.user, itype__user=request.user,
+        res = Pay.objects.filter(invoice__user=request.user, itype__user=request.user,
             invoice__in=definvoices, itype__in=defitypes,
             pdate__range=pdater)
-        result = get_pdate_graph(pdater, defdiap, result)
+        result['graph1'] = get_pdate_graph(pdater, defdiap, res)
+        result['graph2'] = [['foo', 32], ['bar', 64], ['baz', 96]]
     else:
         raise Http404
     # return data
@@ -856,26 +857,3 @@ def get_pdate_graph(start_end, interval, pays):
         current += delta[interval] 
     return result
 
-
-# GENERATE GRAPH REPORT
-@login_required
-def report_generate(request, vtemplate):
-    result = None
-    # try:
-    if request.method == 'POST':
-        invoices = request.POST['invoice'].strip(',')
-        itypes = request.POST['itype'].strip(',')
-        interval = request.POST['diap0']
-        start = datetime.datetime.strptime(request.POST['diap1'], "%Y-%m-%d").date()
-        pdater = pdate_range(start, interval)
-        if pdater: 
-            result = Pay.objects.filter(invoice__user=request.user, itype__user=request.user,
-                invoice__in=invoices.split(','), itype__in=itypes.split(','),
-                pdate__range=pdater)
-            result = get_pdate_graph(pdater, interval, result)
-        else:
-            raise Http404
-    # except:
-    #     raise Http404
-    result = [(datetime.datetime(2011, 1, 1, 0, 0), 1, 3, 5), (datetime.datetime(2011, 2, 1, 0, 0), 2, 3, 4)] 
-    return direct_to_template(request, vtemplate, {'result': result })

@@ -83,16 +83,23 @@ $(document).ready(function() {
         <br> <input type="submit" value="отчет" />
     </fieldset>
 </form><br>
-<div id="genrep" style="text-align: center;"></div>
+<div id="genrep1" style="text-align: center;"></div>
+<br>
+<div id="genrep2" style="text-align: center;"></div>
 {% load googlecharts %}
+
 {% googlecharts %}
-    {% data result "repdata" %}
+    {% data result.graph1 "repdata" %}
         {% col "string" "Время" %}"{{ val }}"{% endcol %}
         {% col "number" "Доход" %}{{ val }}{% endcol %}
         {% col "number" "Расход" %}{{ val }}{% endcol %}
         {% col "number" "Баланс" %}{{ val }}{% endcol %}
     {% enddata %}
-    {% options "repoptions" %}
+    {% data result.graph2 "catdata" %}
+        {% col "string" "Name" %}"{{ val }}"{% endcol %}
+        {% col "number" "Value" %}{{ val }}{% endcol %}
+    {% enddata %}
+    {% options "repoptions1" %}
         kind: "ColumnChart",
         options: {
             backgroundColor: "#7e898c",
@@ -101,7 +108,17 @@ $(document).ready(function() {
             height: 290
         }
     {% endoptions %}
-    {% graph "genrep" "repdata" "repoptions" %}
+    {% options "repoptions2" %}
+        kind: "PieChart",
+        options: {
+            backgroundColor: "#7e898c",
+            chartArea: {left: 65, top: 35, width: 560, height: 220},
+            width: 600,
+            height: 290
+        }
+    {% endoptions %}
+    {% graph "genrep1" "repdata" "repoptions1" %}
+    {% graph "genrep2" "catdata" "repoptions2" %}
 {% endgooglecharts %}
 {% endblock %}
 
