@@ -783,7 +783,10 @@ def report(request, vtemplate):
             invoice__in=definvoices, itype__in=defitypes,
             pdate__range=pdater)
         result['graph1'] = get_pdate_graph(pdater, defdiap, res)
-        result['graph2'] = [['foo', 32], ['bar', 64], ['baz', 96]]
+        result['graph2'] = get_cat_graph(pdater, defdiap, res, defitypes, False)
+        result['graph3'] = get_cat_graph(pdater, defdiap, res, defitypes, True)
+        # result['graph2'] = 
+        # result['graph2'] = [['foo', 32], ['bar', 64], ['baz', 96]]
     else:
         raise Http404
     # return data
@@ -857,3 +860,12 @@ def get_pdate_graph(start_end, interval, pays):
         current += delta[interval] 
     return result
 
+def get_cat_graph(start_end, interval, pays, itypes, incoming=False):
+    result = []
+    itypes = Itype.objects.filter(id__in=itypes).only('id', 'name')
+    pays = pays.filter(itype__sign=incoming)
+    for itype in itypes:
+        psum = pays.filter(itype=itype.id)
+        psum = psum.values('invoice__valuta__kurs').annotate(sdept=Sum('value'))
+        result.append([itype.name, abs(group_valuta_kurs(psum))])
+    return result

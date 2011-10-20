@@ -85,7 +85,10 @@ $(document).ready(function() {
 </form><br>
 <div id="genrep1" style="text-align: center;"></div>
 <br>
-<div id="genrep2" style="text-align: center;"></div>
+<div id="genrep23" style="text-align: center;">
+    <span id="genrep2"></span>
+    <span id="genrep3"></span>
+</div>
 {% load googlecharts %}
 
 {% googlecharts %}
@@ -95,7 +98,11 @@ $(document).ready(function() {
         {% col "number" "Расход" %}{{ val }}{% endcol %}
         {% col "number" "Баланс" %}{{ val }}{% endcol %}
     {% enddata %}
-    {% data result.graph2 "catdata" %}
+    {% data result.graph2 "catdata_in" %}
+        {% col "string" "Name" %}"{{ val }}"{% endcol %}
+        {% col "number" "Value" %}{{ val }}{% endcol %}
+    {% enddata %}
+    {% data result.graph3 "catdata_out" %}
         {% col "string" "Name" %}"{{ val }}"{% endcol %}
         {% col "number" "Value" %}{{ val }}{% endcol %}
     {% enddata %}
@@ -112,13 +119,14 @@ $(document).ready(function() {
         kind: "PieChart",
         options: {
             backgroundColor: "#7e898c",
-            chartArea: {left: 65, top: 35, width: 560, height: 220},
-            width: 600,
+            chartArea: {left: 25, top: 35, width: 320, height: 220},
+            width: 360,
             height: 290
         }
     {% endoptions %}
     {% graph "genrep1" "repdata" "repoptions1" %}
-    {% graph "genrep2" "catdata" "repoptions2" %}
+    {% graph "genrep2" "catdata_in" "repoptions2" %}
+    {% graph "genrep3" "catdata_out" "repoptions2" %}
 {% endgooglecharts %}
 {% endblock %}
 
