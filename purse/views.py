@@ -790,8 +790,14 @@ def report(request, vtemplate):
     else:
         raise Http404
     # return data
+    total_table = {}
+    total_table['inv'] = sum([ x[1] for x in result['graph1']])
+    total_table['ext'] = sum([ x[2] for x in result['graph1']])
+    total_table['plus'] = sum([ x[1] for x in result['graph2']])
+    total_table['minus'] = sum([ x[1] for x in result['graph3']])
+    # total_table['inv'] = sum([ x[3] for x in result['graph1']])
     return TemplateResponse(request, vtemplate, {'values': values, 'result': result,
-        'inv_cols': (col1, col2), 'itype_cols': (type1, type2)})
+        'inv_cols': (col1, col2), 'itype_cols': (type1, type2), 'ttable': total_table})
 
 # CHANGE REPORT DIAPAZONE
 @login_required

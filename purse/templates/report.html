@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load jtags %}
 {% block title %}
     Статистика платежей
 {% endblock title %}
@@ -92,6 +93,15 @@ $(document).ready(function() {
         <br> <input type="submit" value="отчет" />
     </fieldset>
 </form><br>
+Приход: <em>{{ ttable.inv|rusnum }} руб.,</em> 
+&nbsp;&nbsp;
+расход: <em>{{ ttable.ext|rusnum }} руб.</em>
+<br>
+Доходов: <em>{{ ttable.plus|rusnum }} руб.,</em> 
+&nbsp;&nbsp;
+расходов: <em>{{ ttable.minus|rusnum }} руб.</em>
+<br>
+
 <div id="genrep1" style="text-align: center;"></div>
 <br>
 <div id="genrep23" style="text-align: center;">
