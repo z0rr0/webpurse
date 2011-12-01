@@ -766,7 +766,7 @@ def report(request, vtemplate):
         defval = request.POST['diapvalue']
         defdiap = interval
     else:
-        defval = Pay.objects.filter(invoice__user=request.user).only('pdate').order_by('pdate')[0]
+        defval = Pay.objects.filter(invoice__user=request.user).only('pdate').order_by('-pdate')[0]
         defval = datetime.date(defval.pdate.year,1,1).strftime('%Y-%m-%d')
         definvoices = [x['id'] for x in col1.values('id')]
         defitypes = [x['id'] for x in type1.values('id')] + [x['id'] for x in type2.values('id')]
@@ -809,8 +809,8 @@ def report_diapazone(request, vtemplate):
             val_time = request.GET['val']
             pays = Pay.objects.filter(invoice__user=request.user)
             value = user_date_interval(pays, val_time)
-            # defval = request.GET['defval']
-            defval = value[-1][-1][-1][0] if val_time in 'mw' else value[-1][0]
+            defval = request.GET['defval']
+            # defval = value[-1][-1][-1][0] if val_time in 'mw' else value[-1][0]
     except:
         raise Http404
     form = ChdiapazoneForm(initial={'diapvalue': defval})
