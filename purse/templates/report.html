@@ -11,6 +11,7 @@ $(document).ready(function() {
 
     ch_diapazone();
     $( "#rep_diapazone" ).change(ch_diapazone);
+    $("#rep_diapazone").css('width', '110px');
     $("#rep_diapvalue").css('width', '110px');
 });
 </script>
@@ -33,7 +34,7 @@ $(document).ready(function() {
             <tr>
                 <td>
                     <div>
-                        <span>диапазон</span>
+                        <label for="rep_diapazone"><span>диапазон</span></label>
                         <select id="rep_diapazone" name="rep_diapazone">
                             <option value="y" {% if 'y' == values.defdiap %} selected="selected" {% endif %}>Год</option>
                             <option value="m"{% if 'm' == values.defdiap %} selected="selected" {% endif %}>Месяц</option>
@@ -41,41 +42,49 @@ $(document).ready(function() {
                         </select>
                     </div><br>
                     <div>
-                        <span>значение</span>
+                        <label for="rep_diapvalue"><span>значение</span></label>                    
                         <span id="rep_diapvalue"></span>
                         <input type="hidden" id="defrepval" value="{{ values.defval }}">
                     </div>
                 </td>
                 <td>
                     {% for c in inv_cols.0 %}
+                        <nobr>
                         <input id="invoice{{ c.id }}" name="invoice" 
                             type="checkbox" value="{{ c.id }}" 
                             {% if c.id in values.definvoices %} checked="checked" {% endif %}>
-                        {{ c.name }}<br>
+                        <label for="invoice{{ c.id }}">{{ c.name }}</label>
+                        </nobr><br>
                     {% endfor %}
                 </td>
                 <td>
                     {% for c in inv_cols.1 %}
+                        <nobr>
                         <input id="invoice{{ c.id }}" type="checkbox" value="{{ c.id }}"
                         name="invoice" 
                         {% if c.id in values.definvoices %} checked="checked" {% endif %}>
-                        {{ c.name }}<br> 
+                        <label for="invoice{{ c.id }}">{{ c.name }}</label>
+                        </nobr><br> 
                     {% endfor %}
                 </td>
                 <td>
                     {% for c in itype_cols.0 %}
+                        <nobr>
                         <input id="itype{{ c.id }}" type="checkbox" value="{{ c.id }}" 
                         name="itype" 
                         {% if c.id in values.defitype %} checked="checked" {% endif %}>
-                        {{ c.name }}<br>
+                        <label for="itype{{ c.id }}">{{ c.name }}</label>
+                        </nobr><br>
                     {% endfor %}
                 </td>
                 <td>
                     {% for c in itype_cols.1 %}
+                        <nobr>
                         <input id="itype{{ c.id }}" type="checkbox" value="{{ c.id }}" 
                         name="itype" 
                         {% if c.id in values.defitype %} checked="checked" {% endif %}>
-                        {{ c.name }}<br> 
+                        <label for="itype{{ c.id }}">{{ c.name }}</label>
+                        </nobr><br> 
                     {% endfor %}
                 </td>
             </tr>

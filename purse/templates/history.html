@@ -26,21 +26,24 @@ $(document).ready(function() {
             <tr>
                 <td>
                     <div>
-                        <span>начало</span>
+                        <label for="date_start"><span>начало</span></label>
                         <input id="date_start" type="text" name="date_start" value="{{ pdate.start|date:"d.m.Y" }}">
                     </div><br>
                     <div>
-                        <span>окончание</span>
+                        <label for="date_end"><span>окончание</span></label>
                         <input id="date_end" type="text" name="date_end" value="{{ pdate.end|date:"d.m.Y" }}">
                     </div>
                 </td>
                 <td>
-                    <input type="radio" name="radiokat" value="0" checked >платежи<br>
-                    <input type="radio" name="radiokat" value="1">переводы<br>
-                    <input type="radio" name="radiokat" value="2">долги<br>
+                    <input type="radio" name="radiokat" value="0" id="rdk0" checked ><label for="rdk0">платежи</label>
+                    <br>
+                    <input type="radio" name="radiokat" value="1" id="rdk1"><label for="rdk1">переводы</label>
+                    <br>                    
+                    <input type="radio" name="radiokat" value="2" id="rdk2"><label for="rdk2">долги</label>
                 </td>
                 <td>
-                    содержит в примечании:<br><br>
+                    <label for="doptext">содержит в примечании:</label>
+                    <br><br>
                     <input type="text" id="doptext" style="width: 200px;">
                 </td>
             </tr>

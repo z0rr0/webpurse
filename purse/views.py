@@ -688,7 +688,7 @@ def history_update(request, vtemplate):
             result = search_result_history(request.user, category, date_start, date_end, request.POST['comment'])
         except IndexError:
             pass
-    return TemplateResponse(request, vtemplate, { 'result': result})
+    return TemplateResponse(request, vtemplate, { 'result': result })
 
 # USER INTERVAL FOR CALC DIAPAZONE
 def user_date_interval(pays, val_time):
@@ -803,13 +803,14 @@ def report_diapazone(request, vtemplate):
             val_time = request.GET['val']
             pays = Pay.objects.filter(invoice__user=request.user)
             value = user_date_interval(pays, val_time)
-            defval = request.GET['defval']
+            # defval = request.GET['defval']
+            defval = value[-1][-1][-1][0] if val_time in 'mw' else value[-1][0]
     except:
         raise Http404
     form = ChdiapazoneForm(initial={'diapvalue': defval})
     form.fields['diapvalue'].choices = value
 
-    return direct_to_template(request, vtemplate, {'form': form})
+    return direct_to_template(request, vtemplate, {'form': form, 'defval': defval})
 
 def pdate_range(start, interval):
     delta = {'y': relativedelta(years=+1), 
