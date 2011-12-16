@@ -1,10 +1,10 @@
 # Django settings for webpurse project.
 import socket, os
 
-if socket.gethostname() in ('zorro', 'zlaptop'):
-    DEBUG = True
-else:
+if socket.gethostname() in ('thebestzorro',):
     DEBUG = False
+else:
+    DEBUG = True
 # DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
