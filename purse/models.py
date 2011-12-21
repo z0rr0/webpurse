@@ -15,10 +15,10 @@ def none2str(x):
 # CREATE YOUR MODELS HERE.
 # valuta
 class Valuta(models.Model):
-    code = models.CharField(max_length=5)
-    name = models.CharField(max_length=200)
+    code = models.CharField(max_length=5, null=True)
+    name = models.CharField(max_length=200, null=True)
     kurs = models.FloatField(default=1)
-    date = models.DateField()
+    date = models.DateField(null=True)
 
     def __unicode__(self):
         return self.code

@@ -2,7 +2,7 @@ from xml.dom import minidom
 from xml.parsers.expat import ExpatError
 import datetime, os
 
-fn = '/home/zorro/gitrep/djcode/webpurse/purse/bank.xml'
+# fn = '/home/zorro/gitrep/djcode/webpurse/purse/bank.xml'
 
 def import_xml_dom(filename):
     if not os.path.isfile(filename):
