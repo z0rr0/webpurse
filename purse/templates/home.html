@@ -128,8 +128,9 @@ $(document).ready(function() {
                             </strong>)
                             <div>{{ form_cor.value }} <span class="smallsym">сумма транзакции</span></div>
                             <div>{{ form_cor.invoice }} <span class="smallsym">счет списания</span></div>
-                            <div>{{ form_cor.tosum }} корректировка счета</div>
-                            <div><span class="smallsym">примечание (текстовая заметка о транзакции)</span>
+                            <div>{{ form_cor.tosum }} <label for="cor_tosum">корректировка счета</label></div>
+                            <div>
+                                <span class="smallsym">примечание (текстовая заметка о транзакции)</span>
                                 <br>{{ form_cor.comment }}
                             </div>
                             <div>
@@ -190,8 +191,11 @@ $(document).ready(function() {
                             </strong>)
                             <div>{{ form_dept.value }} <span class="smallsym">сумма долга</span></div>
                             <div>{{ form_dept.invoice }} <span class="smallsym">счет долга</span></div>
-                            <div>{{ form_dept.taker }} <span class="smallsym">заёмщик (кредитор)</span>
-                            <div>{{ form_dept.credit }} {{ form_dept.credit.label|lower }}
+                            <div>{{ form_dept.taker }} <span class="smallsym">заёмщик (кредитор)</span></div>
+                            <div>
+                                {{ form_dept.credit }} 
+                                <label for="dept_credit">{{ form_dept.credit.label|lower }}</label>
+                            </div>
                             <div><span class="smallsym">примечание (текстовая заметка о транзакции)</span>
                                 <br>{{ form_dept.comment }}
                             </div>
