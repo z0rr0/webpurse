@@ -632,13 +632,18 @@ def history(request, vtemplate):
     return TemplateResponse(request, vtemplate, {'pdate': {'start': date1, 'end': date2}})
 
 # ALL HISTORY VIEW, num 0-2
-def search_result_history(user_id, num, d1, d2, comment):
+def search_result_history(user_id, num, d1, d2, comment, ptype=0):
     models = (Pay, Transfer, Dept)
     try:
         if num == 1:
             result = models[num].objects.filter(Q(ifrom__user=user_id) | Q(ito__user=user_id))
         else:
             result = models[num].objects.filter(invoice__user=user_id)
+        if ptype:
+            if ptype == 1:
+                result = result.filter(value__gte=0)
+            else:
+                result = result.filter(value__lt=0)
     except IndexError:
         return False
     # additional filter
@@ -685,7 +690,8 @@ def history_update(request, vtemplate):
             date_start = datetime.datetime.strptime(request.POST['date_start'], "%d.%m.%Y").date()
             date_end = datetime.datetime.strptime(request.POST['date_end'], "%d.%m.%Y").date()
             category = int(request.POST['category'])
-            result = search_result_history(request.user, category, date_start, date_end, request.POST['comment'])
+            paytype = int(request.POST['paytype'])
+            result = search_result_history(request.user, category, date_start, date_end, request.POST['comment'], paytype)
         except IndexError:
             pass
     return TemplateResponse(request, vtemplate, { 'result': result })

@@ -390,6 +390,7 @@ function histsearch() {
                 date_start: d1,
                 date_end: d2,
                 category: $('input[name|="radiokat"]:checked').val(),
+                paytype: $('input[name|="radiopay"]:checked').val(),
                 comment: $('#doptext').val(),
             },
             dataType: 'html',

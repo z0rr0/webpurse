@@ -21,6 +21,7 @@ $(document).ready(function() {
             <tr>
                 <th>Период</th>
                 <th>Категория</th>
+                <th>Тип</th>
                 <th>Дополнительно</th>
             </tr>
             <tr>
@@ -41,6 +42,13 @@ $(document).ready(function() {
                     <br>                    
                     <input type="radio" name="radiokat" value="2" id="rdk2"><label for="rdk2">долги</label>
                 </td>
+                <td>
+                    <input type="radio" name="radiopay" value="0" id="rdp0" checked ><label for="rdp0">все</label>
+                    <br>
+                    <input type="radio" name="radiopay" value="1" id="rdp1"><label for="rdp1">приход</label>
+                    <br>                    
+                    <input type="radio" name="radiopay" value="2" id="rdp2"><label for="rdp2">расход</label>
+                </td>                
                 <td>
                     <label for="doptext">содержит в примечании:</label>
                     <br><br>

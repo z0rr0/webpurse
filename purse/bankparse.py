@@ -1,3 +1,4 @@
+#-*- coding: utf-8 -*-
 from xml.dom import minidom
 from xml.parsers.expat import ExpatError
 import datetime, os
@@ -52,6 +53,15 @@ def import_xml_dom(filename):
         except (ValueError, LookupError) as err:
             print "Error: %s" % err
             return False
+    # add ruble
+    ind = 643
+    data[ind] = {}
+    data[ind]["id"] = ind
+    data[ind]["code"] = 'RUB'
+    data[ind]["name"] = 'Российский рубль'
+    data[ind]["kurs"] = 1.0
+    data[ind]["date"] = datetime.datetime.now()
+    # result
     return data
  
 # k = import_xml_dom(fn)
