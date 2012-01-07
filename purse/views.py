@@ -706,45 +706,47 @@ def user_date_interval(pays, val_time):
     return result
 def date_interval_year(start, end, pays):
     result = []
-    cur_year = start.year
-    while cur_year <= end.year:
+    cur_year = end.year
+    while cur_year >= start.year:
         start_year = datetime.date(cur_year, 1, 1)
         result.append([start_year, cur_year])
-        cur_year += 1
+        cur_year -= 1
     return result
 def date_interval_month(start, end, pays):
     year_list = date_interval_year(start, end, pays)
     result = []
     for key, val in year_list:
         pay_years = pays.filter(pdate__year=val)
-        current = pay_years.order_by('pdate')[0].pdate.month
+        current = pay_years.order_by('-pdate')[0].pdate.month
         ml = []
-        while current <= pay_years.order_by('-pdate')[0].pdate.month:
+        while current >= pay_years.order_by('pdate')[0].pdate.month:
             start_month = datetime.date(val, current, 1)
             ml.append([start_month, start_month.strftime('%B')])
-            current += 1
+            current -= 1
         new_row = (val, ml)
         result.append(new_row)
     return result
 def search_monday(pdate):
-    startw = pdate
-    while startw.weekday() != 0:
-        startw = startw - datetime.timedelta(days=-1)
-    return startw
+    DAY_IN_WEEK = 7
+    return pdate + datetime.timedelta(days=(DAY_IN_WEEK-pdate.weekday()))
 def date_interval_week(start, end, pays):
-    startw = search_monday(start)
-    months = date_interval_month(startw, end, pays)
+    endw = search_monday(end)
+    startw = start + datetime.timedelta(days=-7)
+    months = date_interval_month(start, search_monday(end), pays)
     result = []
     for year, month in months:
         for key, name in month:
             ml = []
-            current = search_monday(key)
-            while current.month <= key.month and current <= end:
-                current2 = current + datetime.timedelta(days=+7)
-                if current2 < start: 
+            # последний день месяца
+            current = search_monday(key + relativedelta(months=+1) + datetime.timedelta(days=-1))
+            if endw < current:
+                current = endw
+            while current >= key:
+                current2 = current + datetime.timedelta(days=-7)
+                if current2 < startw:
                     current = current2
                     continue
-                ml.append([current, "%s - %s" % (current.strftime('%d'), current2.strftime('%d'))])
+                ml.append([current2, "%s - %s" % (current2.strftime('%d.%m'), current.strftime('%d.%m'))])
                 current = current2
             val = "%s %s" % (key.strftime('%B'), "'" + str(year - 2000))
             new_row = (val, ml)
@@ -815,13 +817,15 @@ def report_diapazone(request, vtemplate):
             val_time = request.GET['val']
             pays = Pay.objects.filter(invoice__user=request.user)
             value = user_date_interval(pays, val_time)
-            defval = request.GET['defval']
+            # defval = request.GET['defval']
+            # defval = datetime.datetime.now().strftime('%Y-%m-%d')
             # defval = value[-1][-1][-1][0] if val_time in 'mw' else value[-1][0]
+            defval = ''
     except:
-        raise Http404
+        # raise Http404
+        pass
     form = ChdiapazoneForm(initial={'diapvalue': defval})
     form.fields['diapvalue'].choices = value
-
     return direct_to_template(request, vtemplate, {'form': form, 'defval': defval})
 
 def pdate_range(start, interval):
