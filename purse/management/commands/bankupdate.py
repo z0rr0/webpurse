@@ -45,8 +45,3 @@ class Command(BaseCommand):
         except (lOError, OSError) as err:
             print err
             
-
-        
-
-
-

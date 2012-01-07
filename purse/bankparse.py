@@ -3,6 +3,7 @@ from xml.dom import minidom
 from xml.parsers.expat import ExpatError
 import datetime, os
 
+RUB_IDX = 643
 # fn = '/home/zorro/gitrep/djcode/webpurse/purse/bank.xml'
 
 def import_xml_dom(filename):
@@ -54,11 +55,11 @@ def import_xml_dom(filename):
             print "Error: %s" % err
             return False
     # add ruble
-    ind = 643
+    ind = RUB_IDX
     data[ind] = {}
     data[ind]["id"] = ind
     data[ind]["code"] = 'RUB'
-    data[ind]["name"] = 'Российский рубль'
+    data[ind]["name"] = u'Российский рубль'
     data[ind]["kurs"] = 1.0
     data[ind]["date"] = datetime.datetime.now()
     # result
