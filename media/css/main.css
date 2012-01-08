@@ -65,6 +65,19 @@ a:hover {
     opacity: 0.7;
     /*background-color: #4c6168;*/
 }
+#repdiv1 {
+    float: left;
+    width: 49%;
+    text-align: right;
+    /*border: 2px solid black;*/
+    padding: 5px;
+}
+#repdiv2 {
+    margin-left: 50%;
+    width: 45%;
+    /*border: 2px solid black;*/
+    padding: 5px;    
+}
 #flatdiv {
     margin-left: 20%;
     width: 60%;
@@ -219,10 +232,21 @@ a:hover {
     background-color: #232323;
     padding: 2px;
 }
+.table_edit {
+    padding: 20px solid black;
+}
 .table_edit td {
     text-align: center; 
     border-bottom: 1px solid #818181;
-    padding: 0;
+    padding: 1;
+}
+.table_report th {
+    font-weight: bold;
+    padding: 4px;
+}
+.table_report td {
+    border-bottom: 1px solid #818181;
+    padding: 2px;
 }
 ul.errorlist {
     display: inline;

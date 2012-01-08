@@ -29,6 +29,7 @@ from webpurse.settings import BANK_FILE
 from dateutil.relativedelta import relativedelta
 from googlecharts import time_series
 from qsstats import QuerySetStats
+from operator import attrgetter
 import datetime
 import logging
 
@@ -803,7 +804,6 @@ def report(request, vtemplate):
     total_table['ext'] = sum([ x[2] for x in result['graph1']])
     total_table['plus'] = sum([ x[1] for x in result['graph2']])
     total_table['minus'] = sum([ x[1] for x in result['graph3']])
-    # total_table['inv'] = sum([ x[3] for x in result['graph1']])
     return TemplateResponse(request, vtemplate, {'values': values, 'result': result,
         'inv_cols': (col1, col2), 'itype_cols': (type1, type2), 'ttable': total_table})
 
@@ -817,10 +817,10 @@ def report_diapazone(request, vtemplate):
             val_time = request.GET['val']
             pays = Pay.objects.filter(invoice__user=request.user)
             value = user_date_interval(pays, val_time)
-            # defval = request.GET['defval']
+            defval = request.GET['defval']
             # defval = datetime.datetime.now().strftime('%Y-%m-%d')
             # defval = value[-1][-1][-1][0] if val_time in 'mw' else value[-1][0]
-            defval = ''
+            # defval = ''
     except:
         # raise Http404
         pass
@@ -879,10 +879,10 @@ def get_pdate_graph(start_end, interval, pays):
 
 def get_cat_graph(start_end, interval, pays, itypes, incoming=False):
     result = []
-    itypes = Itype.objects.filter(id__in=itypes).only('id', 'name')
+    itypes = Itype.objects.filter(id__in=itypes).only('id', 'name').order_by('name')
     pays = pays.filter(itype__sign=incoming)
     for itype in itypes:
         psum = pays.filter(itype=itype.id)
         psum = psum.values('invoice__valuta__kurs').annotate(sdept=Sum('value'))
         result.append([itype.name, abs(group_valuta_kurs(psum))])
-    return result
+    return sorted(result, key=lambda item: item[1], reverse=True)

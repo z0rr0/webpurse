@@ -93,6 +93,7 @@ $(document).ready(function() {
         <br> <input type="submit" value="отчет" />
     </fieldset>
 </form><br>
+{% comment %}    
 Приход: <em>{{ ttable.inv|rusnum }} руб.,</em> 
 &nbsp;&nbsp;
 расход: <em>{{ ttable.ext|rusnum }} руб.</em>
@@ -101,6 +102,7 @@ $(document).ready(function() {
 &nbsp;&nbsp;
 расходов: <em>{{ ttable.minus|rusnum }} руб.</em>
 <br>
+{% endcomment %}
 
 <div id="genrep1" style="text-align: center;"></div>
 <br>
@@ -147,5 +149,66 @@ $(document).ready(function() {
     {% graph "genrep2" "catdata_in" "repoptions2" %}
     {% graph "genrep3" "catdata_out" "repoptions2" %}
 {% endgooglecharts %}
+<div id="repdiv1">
+    {% if ttable.plus > 0 %}
+        <table align="right" class="table_report">
+            <thead>
+                <tr>
+                    <th>Статья доходов</th>
+                    <th>Сумма, руб.</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th align="left">Итого <br> (с коррекцией) </th>
+                    <th align="left">{{ ttable.plus|rusnum }} <br> {{ ttable.inv|rusnum }}</th>
+                </tr>
+            </tfoot>
+            <tbody>
+            {% for row in result.graph2 %}
+                {% if row.1 > 0 %}
+                <tr>
+                    <td>{{ row.0 }}</td> 
+                    <td>{{ row.1|rusnum }}</td> 
+                </tr>           
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        За выбранный период данные отсутствуют
+    {% endif %}
+</div>
+<div id="repdiv2">
+    {% if ttable.minus > 0 %}
+        <table class="table_report">
+            <thead>
+                <tr>
+                    <th>Статья расходов</th>
+                    <th>Сумма, руб.</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th align="left">Итого <br> (с коррекцией) </th>
+                    <th align="left">{{ ttable.minus|rusnum }} <br> {{ ttable.ext|rusnum }}</th>
+                </tr>
+            </tfoot>
+            <tbody>
+            {% for row in result.graph3 %}
+                {% if row.1 > 0 %}
+                <tr>
+                    <td>{{ row.0 }}</td> 
+                    <td>{{ row.1|rusnum }}</td> 
+                </tr>           
+                {% endif %}
+            {% endfor %}
+            <tbody>
+        </table>
+    {% else %}
+        За выбранный период данные отсутствуют
+    {% endif %}
+</div>
+
 {% endblock %}
 
