@@ -168,8 +168,8 @@ $(document).ready(function() {
             {% for row in result.graph2 %}
                 {% if row.1 > 0 %}
                 <tr>
-                    <td>{{ row.0 }}</td> 
-                    <td>{{ row.1|rusnum }}</td> 
+                    <td align="left">{{ row.0 }}</td> 
+                    <td align="left">{{ row.1|rusnum }}</td> 
                 </tr>           
                 {% endif %}
             {% endfor %}
