@@ -40,6 +40,21 @@ logger = logging.getLogger(__name__)
 # INDEX PAGE *************************
 @login_required
 def home(request, vtemplate):
+    """
+    Base page :model:`purse.Invoice`.
+
+    **Context**
+
+    ``RequestContext``
+
+    ``mymodel``
+        An instance of :model:`purse.Invoice`.
+
+    **Template:**
+
+    :template:`purse/home.html`
+
+    """
     # data from cookie
     form_def = {}
     for prefix in ('in_', 'out_'):

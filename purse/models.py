@@ -28,6 +28,10 @@ class Valuta(models.Model):
 
 # ivoices
 class Invoice(models.Model):
+    """
+    User invoces, base model, related to :model:`purse.Valuta` 
+
+    """
     user = models.ForeignKey(User, verbose_name=u'пользователь')
     valuta = models.ForeignKey(Valuta, default=643,
         verbose_name=u'валюта', on_delete=models.SET_DEFAULT,
