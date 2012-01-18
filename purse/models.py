@@ -15,6 +15,10 @@ def none2str(x):
 # CREATE YOUR MODELS HERE.
 # valuta
 class Valuta(models.Model):
+    u""" 
+    Используемые валюты 
+
+    """
     code = models.CharField(max_length=5, null=True)
     name = models.CharField(max_length=200, null=True)
     kurs = models.FloatField(default=1)
@@ -28,10 +32,10 @@ class Valuta(models.Model):
 
 # ivoices
 class Invoice(models.Model):
+    u""" 
+    Счета пользователей 
     """
-    User invoces, base model, related to :model:`purse.Valuta` 
 
-    """
     user = models.ForeignKey(User, verbose_name=u'пользователь')
     valuta = models.ForeignKey(Valuta, default=643,
         verbose_name=u'валюта', on_delete=models.SET_DEFAULT,
@@ -63,6 +67,10 @@ class Invoice(models.Model):
 
 # pay types
 class Itype(models.Model):
+    u"""
+    Типы платежей
+
+    """
     user = models.ForeignKey(User, verbose_name = u'пользователь')
     sign = models.BooleanField(default=True, verbose_name = u'расход (доход)')
     status = models.BooleanField(default=True, verbose_name = u'статус)')
@@ -81,6 +89,10 @@ class Itype(models.Model):
 
 # user pays
 class Pay(models.Model):
+    u"""
+    Платежи пользователей: доходы и расходы
+
+    """
     invoice = models.ForeignKey(Invoice, verbose_name = u'счет', help_text=u'счет для операции')
     itype = models.ForeignKey(Itype, verbose_name = u'вид', help_text=u'вид платежа')
     value = models.FloatField(default=0, verbose_name = u'сумма', help_text=u'сумма платежа')
@@ -120,6 +132,10 @@ class Futpay(models.Model):
 
 # dept pays
 class Dept(models.Model):
+    u"""
+    Займы, работа с долгами
+
+    """
     invoice = models.ForeignKey(Invoice, verbose_name = u'счет',
         help_text=u'счет для списания (полученя) долга')
     value = models.FloatField(default=0, verbose_name = u'сумма',
@@ -142,6 +158,10 @@ class Dept(models.Model):
 
 # transfer pays
 class Transfer(models.Model):
+    u"""
+    Переводы
+
+    """
     ifrom = models.ForeignKey(Invoice, related_name='invfrom', 
         verbose_name = u'счет списания',
         help_text=u'с этого счета будут списаны сердства')

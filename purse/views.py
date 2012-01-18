@@ -40,15 +40,15 @@ logger = logging.getLogger(__name__)
 # INDEX PAGE *************************
 @login_required
 def home(request, vtemplate):
-    """
-    Base page :model:`purse.Invoice`.
+    u"""
+    Base page :model:`purse.Invoice`, :model:`purse.Valuta`
 
     **Context**
 
     ``RequestContext``
 
     ``mymodel``
-        An instance of :model:`purse.Invoice`.
+        An instance of :model:`purse.Invoice`. :model:`purse.Valuta`
 
     **Template:**
 
