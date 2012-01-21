@@ -1,5 +1,5 @@
 #-*- coding: utf-8 -*-
-from webpurse.purse import models
+from main.purse import models
 from django.forms.extras.widgets import SelectDateWidget
 from django import forms
 

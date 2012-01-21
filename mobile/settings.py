@@ -1,4 +1,4 @@
-# Django settings for webpurse project.
+# Django settings for mobile project.
 import socket, os
 
 if socket.gethostname() in ('thebestzorro',):
@@ -39,7 +39,7 @@ TIME_ZONE = 'Europe/Moscow'
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'ru-RU'
 
-SITE_ID = 1
+SITE_ID = 2
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
@@ -127,7 +127,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 )
 
-ROOT_URLCONF = 'webpurse.urls'
+ROOT_URLCONF = 'mobile.urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -150,7 +150,7 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'django.contrib.flatpages',
     'googlecharts',
-    'webpurse.purse',
+    'mobile.purse',
 )
 GOOGLECHARTS_API = '1.1'
 
@@ -216,7 +216,7 @@ CACHES = {
 
 BANK_FILE = os.path.join(PROJECT_PATH, 'bank.xml')
 BANK_LOG = os.path.join(PROJECT_PATH, 'bank.log')
-# BANK_FILE = '/home/zorro/gitrep/djcode/webpurse/purse/bank.xml'
+# BANK_FILE = '/home/zorro/gitrep/djcode/mobile/purse/bank.xml'
 
 
 # rewrite global setting vars

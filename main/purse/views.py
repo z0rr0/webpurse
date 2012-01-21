@@ -22,9 +22,9 @@ from django import forms
 # Get an instance of a logger
 # logger = logging.getLogger(__name__)
 
-from webpurse.purse.models import *
-from webpurse.purse.forms import *
-from webpurse.settings import BANK_FILE
+from main.purse.models import *
+from main.purse.forms import *
+from main.settings import BANK_FILE
 
 from dateutil.relativedelta import relativedelta
 from googlecharts import time_series

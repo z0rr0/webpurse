@@ -1,8 +1,8 @@
 #-*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand, CommandError
-from webpurse.purse.bankparse import import_xml_dom
-from webpurse.purse.models import Valuta
-from webpurse.settings import BANK_FILE, BANK_LOG
+from main.purse.bankparse import import_xml_dom
+from main.purse.models import Valuta
+from main.settings import BANK_FILE, BANK_LOG
 from django.db import transaction
 import datetime
 

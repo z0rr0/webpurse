@@ -6,8 +6,8 @@ from django.contrib.auth.views import login, logout
 from django.contrib import admin
 from django.conf import settings
 
-from webpurse.views import ping_test
-from webpurse.purse import views as pv
+from main.views import ping_test
+from main.purse import views as pv
 
 admin.autodiscover()
 

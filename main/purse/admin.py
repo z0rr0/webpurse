@@ -1,6 +1,6 @@
 #-*- coding: utf-8 -*-
 from django.contrib import admin
-from webpurse.purse import models
+from main.purse import models
 
 admin.site.register(models.Invoice)
 admin.site.register(models.Itype)
