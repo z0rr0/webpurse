@@ -8,3 +8,4 @@ purse.db
 static/*
 main/env/*
 mobile/env/*
+conf/*
