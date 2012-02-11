@@ -6,4 +6,5 @@ bank.log
 bank.xml
 purse.db
 static/*
-env/*
+main/env/*
+mobile/env/*
