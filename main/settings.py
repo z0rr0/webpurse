@@ -1,7 +1,7 @@
 # Django settings for webpurse/main project.
 import socket, os
 
-if socket.gethostname() in ('thebestzorro',):
+if socket.gethostname() in ('thebestzorro', 'thebestzorro.ru'):
     DEBUG = False
 else:
     DEBUG = True
